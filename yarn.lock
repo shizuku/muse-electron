@@ -353,6 +353,13 @@
   resolved "https://registry.npm.taobao.org/@types/color-name/download/@types/color-name-1.1.1.tgz?cache=0&sync_timestamp=1596838000843&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fcolor-name%2Fdownload%2F%40types%2Fcolor-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha1-HBJhu+qhCoBVu8XYq4S3sq/IRqA=
 
+"@types/electron@^1.6.10":
+  version "1.6.10"
+  resolved "https://registry.npm.taobao.org/@types/electron/download/@types/electron-1.6.10.tgz#7e87888ed3888767cca68e92772c2c8ea46bc873"
+  integrity sha1-foeIjtOIh2fMpo6SdywsjqRryHM=
+  dependencies:
+    electron "*"
+
 "@types/eslint-visitor-keys@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/@types/eslint-visitor-keys/download/@types/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
@@ -2084,7 +2091,7 @@ electron-winstaller@^4.0.1:
     lodash.template "^4.2.2"
     temp "^0.9.0"
 
-electron@10.1.3:
+electron@*, electron@10.1.3:
   version "10.1.3"
   resolved "https://registry.npm.taobao.org/electron/download/electron-10.1.3.tgz?cache=0&sync_timestamp=1601356387978&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-10.1.3.tgz#7e276e373bf30078bd4cb1184850a91268dc0e6c"
   integrity sha1-fiduNzvzAHi9TLEYSFCpEmjcDmw=

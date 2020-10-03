@@ -451,6 +451,7 @@ class MuseNote extends React.Component<{ note: Note }, {}> {
         height={this.props.note.height}
         onClick={() => {
           Selector.instance.selectNote(this.props.note);
+          console.log("xxx")
         }}
       >
         <OuterBorder

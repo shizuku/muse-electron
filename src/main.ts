@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, Menu } from "electron";
+import { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem } from "electron";
 import { readFile } from "fs";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
@@ -9,6 +9,7 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+let mw: BrowserWindow;
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -18,7 +19,7 @@ const createWindow = (): void => {
       nodeIntegration: true,
     },
   });
-
+  mw = mainWindow;
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
@@ -71,4 +72,71 @@ ipcMain.on("open-file", (event, arg) => {
     });
 });
 
-Menu.setApplicationMenu(null);
+const newFile = () => {};
+const openFileDialog = () => {
+  dialog
+    .showOpenDialog({
+      properties: ["openFile"],
+      filters: [{ name: "Notation", extensions: ["json"] }],
+    })
+    .then((v) => {
+      if (!v.canceled) {
+        readFile(v.filePaths[0], (err, data) => {
+          if (!err) {
+            mw.webContents.send("open-file-reply", data.toString());
+          }
+        });
+      }
+    });
+};
+const save = () => {};
+
+const template = [
+  {
+    label: "&File",
+    role:"fileMenu",
+    submenu: [
+      {
+        label: "&New File",
+        accelerator: "Ctrl+N",
+        click: () => newFile(),
+      },
+      { type: "separator" },
+      {
+        label: "&Open",
+        accelerator: "Ctrl+O",
+        click: () => openFileDialog(),
+      },
+      { type: "separator" },
+      {
+        label: "&Save",
+        accelerator: "Ctrl+S",
+        click: () => save(),
+      },
+      {
+        label: "A&uto Save",
+        type: "checkbox",
+        checked: false,
+      },
+      { type: "separator" },
+      {
+        label: "&Exit",
+        accelerator: "Ctrl+Q",
+        role: "quit",
+      },
+    ],
+  },
+  {
+    label: "Help",
+    submenu: [
+      {
+        label: "Toggle Develop Tools",
+        accelerator: "Ctrl+Shift+I",
+        role: "toggledevtools",
+      },
+    ],
+  },
+];
+
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
