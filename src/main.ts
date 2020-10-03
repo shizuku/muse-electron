@@ -1,5 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog, Menu, MenuItem } from "electron";
 import { readFile } from "fs";
+import { strings } from "./resource";
+import { translate } from "./translate";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -8,6 +10,99 @@ if (require("electron-squirrel-startup")) {
   // eslint-disable-line global-require
   app.quit();
 }
+
+let t: (key: string) => string;
+const loadTranslate = () => {
+  console.log(app.getLocale());
+  t = translate(app.getLocale(), strings);
+};
+
+const createMenu = () => {
+  const newFile = () => {};
+  const openFileDialog = () => {
+    dialog
+      .showOpenDialog({
+        properties: ["openFile"],
+        filters: [{ name: "Notation", extensions: ["json"] }],
+      })
+      .then((v) => {
+        if (!v.canceled) {
+          readFile(v.filePaths[0], (err, data) => {
+            if (!err) {
+              app.addRecentDocument(v.filePaths[0]);
+              mw.webContents.send("open-file", data.toString());
+            }
+          });
+        }
+      });
+  };
+  const save = () => {};
+  const saveAs = () => {};
+  const template = [
+    {
+      label: t("menuFile"),
+      role: "fileMenu",
+      submenu: [
+        {
+          label: t("menuFileNew"),
+          accelerator: "Ctrl+N",
+          click: () => newFile(),
+        },
+        { type: "separator" },
+        {
+          label: t("menuFileOpen"),
+          accelerator: "Ctrl+O",
+          click: () => openFileDialog(),
+        },
+        {
+          label: t("menuFileOpenrecent"),
+          role: "recentdocuments",
+          submenu: [
+            {
+              label: t("menuFileOpenrecentClear"),
+              role: "clearrecentdocuments",
+            },
+          ],
+        },
+        { type: "separator" },
+        {
+          label: t("menuFileSave"),
+          accelerator: "Ctrl+S",
+          click: () => save(),
+        },
+        {
+          label: t("menuFileSaveas"),
+          accelerator: "Ctrl+Shift+S",
+          click: () => saveAs(),
+        },
+        {
+          label: t("menuFileAutosave"),
+          type: "checkbox",
+          checked: false,
+        },
+        { type: "separator" },
+        {
+          label: t("menuFileExit"),
+          accelerator: "Ctrl+Q",
+          role: "quit",
+        },
+      ],
+    },
+    {
+      label: t("menuHelp"),
+      submenu: [
+        {
+          label: t("menuHelpToggledevtools"),
+          accelerator: "Ctrl+Shift+I",
+          role: "toggledevtools",
+        },
+      ],
+    },
+  ];
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+};
 
 let mw: BrowserWindow;
 const createWindow = (): void => {
@@ -25,12 +120,18 @@ const createWindow = (): void => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  mainWindow.webContents.send("set-locale", app.getLocale());
 };
 
+const onready = () => {
+  loadTranslate();
+  createMenu();
+  createWindow();
+};
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", onready);
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -51,92 +152,3 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.on("open-file", (event, arg) => {
-  dialog
-    .showOpenDialog({
-      properties: ["openFile"],
-      filters: [{ name: "Notation", extensions: ["json"] }],
-    })
-    .then((v) => {
-      if (v.canceled) {
-        event.reply("open-file-reply", "");
-      } else {
-        readFile(v.filePaths[0], (err, data) => {
-          if (err) {
-            event.reply("open-file-reply", "");
-          } else {
-            event.reply("open-file-reply", data.toString());
-          }
-        });
-      }
-    });
-});
-
-const newFile = () => {};
-const openFileDialog = () => {
-  dialog
-    .showOpenDialog({
-      properties: ["openFile"],
-      filters: [{ name: "Notation", extensions: ["json"] }],
-    })
-    .then((v) => {
-      if (!v.canceled) {
-        readFile(v.filePaths[0], (err, data) => {
-          if (!err) {
-            mw.webContents.send("open-file-reply", data.toString());
-          }
-        });
-      }
-    });
-};
-const save = () => {};
-
-const template = [
-  {
-    label: "&File",
-    role:"fileMenu",
-    submenu: [
-      {
-        label: "&New File",
-        accelerator: "Ctrl+N",
-        click: () => newFile(),
-      },
-      { type: "separator" },
-      {
-        label: "&Open",
-        accelerator: "Ctrl+O",
-        click: () => openFileDialog(),
-      },
-      { type: "separator" },
-      {
-        label: "&Save",
-        accelerator: "Ctrl+S",
-        click: () => save(),
-      },
-      {
-        label: "A&uto Save",
-        type: "checkbox",
-        checked: false,
-      },
-      { type: "separator" },
-      {
-        label: "&Exit",
-        accelerator: "Ctrl+Q",
-        role: "quit",
-      },
-    ],
-  },
-  {
-    label: "Help",
-    submenu: [
-      {
-        label: "Toggle Develop Tools",
-        accelerator: "Ctrl+Shift+I",
-        role: "toggledevtools",
-      },
-    ],
-  },
-];
-
-const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
