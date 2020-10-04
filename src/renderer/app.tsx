@@ -3,8 +3,8 @@ import { ipcRenderer } from "electron";
 import { MuseNotation, Notation, MuseConfig } from "./components/muse-notation";
 import "./app.css";
 
-import { strings } from "./resource";
-import { translate } from "./translate";
+import { strings } from "../shared/resource";
+import { translate } from "../shared/translate";
 
 const App: React.FC = () => {
   let [notation, setNotation] = useState<Notation>();
