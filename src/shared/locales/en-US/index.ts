@@ -1,5 +1,5 @@
-import menu from "./menu";
+import { menu } from "./menu";
 
-export default {
-  menu,
+export const enUS: Record<string, string> = {
+  ...menu,
 };

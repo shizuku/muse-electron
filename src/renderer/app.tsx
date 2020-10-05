@@ -3,12 +3,9 @@ import { ipcRenderer } from "electron";
 import { MuseNotation, Notation, MuseConfig } from "./components/muse-notation";
 import "./app.css";
 
-import { strings } from "../shared/resource";
-import { translate } from "../shared/translate";
-
 const App: React.FC = () => {
   let [notation, setNotation] = useState<Notation>();
-  let [t, setT] = useState<(k: string) => string>(translate("en-US", strings));
+
   useEffect(() => {
     ipcRenderer.on("open-file", (event, arg) => {
       if (arg !== "") {
@@ -16,15 +13,10 @@ const App: React.FC = () => {
       }
       console.log(notation?.code());
     });
-    ipcRenderer.on("set-locale", (event, arg) => {
-      if (arg !== "") {
-        setT(translate(arg, strings));
-      }
-    });
   });
   return (
     <div id="app">
-      <header>{t("menuFile")}</header>
+      <header></header>
       <div className="notation">
         {notation ? <MuseNotation notation={notation} /> : <></>}
       </div>
