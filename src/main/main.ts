@@ -3,7 +3,7 @@ import { getTranslator } from "../shared/locales";
 import { createMenu } from "./menu";
 import { createWindow } from "./window";
 
-declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 if (require("electron-squirrel-startup")) {
   app.quit();

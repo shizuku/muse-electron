@@ -14,7 +14,12 @@ export const openFile = (mw: BrowserWindow) => {
         readFile(v.filePaths[0], (err, data) => {
           if (!err) {
             app.addRecentDocument(v.filePaths[0]);
-            mw.webContents.send("open-file", data.toString());
+            let l = v.filePaths[0].split("/");
+            let fileName = l[l.length - 1];
+            mw.webContents.send("open-file-reply", {
+              fileName: fileName,
+              content: data.toString(),
+            });
           }
         });
       }
