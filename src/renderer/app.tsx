@@ -7,9 +7,10 @@ import "antd/dist/antd.css";
 import "./app.css";
 
 interface ITab {
-  tab: JSX.Element;
+  tab: JSX.Element | string;
   closable: boolean;
-  content: JSX.Element;
+  content: JSX.Element | string;
+  key: string;
 }
 
 interface OpenFileReply {
@@ -18,19 +19,21 @@ interface OpenFileReply {
 }
 
 const App: React.FC = () => {
-  let [tabs, setTabs] = useState<ITab[]>([
+  let [panes, setPanes] = useState<ITab[]>([
     {
-      tab: <span>Get Start</span>,
+      tab: <i>Get Start</i>,
       closable: false,
       content: <GetStart />,
+      key: "0",
     },
   ]);
   let [activeKey, setActiveKey] = useState("0");
+  let [nextKey, setNextKey] = useState(1);
   useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, arg: OpenFileReply) => {
       if (arg.content !== "") {
-        setTabs([
-          ...tabs,
+        setPanes([
+          ...panes,
           {
             tab: <span>{arg.fileName}</span>,
             closable: true,
@@ -41,13 +44,53 @@ const App: React.FC = () => {
                 }
               />
             ),
+            key: `${nextKey}`,
           },
         ]);
+        setActiveKey(`${nextKey}`);
+        setNextKey(nextKey + 1);
       }
     });
   });
   const onChange = (k: string) => {
     setActiveKey(k);
+  };
+  const add = () => {
+    setPanes([
+      ...panes,
+      {
+        tab: "New Tab",
+        content: "Content of new Tab",
+        key: `${nextKey}`,
+        closable: true,
+      },
+    ]);
+    setActiveKey(`${nextKey}`);
+    setNextKey(nextKey + 1);
+  };
+  const remove = (
+    targetKey:
+      | string
+      | React.MouseEvent<Element, MouseEvent>
+      | React.KeyboardEvent<Element>
+  ) => {
+    let newActiveKey = activeKey;
+    let lastIndex = 0;
+    panes.forEach((pane, i) => {
+      if (pane.key === targetKey) {
+        lastIndex = i - 1;
+      }
+    });
+    const newPanes = panes.filter((pane) => pane.key !== targetKey);
+    if (newPanes.length && newActiveKey === targetKey) {
+      if (lastIndex >= 0) {
+        newActiveKey = newPanes[lastIndex].key;
+      } else {
+        newActiveKey = newPanes[0].key;
+      }
+    }
+    setPanes(newPanes);
+    setActiveKey(newActiveKey);
   };
   const onEdit = (
     targetKey:
@@ -57,22 +100,32 @@ const App: React.FC = () => {
     action: "add" | "remove"
   ) => {
     if (action === "add") {
+      add();
     } else if (action === "remove") {
+      remove(targetKey);
     }
   };
   return (
     <div id="app">
       <header></header>
       <Tabs
+        className="tabs"
         hideAdd
         tabBarGutter={1}
         type="editable-card"
         activeKey={activeKey.toString()}
         onChange={onChange}
         onEdit={onEdit}
+        tabBarStyle={{ height: "2.3rem" }}
       >
-        {tabs.map((it, idx) => (
-          <Tabs.TabPane tab={it.tab} key={idx} closable={it.closable} forceRender={true}>
+        {panes.map((it, idx) => (
+          <Tabs.TabPane
+            tab={it.tab}
+            key={idx}
+            closable={it.closable}
+            forceRender={true}
+            className="tab-pane"
+          >
             {it.content}
           </Tabs.TabPane>
         ))}

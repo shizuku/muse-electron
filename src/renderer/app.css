@@ -2,3 +2,13 @@
     margin: 0 auto;
     text-align: center;
 }
+
+.tabs {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.tab-pane {
+    height: calc(100vh - 3.3rem);
+    overflow: scroll;
+}
