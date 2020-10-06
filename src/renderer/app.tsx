@@ -111,7 +111,7 @@ const App: React.FC = () => {
       <Tabs
         className="tabs"
         hideAdd
-        tabBarGutter={1}
+        tabBarGutter={0}
         type="editable-card"
         activeKey={activeKey.toString()}
         onChange={onChange}
@@ -126,7 +126,7 @@ const App: React.FC = () => {
             forceRender={true}
             className="tab-pane"
           >
-            {it.content}
+            <div className="tab-content">{it.content}</div>
           </Tabs.TabPane>
         ))}
       </Tabs>
