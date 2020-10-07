@@ -1,0 +1,4 @@
+.get-start {
+    height: calc(100vh - 2.3rem);
+    overflow: hidden;
+}

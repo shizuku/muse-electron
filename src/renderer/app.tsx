@@ -5,17 +5,13 @@ import { GetStart } from "./components/get-start";
 import { Tabs } from "antd";
 import "antd/dist/antd.css";
 import "./app.css";
+import { FileContent } from "./components/file-content";
 
 interface ITab {
-  tab: JSX.Element | string;
+  tab: React.ReactNode;
   closable: boolean;
-  content: JSX.Element | string;
+  content: React.ReactNode;
   key: string;
-}
-
-interface OpenFileReply {
-  fileName: string;
-  content: string;
 }
 
 const App: React.FC = () => {
@@ -30,27 +26,32 @@ const App: React.FC = () => {
   let [activeKey, setActiveKey] = useState("0");
   let [nextKey, setNextKey] = useState(1);
   useEffect(() => {
-    ipcRenderer.on("open-file-reply", (event, arg: OpenFileReply) => {
-      if (arg.content !== "") {
-        setPanes([
-          ...panes,
-          {
-            tab: <span>{arg.fileName}</span>,
-            closable: true,
-            content: (
-              <MuseNotation
-                notation={
-                  new Notation(JSON.parse(arg.content), new MuseConfig())
-                }
-              />
-            ),
-            key: `${nextKey}`,
-          },
-        ]);
-        setActiveKey(`${nextKey}`);
-        setNextKey(nextKey + 1);
+    ipcRenderer.on(
+      "open-file-reply",
+      (event, filePath: string, content: string) => {
+        let l = filePath.split("/");
+        let fileName = l[l.length - 1];
+        if (content !== "") {
+          setPanes([
+            ...panes,
+            {
+              tab: <span>{fileName}</span>,
+              closable: true,
+              content: (
+                <FileContent
+                  fileName={fileName}
+                  filePath={filePath}
+                  data={content}
+                />
+              ),
+              key: `${nextKey}`,
+            },
+          ]);
+          setActiveKey(`${nextKey}`);
+          setNextKey(nextKey + 1);
+        }
       }
-    });
+    );
   });
   const onChange = (k: string) => {
     setActiveKey(k);
@@ -107,7 +108,6 @@ const App: React.FC = () => {
   };
   return (
     <div id="app">
-      <header></header>
       <Tabs
         className="tabs"
         hideAdd
@@ -124,7 +124,6 @@ const App: React.FC = () => {
             key={idx}
             closable={it.closable}
             forceRender={true}
-            className="tab-pane"
           >
             <div className="tab-content">{it.content}</div>
           </Tabs.TabPane>

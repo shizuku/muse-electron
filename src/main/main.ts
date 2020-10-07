@@ -1,7 +1,8 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, Menu } from "electron";
 import { getTranslator } from "../shared/locales";
-import { createMenu } from "./menu";
+import { createActions } from "./actions";
 import { createWindow } from "./window";
+import { createKeyMap } from "./keymap";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
@@ -13,7 +14,9 @@ app.on("ready", () => {
   let mw = createWindow();
   let t = getTranslator(app.getLocale());
   mw.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  createMenu(mw, t);
+  createActions();
+  createKeyMap();
+  Menu.setApplicationMenu(null);
 });
 
 app.on("window-all-closed", () => {

@@ -6,10 +6,8 @@ import zhCN from "antd/es/locale/zh_CN";
 import "./index.css";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ConfigProvider locale={zhCN}>
-      <App />
-    </ConfigProvider>
-  </React.StrictMode>,
+  <ConfigProvider locale={zhCN}>
+    <App />
+  </ConfigProvider>,
   document.getElementById("root")
 );

@@ -1,14 +1,12 @@
 #app {
-    margin: 0 auto;
-    text-align: center;
+    margin: 0;
 }
 
 .tabs {
     height: 100vh;
-    overflow: hidden;
 }
 
 .tab-content {
-    height: calc(100vh - 3.3rem);
-    overflow: scroll;
+    margin-top: -1rem;
+    overflow: visible;
 }
