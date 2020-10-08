@@ -20,6 +20,9 @@
     "forge": {
       "packagerConfig": {},
       "makers": [{
+          "name": "@electron-forge/maker-zip"
+        },
+        {
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "name": "muse_electron"
@@ -29,11 +32,8 @@
           "name": "@electron-forge/maker-wix",
           "config": {
             "language": 1033,
-            "manufacturer": "com.shizuku"
+            "manufacturer": "shizuku"
           }
-        },
-        {
-          "name": "@electron-forge/maker-zip"
         },
         {
           "name": "@electron-forge/maker-deb",
@@ -42,6 +42,12 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "format": "ULFO"
+          }
         }
       ],
       "plugins": [
