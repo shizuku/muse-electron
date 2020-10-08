@@ -1,17 +1,15 @@
 import React, { FC } from "react";
 import { Button, Tabs } from "antd";
-import { SaveOutlined } from "@ant-design/icons";
-import './style.css'
+import { SaveOutlined, FolderOpenFilled } from "@ant-design/icons";
+import "./style.css";
 
 export const Toolbar: FC = () => {
-  const onChange = (k: string) => {};
+  const open = () => {};
+  const save = () => {};
   return (
     <div className="toolbar">
-      <Tabs defaultActiveKey="0" onChange={onChange}>
-        <Tabs.TabPane tab={"File"} key="0">
-          <Button size="small" icon={<SaveOutlined />} />
-        </Tabs.TabPane>
-      </Tabs>
+      <Button size="small" icon={<FolderOpenFilled />} onClick={open} />
+      <Button size="small" icon={<SaveOutlined />} onClick={save} />
     </div>
   );
 };
