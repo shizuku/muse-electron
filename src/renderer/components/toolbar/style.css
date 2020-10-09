@@ -1,4 +1,36 @@
 .toolbar {
+    display: block;
+}
+
+.toolbar__tabs {
+    background: #1890ff;
+}
+
+.toolbar__tab {
+    display: inline-flex;
+    font-size: 1rem;
+}
+
+.toolbar__tab:hover {
+    cursor: pointer;
+    color: #8bc7ff;
+}
+
+.toolbar__tab.active {
+    background: white;
+}
+
+.toolbar__tab-container {
     margin-left: 1rem;
     margin-right: 1rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.toolbar__content.inactive {
+    display: none;
+}
+
+.toolbar__content {
+    display: block;
 }

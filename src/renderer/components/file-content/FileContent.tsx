@@ -15,7 +15,9 @@ export const FileContent: FC<FileContentProps> = ({ data }) => {
     <div className="file-content">
       <Toolbar />
       <div className="main-content">
-        <MuseNotation notation={n} />
+        <div className="notaiton-content">
+          <MuseNotation notation={n} />
+        </div>
       </div>
     </div>
   );
