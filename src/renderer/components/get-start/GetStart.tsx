@@ -9,7 +9,13 @@ export const GetStart: React.FC = () => {
   return (
     <Layout className="get-start">
       <Sider className="get-start__sider">
-        <Menu theme="dark" mode="inline" className="get-start__sider-menu">
+        <h1 className="get-start__sider-title">{"Muse"}</h1>
+        <Menu
+          theme="dark"
+          mode="inline"
+          className="get-start__sider-menu"
+          selectable={true}
+        >
           <Menu.Item
             key="0"
             icon={<FileAddOutlined />}
@@ -31,7 +37,10 @@ export const GetStart: React.FC = () => {
         </Menu>
       </Sider>
       <Content>
-        <h2>Recent</h2>
+        <div className="get-start__content">
+          <h2>Recent</h2>
+          <div></div>
+        </div>
       </Content>
     </Layout>
   );

@@ -1,0 +1,11 @@
+.header {
+    display: block;
+    height: 2rem;
+    background: #1890ff;
+}
+
+.window-title {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}

@@ -1,24 +1,24 @@
 import React, { FC } from "react";
+import { FileContext } from "../../FileContext";
 import { MuseConfig, MuseNotation, Notation } from "../muse-notation";
 import { Toolbar } from "../toolbar";
 import "./style.css";
 
-export interface FileContentProps {
-  filePath: string;
-  fileName: string;
-  data: string;
-}
-
-export const FileContent: FC<FileContentProps> = ({ data }) => {
-  let n = new Notation(JSON.parse(data), new MuseConfig());
+export const FileContent: FC = ({}) => {
   return (
-    <div className="file-content">
-      <Toolbar />
-      <div className="main-content">
-        <div className="notaiton-content">
-          <MuseNotation notation={n} />
+    <FileContext.Consumer>
+      {(f) => (
+        <div className="file-content">
+          <Toolbar />
+          <div className="main-content">
+            <div className="notaiton-content">
+              <MuseNotation
+                notation={new Notation(JSON.parse(f.data), new MuseConfig())}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </FileContext.Consumer>
   );
 };

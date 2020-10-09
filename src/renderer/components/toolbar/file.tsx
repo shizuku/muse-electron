@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { ActiveContext } from "./Toolbar";
 import classNames from "classnames";
+import { ActiveContext } from "./ActiveContext";
 
 const label = "file";
 

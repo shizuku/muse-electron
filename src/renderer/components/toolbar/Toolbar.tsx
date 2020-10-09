@@ -1,26 +1,18 @@
 import React, { FC, useState } from "react";
-import { File, FileTab } from "./file";
-import { View, ViewTab } from "./view";
 import { Button } from "antd";
 import {
   SaveOutlined,
   FolderOpenOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
+import { ActiveContext } from "./ActiveContext";
+import { File, FileTab } from "./file";
+import { View, ViewTab } from "./view";
+import { StartTab } from "./start";
 import "./style.css";
 
-export type Active = "file" | "view";
-
-export const ActiveContext = React.createContext<{
-  active: Active;
-  setActive: (a: Active) => void;
-}>({
-  active: "file",
-  setActive: () => {},
-});
-
 export const Toolbar: FC = () => {
-  let [active, setActive] = useState<Active>("file");
+  let [active, setActive] = useState<string>("file");
   return (
     <div className="toolbar">
       <ActiveContext.Provider value={{ active, setActive }}>
@@ -28,6 +20,7 @@ export const Toolbar: FC = () => {
           <Button type="primary" icon={<FolderOpenOutlined />} />
           <Button type="primary" icon={<SaveOutlined />} />
           <Button type="primary" icon={<PrinterOutlined />} />
+          <StartTab />
           <FileTab />
           <ViewTab />
         </div>
