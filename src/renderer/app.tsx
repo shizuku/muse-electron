@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ipcRenderer, remote } from "electron";
-import { GetStart } from "./components/get-start";
+import { Welcome } from "./components/welcome";
 import "antd/dist/antd.css";
 import "./app.css";
 import { FileContent } from "./components/file-content";
@@ -51,7 +51,7 @@ const App: React.FC = () => {
           {file.data === "" ? (
             <>
               <Header />
-              <GetStart />
+              <Welcome />
             </>
           ) : (
             <>

@@ -10,7 +10,7 @@ import "./style.css";
 import { ipcRenderer } from "electron";
 import { RecentContext } from "../../RecentContext";
 
-export const GetStart: React.FC = () => {
+export const Welcome: React.FC = () => {
   return (
     <Layout className="get-start">
       <Sider className="get-start__sider" theme="light">
