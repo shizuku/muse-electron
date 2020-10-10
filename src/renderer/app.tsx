@@ -10,6 +10,8 @@ import { Footer } from "./components/footer";
 import { FileContext, File } from "./FileContext";
 import { FileInfo, RecentContext } from "./RecentContext";
 import Store from "electron-store";
+import { getFileName } from "../shared/utils";
+
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
 const App: React.FC = () => {
@@ -30,8 +32,7 @@ const App: React.FC = () => {
     ipcRenderer.on(
       "open-file-reply",
       (event, filePath: string, content: string) => {
-        let l = filePath.split("/");
-        let fileName = l[l.length - 1];
+        let fileName = getFileName(filePath)
         if (content !== "") {
           setFile({ filePath, fileName, data: content });
           addFile({ name: fileName, path: filePath });

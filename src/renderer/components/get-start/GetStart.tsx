@@ -13,10 +13,10 @@ import { RecentContext } from "../../RecentContext";
 export const GetStart: React.FC = () => {
   return (
     <Layout className="get-start">
-      <Sider className="get-start__sider">
+      <Sider className="get-start__sider" theme="light">
         <h1 className="get-start__sider-title">{"Muse"}</h1>
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
           className="get-start__sider-menu"
           selectable={true}

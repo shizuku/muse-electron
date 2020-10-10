@@ -2249,6 +2249,19 @@ electron-installer-redhat@^3.2.0:
     word-wrap "^1.2.3"
     yargs "^15.1.0"
 
+electron-is-dev@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npm.taobao.org/electron-is-dev/download/electron-is-dev-0.3.0.tgz#14e6fda5c68e9e4ecbeff9ccf037cbd7c05c5afe"
+  integrity sha1-FOb9pcaOnk7L7/nM8DfL18BcWv4=
+
+electron-is@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/electron-is/download/electron-is-3.0.0.tgz#bd4c27651fbe03f243f3607c2a098be884f9ed50"
+  integrity sha1-vUwnZR++A/JD82B8KgmL6IT57VA=
+  dependencies:
+    electron-is-dev "^0.3.0"
+    semver "^5.5.0"
+
 electron-notarize@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/electron-notarize/download/electron-notarize-1.0.0.tgz#bc925b1ccc3f79e58e029e8c4706572b01a9fd8f"
