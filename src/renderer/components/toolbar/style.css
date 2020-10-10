@@ -13,7 +13,7 @@
 
 .toolbar__tab:hover {
     cursor: pointer;
-    background: #116fc7;
+    background: #1890ff;
 }
 
 .toolbar__tab.active {

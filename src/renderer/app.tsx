@@ -4,6 +4,7 @@ import { GetStart } from "./components/get-start";
 import "antd/dist/antd.css";
 import "./app.css";
 import { FileContent } from "./components/file-content";
+import { Toolbar } from "./components/toolbar";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
 import { FileContext, File } from "./FileContext";
@@ -33,6 +34,7 @@ const App: React.FC = () => {
       ) : (
         <FileContext.Provider value={file}>
           <Header />
+          <Toolbar />
           <FileContent />
           <Footer />
         </FileContext.Provider>

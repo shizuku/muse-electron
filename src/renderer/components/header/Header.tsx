@@ -5,12 +5,13 @@ import "./style.css";
 export const Header: FC = () => {
   return (
     <FileContext.Consumer>
-      {(t) => (
+      {({ fileName }) => (
         <div className="header">
-          <div className="app-logo"></div>
-          <div className="window-title">
-            {t.fileName === "" ? `Muse` : `${t.fileName} - Muse`}
+          <div className="header__app-logo"></div>
+          <div className="header__window-title">
+            {fileName === "" ? `Muse` : `${fileName} - Muse`}
           </div>
+          <div className="header__controls"></div>
         </div>
       )}
     </FileContext.Consumer>

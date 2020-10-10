@@ -4,7 +4,7 @@
     background: #1890ff;
 }
 
-.window-title {
+.header__window-title {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0);

@@ -1,12 +1,6 @@
 #app {
     margin: 0;
-}
-
-.tabs {
+    padding: 0;
     height: 100vh;
-}
-
-.tab-content {
-    margin-top: -1rem;
-    overflow: visible;
+    display: block;
 }
