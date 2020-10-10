@@ -2,10 +2,11 @@ import { BrowserWindow } from "electron";
 
 export const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    height: 800,
-    width: 1200,
+    height: 900,
+    width: 1600,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
   mainWindow.webContents.openDevTools();

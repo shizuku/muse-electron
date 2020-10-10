@@ -1,9 +1,14 @@
 import React from "react";
-import { Layout, Menu } from "antd";
-import { FileAddOutlined, FolderOpenOutlined } from "@ant-design/icons";
+import { Layout, Menu, List } from "antd";
+import {
+  FileAddOutlined,
+  FolderOpenOutlined,
+  FileOutlined,
+} from "@ant-design/icons";
 const { Sider, Content } = Layout;
 import "./style.css";
 import { ipcRenderer } from "electron";
+import { RecentContext } from "../../RecentContext";
 
 export const GetStart: React.FC = () => {
   return (
@@ -39,7 +44,33 @@ export const GetStart: React.FC = () => {
       <Content>
         <div className="get-start__content">
           <h2>Recent</h2>
-          <div></div>
+          <RecentContext.Consumer>
+            {({ files }) => (
+              <div className="get-start__recent-files">
+                <List
+                  itemLayout="vertical"
+                  dataSource={files}
+                  renderItem={(it) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<FileOutlined style={{ fontSize: "2rem" }} />}
+                        title={
+                          <a
+                            onClick={() => {
+                              ipcRenderer.send("open-file", it.path);
+                            }}
+                          >
+                            {it.name}
+                          </a>
+                        }
+                        description={it.path}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </div>
+            )}
+          </RecentContext.Consumer>
         </div>
       </Content>
     </Layout>
