@@ -13,6 +13,7 @@ export const Header: FC = () => {
     <FileContext.Consumer>
       {({ fileName }) => (
         <div className="header">
+          <div className="header__drag-region"></div>
           <div className="header__app-logo"></div>
           <div className="header__window-title">
             {fileName === "" ? `Muse` : `${fileName} - Muse`}
