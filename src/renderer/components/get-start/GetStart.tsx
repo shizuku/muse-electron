@@ -48,12 +48,12 @@ export const GetStart: React.FC = () => {
             {({ files }) => (
               <div className="get-start__recent-files">
                 <List
-                  itemLayout="vertical"
+                  itemLayout="horizontal"
                   dataSource={files}
                   renderItem={(it) => (
                     <List.Item>
                       <List.Item.Meta
-                        avatar={<FileOutlined style={{ fontSize: "2rem" }} />}
+                        avatar={<FileOutlined style={{ fontSize: "3rem" }} />}
                         title={
                           <a
                             onClick={() => {

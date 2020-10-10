@@ -1,41 +1,9 @@
 import React, { FC } from "react";
-import classNames from "classnames";
-import { ActiveContext } from "./ActiveContext";
-
-const label = "view";
 
 export const ViewTab: FC = () => {
-  return (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__tab", {
-            active: a.active === label,
-          })}
-          onClick={() => {
-            a.setActive(label);
-          }}
-        >
-          <div className={"toolbar__tab-container"}>{"View"}</div>
-        </div>
-      )}
-    </ActiveContext.Consumer>
-  );
+  return <span>View</span>;
 };
 
 export const View: FC = () => {
-  return (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__content", {
-            active: a.active === label,
-            inactive: a.active !== label,
-          })}
-        >
-          View Content
-        </div>
-      )}
-    </ActiveContext.Consumer>
-  );
+  return <div>View Content</div>;
 };

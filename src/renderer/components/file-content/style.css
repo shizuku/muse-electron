@@ -3,6 +3,8 @@
 }
 
 .notaiton-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     display: block;
     height: 100%;
     text-align: center;

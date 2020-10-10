@@ -42,16 +42,21 @@ const App: React.FC = () => {
   return (
     <div id="app">
       <RecentContext.Provider value={{ files, addFile }}>
-        {file.data === "" ? (
-          <GetStart />
-        ) : (
-          <FileContext.Provider value={file}>
-            <Header />
-            <Toolbar />
-            <FileContent />
-            <Footer />
-          </FileContext.Provider>
-        )}
+        <FileContext.Provider value={file}>
+          {file.data === "" ? (
+            <>
+              <Header />
+              <GetStart />
+            </>
+          ) : (
+            <>
+              <Header />
+              <Toolbar />
+              <FileContent />
+              <Footer />
+            </>
+          )}
+        </FileContext.Provider>
       </RecentContext.Provider>
     </div>
   );

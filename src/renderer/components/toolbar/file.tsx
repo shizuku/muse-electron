@@ -1,41 +1,9 @@
 import React, { FC } from "react";
-import classNames from "classnames";
-import { ActiveContext } from "./ActiveContext";
-
-const label = "file";
 
 export const FileTab: FC = () => {
-  return (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__tab", {
-            active: a.active === label,
-          })}
-          onClick={() => {
-            a.setActive(label);
-          }}
-        >
-          <div className={"toolbar__tab-container"}>{"File"}</div>
-        </div>
-      )}
-    </ActiveContext.Consumer>
-  );
+  return <span>File</span>;
 };
 
 export const File: FC = () => {
-  return (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__content", {
-            active: a.active === label,
-            inactive: a.active !== label,
-          })}
-        >
-          File Content
-        </div>
-      )}
-    </ActiveContext.Consumer>
-  );
+  return <div>File Content</div>;
 };
