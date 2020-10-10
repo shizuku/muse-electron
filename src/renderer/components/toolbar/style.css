@@ -1,39 +1,40 @@
 .toolbar {
-    background: #1890ff;
-    display: block;
-    box-shadow: 0px 6px 6px 0px rgba(29, 29, 29, 0.2);
+  background: #1890ff;
+  display: block;
+  box-shadow: 0px 6px 6px 0px rgba(29, 29, 29, 0.2);
 }
 
 .toolbar__tabs {
-    background: #1890ff;
+  background: #1890ff;
 }
 
 .toolbar__tab {
-    display: inline-flex;
-    font-size: 1rem;
+  display: inline-flex;
+  font-size: 1rem;
 }
 
 .toolbar__tab:hover {
-    cursor: pointer;
-    background: #2482da;
+  cursor: pointer;
+  background: #2482da;
 }
 
 .toolbar__tab.active {
-    background: white;
+  background: white;
 }
 
 .toolbar__tab-container {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-top: 0.3rem;
-    margin-bottom: 0.3rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .toolbar__content.inactive {
-    display: none;
+  display: none;
 }
 
 .toolbar__content {
-    background: white;
-    display: block;
+  background: white;
+  display: block;
+  height: 6rem;
 }

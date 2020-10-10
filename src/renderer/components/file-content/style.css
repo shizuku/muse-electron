@@ -1,12 +1,12 @@
 .file-content {
-    height: calc(100vh - 6.3rem);
+  height: calc(100vh - 6.3rem);
 }
 
 .notaiton-content {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    display: block;
-    height: 100%;
-    text-align: center;
-    overflow-y: scroll;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: block;
+  height: 100%;
+  text-align: center;
+  overflow-y: scroll;
 }

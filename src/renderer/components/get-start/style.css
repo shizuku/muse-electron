@@ -1,23 +1,23 @@
 .get-start {
-    height: calc(100vh - 30px);
-    overflow: hidden;
+  height: calc(100vh - 30px);
+  overflow: hidden;
 }
 
 .get-start__sider {
-    background: #1890ff;
+  background: #1890ff;
 }
 
 .get-start__sider-title {
-    margin-top: 5rem;
-    color: white;
-    text-align: center;
+  margin-top: 5rem;
+  color: white;
+  text-align: center;
 }
 
 .get-start__sider-menu {
-    background: #1890ff;
+  background: #1890ff;
 }
 
 .get-start__content {
-    margin-top: 5rem;
-    margin-left: 1rem;
+  margin-top: 5rem;
+  margin-left: 1rem;
 }
