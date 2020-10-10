@@ -1,7 +1,7 @@
-import { app, dialog, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { readFile } from "fs";
 
-export function createActions() {
+export function createActions(mw: BrowserWindow) {
   ipcMain.on("new-file", () => {});
   ipcMain.on("open-file", (event, path) => {
     const read = (p: string) => {
@@ -26,5 +26,8 @@ export function createActions() {
     } else {
       read(path);
     }
+  });
+  ipcMain.on("toggle-dev-tools", () => {
+    mw.webContents.toggleDevTools();
   });
 }

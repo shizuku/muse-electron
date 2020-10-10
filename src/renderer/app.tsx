@@ -11,6 +11,7 @@ import { FileContext, File } from "./FileContext";
 import { FileInfo, RecentContext } from "./RecentContext";
 import Store from "electron-store";
 import { getFileName } from "../shared/utils";
+import hotkeys from "hotkeys-js";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
@@ -32,13 +33,16 @@ const App: React.FC = () => {
     ipcRenderer.on(
       "open-file-reply",
       (event, filePath: string, content: string) => {
-        let fileName = getFileName(filePath)
+        let fileName = getFileName(filePath);
         if (content !== "") {
           setFile({ filePath, fileName, data: content });
           addFile({ name: fileName, path: filePath });
         }
       }
     );
+    hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
+      ipcRenderer.send("toggle-dev-tools");
+    });
   });
   return (
     <div id="app">

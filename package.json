@@ -118,6 +118,7 @@
     "electron-is": "^3.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^6.0.1",
+    "hotkeys-js": "^3.8.1",
     "i18next": "^19.8.0",
     "i18next-browser-languagedetector": "^6.0.1",
     "mobx": "^6.0.0",
