@@ -1,24 +1,25 @@
 .welcome {
+  display: flex;
   height: calc(100vh - 30px);
   overflow: hidden;
   -webkit-user-select: none;
 }
 
 .welcome__sider {
-  background: #1890ff;
-}
-
-.welcome__sider-title {
-  margin-top: 5rem;
-  color: white;
-  text-align: center;
-}
-
-.welcome__sider-menu {
-  background: #1890ff;
+  display: block;
 }
 
 .welcome__content {
-  margin-top: 5rem;
-  margin-left: 1rem;
+  flex: 1;
+  display: block;
+  margin-top: 7rem;
+  margin-left: 2rem;
+}
+
+.welcome__content h2 {
+  display: block;
+}
+
+.welcome__recent-files {
+  display: block;
 }
