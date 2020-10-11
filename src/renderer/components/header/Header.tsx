@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import {
   CloseOutlined,
   BorderOutlined,
@@ -7,12 +7,17 @@ import {
 import { FileContext } from "../../FileContext";
 import "./style.css";
 import { ipcRenderer } from "electron";
+import { Heights } from "../../app";
 
-export const Header: FC = () => {
+export const Header: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
+  useEffect(() => {
+    h.header = r.current?.clientHeight || 0;
+  });
+  let r = useRef<HTMLDivElement>(null);
   return (
     <FileContext.Consumer>
       {({ fileName }) => (
-        <div className="header">
+        <div className="header" ref={r}>
           <div className="header__drag-region"></div>
           <div className="header__app-logo"></div>
           <div className="header__window-title">

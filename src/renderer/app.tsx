@@ -3,7 +3,7 @@ import { ipcRenderer, remote } from "electron";
 import { Welcome } from "./components/welcome";
 import "antd/dist/antd.css";
 import "./app.css";
-import { FileContent } from "./components/file-content";
+import { Content } from "./components/content";
 import { Toolbar } from "./components/toolbar";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
@@ -12,8 +12,20 @@ import { FileInfo, RecentContext } from "./RecentContext";
 import Store from "electron-store";
 import { getFileFolder, getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
+import { computed, observable } from "mobx";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
+
+export class Heights {
+  @observable header: number = 0;
+  @observable toolbar: number = 0;
+  @computed get content(): number {
+    return (
+      document.body.clientHeight - this.header - this.toolbar - this.footer
+    );
+  }
+  @observable footer: number = 0;
+}
 
 const App: React.FC = () => {
   let [file, setFile] = useState<File>({
@@ -21,7 +33,6 @@ const App: React.FC = () => {
     filePath: "",
     data: "",
   });
-  console.log(remote.app.getPath("appData"));
   let r = (store.get("recent-files") as FileInfo[]) || [];
   let [files, setFiles] = useState<FileInfo[]>(r);
   const addFile = (f: FileInfo) => {
@@ -62,21 +73,22 @@ const App: React.FC = () => {
       ipcRenderer.send("toggle-dev-tools");
     });
   });
+  let h = new Heights();
   return (
     <div id="app">
       <RecentContext.Provider value={{ files, addFile }}>
         <FileContext.Provider value={file}>
           {file.data === "" ? (
             <>
-              <Header />
+              <Header h={h} />
               <Welcome />
             </>
           ) : (
             <>
-              <Header />
-              <Toolbar />
-              <FileContent />
-              <Footer />
+              <Header h={h} />
+              <Toolbar h={h} />
+              <Content h={h} />
+              <Footer h={h} />
             </>
           )}
         </FileContext.Provider>

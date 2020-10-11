@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Button } from "antd";
 import {
   SaveOutlined,
@@ -11,6 +11,7 @@ import { File, FileTab } from "./file";
 import { View, ViewTab } from "./view";
 import { StartTab } from "./start";
 import "./style.css";
+import { Heights } from "../../app";
 
 export const Tab: FC<{ label: string }> = ({ label, children }) => {
   return (
@@ -48,10 +49,14 @@ export const Pane: FC<{ label: string }> = ({ label, children }) => {
   );
 };
 
-export const Toolbar: FC = () => {
+export const Toolbar: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
   let [active, setActive] = useState<string>("file");
+  let r = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    h.toolbar = r.current?.clientHeight || 0;
+  });
   return (
-    <div className="toolbar">
+    <div className="toolbar" ref={r}>
       <ActiveContext.Provider value={{ active, setActive }}>
         <div className="toolbar__tabs">
           <Button type="primary" icon={<FolderOpenOutlined />} />
