@@ -17,12 +17,11 @@ import { computed, observable } from "mobx";
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
 export class Heights {
+  @observable wh: number = 0;
   @observable header: number = 0;
   @observable toolbar: number = 0;
   @computed get content(): number {
-    return (
-      document.body.clientHeight - this.header - this.toolbar - this.footer
-    );
+    return this.wh - this.header - this.toolbar - this.footer;
   }
   @observable footer: number = 0;
 }
@@ -51,6 +50,8 @@ const App: React.FC = () => {
     re.sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
+  let h = new Heights();
+  h.wh = document.body.clientHeight;
   useEffect(() => {
     ipcRenderer.on(
       "open-file-reply",
@@ -72,8 +73,10 @@ const App: React.FC = () => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
       ipcRenderer.send("toggle-dev-tools");
     });
+    window.onresize = () => {
+      h.wh = document.body.clientHeight;
+    };
   });
-  let h = new Heights();
   return (
     <div id="app">
       <RecentContext.Provider value={{ files, addFile }}>
