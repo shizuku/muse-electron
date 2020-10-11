@@ -4553,17 +4553,17 @@ mobx-react-lite@^2.2.0:
   resolved "https://registry.npm.taobao.org/mobx-react-lite/download/mobx-react-lite-2.2.2.tgz#87c217dc72b4e47b22493daf155daf3759f868a6"
   integrity sha1-h8IX3HK05HsiST2vFV2vN1n4aKY=
 
-mobx-react@^6.3.1:
+mobx-react@^6.3.0:
   version "6.3.1"
   resolved "https://registry.npm.taobao.org/mobx-react/download/mobx-react-6.3.1.tgz#204f9756e42e19d91cb6598837063b7e7de87c52"
   integrity sha1-IE+XVuQuGdkctlmINwY7fn3ofFI=
   dependencies:
     mobx-react-lite "^2.2.0"
 
-mobx@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npm.taobao.org/mobx/download/mobx-6.0.0.tgz#676fc8dd225d26485d354ff44a1f8d00938b32dc"
-  integrity sha1-Z2/I3SJdJkhdNU/0Sh+NAJOLMtw=
+mobx@^5.15.6:
+  version "5.15.7"
+  resolved "https://registry.npm.taobao.org/mobx/download/mobx-5.15.7.tgz#b9a5f2b6251f5d96980d13c78e9b5d8d4ce22665"
+  integrity sha1-uaXytiUfXZaYDRPHjptdjUziJmU=
 
 moment@^2.24.0, moment@^2.25.3:
   version "2.29.0"

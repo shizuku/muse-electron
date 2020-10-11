@@ -63,7 +63,9 @@ export const Welcome: React.FC = () => {
                             {it.name}
                           </a>
                         }
-                        description={it.path}
+                        description={`${it.folder}\t${new Date(
+                          it.time
+                        ).toLocaleString()}`}
                       />
                     </List.Item>
                   )}

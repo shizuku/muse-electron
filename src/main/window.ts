@@ -12,5 +12,6 @@ export const createWindow = () => {
       enableRemoteModule: true,
     },
   });
+  mainWindow.webContents.openDevTools();
   return mainWindow;
 };
