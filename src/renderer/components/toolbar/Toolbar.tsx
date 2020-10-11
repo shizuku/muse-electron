@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { CSSProperties, FC, useEffect, useRef, useState } from "react";
 import { Button } from "antd";
 import {
   SaveOutlined,
@@ -9,78 +9,148 @@ import classNames from "classnames";
 import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./file";
 import { View, ViewTab } from "./view";
-import { StartTab } from "./start";
+import { Start, StartTab } from "./start";
 import "./style.css";
 import { Heights } from "../../app";
+import { ThemeContext } from "../../ThemeContext";
 
 export const Tab: FC<{ label: string }> = ({ label, children }) => {
+  let [hover, setHover] = useState(false);
   return (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__tab", {
-            active: a.active === label,
-          })}
-          onClick={() => {
-            a.setActive(label);
-          }}
-        >
-          <div className={"toolbar__tab-container"}>{children}</div>
-        </div>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <ActiveContext.Consumer>
+          {(a) => (
+            <div
+              className={classNames("toolbar__tab", {
+                active: a.active === label,
+              })}
+              onClick={() => {
+                a.setActive(label);
+              }}
+              style={
+                hover
+                  ? a.active !== label
+                    ? { background: theme.colorPrimaryDark }
+                    : { background: theme.colorBackground }
+                  : a.active !== label
+                  ? { background: theme.colorPrimary }
+                  : { background: theme.colorBackground }
+              }
+              onMouseEnter={() => {
+                setHover(true);
+              }}
+              onMouseLeave={() => {
+                setHover(false);
+              }}
+            >
+              <div className={"toolbar__tab-container"}>{children}</div>
+            </div>
+          )}
+        </ActiveContext.Consumer>
       )}
-    </ActiveContext.Consumer>
+    </ThemeContext.Consumer>
   );
 };
 
 export const Pane: FC<{ label: string }> = ({ label, children }) => {
   return (
-    <ActiveContext.Consumer>
-      {(a) => (
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <ActiveContext.Consumer>
+          {(a) => (
+            <div
+              className={classNames("toolbar__content", {
+                active: a.active === label,
+                inactive: a.active !== label,
+              })}
+              style={{ background: theme.colorBackground }}
+            >
+              {children}
+            </div>
+          )}
+        </ActiveContext.Consumer>
+      )}
+    </ThemeContext.Consumer>
+  );
+};
+
+export const FunButtom: FC = ({ children }) => {
+  let [hover, setHover] = useState(false);
+  return (
+    <ThemeContext.Consumer>
+      {(theme) => (
         <div
-          className={classNames("toolbar__content", {
-            active: a.active === label,
-            inactive: a.active !== label,
-          })}
+          className="toolbar__button"
+          onMouseEnter={() => {
+            setHover(true);
+          }}
+          onMouseLeave={() => {
+            setHover(false);
+          }}
+          style={hover ? { background: theme.colorPrimaryDark } : {}}
         >
-          {children}
+          <div className="toolbar__button-container">{children}</div>
         </div>
       )}
-    </ActiveContext.Consumer>
+    </ThemeContext.Consumer>
   );
 };
 
 export const Toolbar: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
-  let [active, setActive] = useState<string>("file");
+  let [active, setActive] = useState<string>("start");
   let r = useRef<HTMLDivElement>(null);
   useEffect(() => {
     h.toolbar = r.current?.clientHeight || 0;
   });
   return (
-    <div className="toolbar" ref={r}>
-      <ActiveContext.Provider value={{ active, setActive }}>
-        <div className="toolbar__tabs">
-          <Button type="primary" icon={<FolderOpenOutlined />} />
-          <Button type="primary" icon={<SaveOutlined />} />
-          <Button type="primary" icon={<PrinterOutlined />} />
-          <Tab label="start">
-            <StartTab />
-          </Tab>
-          <Tab label="file">
-            <FileTab />
-          </Tab>
-          <Tab label="view">
-            <ViewTab />
-          </Tab>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <div
+          className="toolbar"
+          ref={r}
+          style={{ background: theme.colorPrimary }}
+        >
+          <ActiveContext.Provider value={{ active, setActive }}>
+            <div
+              className="toolbar__tabs"
+              style={{ background: theme.colorPrimary }}
+            >
+              <div className="toolbar__functions">
+                <FunButtom>
+                  <FolderOpenOutlined />
+                </FunButtom>
+                <FunButtom>
+                  <SaveOutlined />
+                </FunButtom>
+                <FunButtom>
+                  <PrinterOutlined />
+                </FunButtom>
+              </div>
+              <Tab label="file">
+                <FileTab />
+              </Tab>
+              <Tab label="start">
+                <StartTab />
+              </Tab>
+              <Tab label="view">
+                <ViewTab />
+              </Tab>
+            </div>
+            <div className="toolbar__contents">
+              <Pane label="file">
+                <File />
+              </Pane>
+              <Pane label="start">
+                <Start />
+              </Pane>
+              <Pane label="view">
+                <View />
+              </Pane>
+            </div>
+          </ActiveContext.Provider>
         </div>
-        <div className="toolbar__contents">
-          <Pane label="file">
-            <File />
-          </Pane>
-          <Pane label="view">
-            <View />
-          </Pane>
-        </div>
-      </ActiveContext.Provider>
-    </div>
+      )}
+    </ThemeContext.Consumer>
   );
 };

@@ -1,11 +1,30 @@
 .toolbar {
-  background: #1890ff;
   display: block;
   box-shadow: 0px 6px 6px 0px rgba(29, 29, 29, 0.2);
 }
 
+.toolbar__functions {
+  display: inline-flex;
+}
+
+.toolbar__button {
+  display: inline-flex;
+  font-size: 1rem;
+}
+
+.toolbar__button:hover {
+  cursor: pointer;
+}
+
+.toolbar__button-container {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
 .toolbar__tabs {
-  background: #1890ff;
+  display: block;
 }
 
 .toolbar__tab {
@@ -15,11 +34,6 @@
 
 .toolbar__tab:hover {
   cursor: pointer;
-  background: #2482da;
-}
-
-.toolbar__tab.active {
-  background: white;
 }
 
 .toolbar__tab-container {
@@ -34,7 +48,6 @@
 }
 
 .toolbar__content {
-  background: white;
   display: block;
   height: 6rem;
 }

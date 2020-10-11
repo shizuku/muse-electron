@@ -4,8 +4,6 @@
   height: 30px;
   background: none;
   overflow: visible;
-  background: #1890ff;
-  color: white;
 }
 
 .header__drag-region {
@@ -31,7 +29,6 @@
   right: 0;
   display: inline-flex;
   float: right;
-  color: white;
   -webkit-app-region: no-drag;
 }
 
@@ -45,7 +42,7 @@
 }
 
 .close:hover {
-  background: red;
+  background: rgba(255, 0, 0, 0.8);
 }
 
 .minimize:hover {

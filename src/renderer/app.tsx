@@ -13,6 +13,7 @@ import Store from "electron-store";
 import { getFileFolder, getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
 import { computed, observable } from "mobx";
+import { defaultTheme, ThemeContext } from "./ThemeContext";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
@@ -81,19 +82,21 @@ const App: React.FC = () => {
     <div id="app">
       <RecentContext.Provider value={{ files, addFile }}>
         <FileContext.Provider value={file}>
-          {file.data === "" ? (
-            <>
-              <Header h={h} />
-              <Welcome />
-            </>
-          ) : (
-            <>
-              <Header h={h} />
-              <Toolbar h={h} />
-              <Content h={h} />
-              <Footer h={h} />
-            </>
-          )}
+          <ThemeContext.Provider value={defaultTheme}>
+            {file.data === "" ? (
+              <>
+                <Header h={h} />
+                <Welcome />
+              </>
+            ) : (
+              <>
+                <Header h={h} />
+                <Toolbar h={h} />
+                <Content h={h} />
+                <Footer h={h} />
+              </>
+            )}
+          </ThemeContext.Provider>
         </FileContext.Provider>
       </RecentContext.Provider>
     </div>

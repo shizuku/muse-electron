@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Heights } from "../../app";
+import { ThemeContext } from "../../ThemeContext";
 import "./style.css";
 
 export const Footer: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
@@ -8,8 +9,19 @@ export const Footer: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
     h.footer = r.current?.clientHeight || 0;
   });
   return (
-    <div className="footer" ref={r} style={{ background: "#1890ff" }}>
-      Footer
-    </div>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <div
+          className="footer"
+          ref={r}
+          style={{
+            background: theme.colorPrimary,
+            color: theme.colorBackground,
+          }}
+        >
+          Footer
+        </div>
+      )}
+    </ThemeContext.Consumer>
   );
 };
