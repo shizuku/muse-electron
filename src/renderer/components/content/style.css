@@ -1,5 +1,6 @@
-.file-content {
+.content {
   height: calc(100vh - 11.3rem);
+  -webkit-user-select: none;
 }
 
 .notaiton-content {

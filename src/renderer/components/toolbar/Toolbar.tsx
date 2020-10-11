@@ -1,10 +1,5 @@
-import React, { CSSProperties, FC, useEffect, useRef, useState } from "react";
-import { Button } from "antd";
-import {
-  SaveOutlined,
-  FolderOpenOutlined,
-  PrinterOutlined,
-} from "@ant-design/icons";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./file";
@@ -118,13 +113,13 @@ export const Toolbar: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
             >
               <div className="toolbar__functions">
                 <FunButtom>
-                  <FolderOpenOutlined />
-                </FunButtom>
-                <FunButtom>
                   <SaveOutlined />
                 </FunButtom>
                 <FunButtom>
-                  <PrinterOutlined />
+                  <UndoOutlined />
+                </FunButtom>
+                <FunButtom>
+                  <RedoOutlined />
                 </FunButtom>
               </div>
               <Tab label="file">

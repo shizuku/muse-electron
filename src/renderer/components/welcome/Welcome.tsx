@@ -12,13 +12,13 @@ import { RecentContext } from "../../RecentContext";
 
 export const Welcome: React.FC = () => {
   return (
-    <Layout className="get-start">
-      <Sider className="get-start__sider" theme="light">
-        <h1 className="get-start__sider-title">{"Muse"}</h1>
+    <Layout className="welcome">
+      <Sider className="welcome__sider" theme="light">
+        <h1 className="welcome__sider-title">{"Muse"}</h1>
         <Menu
           theme="light"
           mode="inline"
-          className="get-start__sider-menu"
+          className="welcome__sider-menu"
           selectable={true}
         >
           <Menu.Item
@@ -42,11 +42,11 @@ export const Welcome: React.FC = () => {
         </Menu>
       </Sider>
       <Content>
-        <div className="get-start__content">
+        <div className="welcome__content">
           <h2>Recent</h2>
           <RecentContext.Consumer>
             {({ files }) => (
-              <div className="get-start__recent-files">
+              <div className="welcome__recent-files">
                 <List
                   itemLayout="horizontal"
                   dataSource={files}

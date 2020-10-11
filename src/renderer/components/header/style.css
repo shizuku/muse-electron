@@ -4,6 +4,7 @@
   height: 30px;
   background: none;
   overflow: visible;
+  -webkit-user-select: none;
 }
 
 .header__drag-region {
