@@ -52,6 +52,14 @@ export class Heights {
   footer: number = 0;
 }
 
+export interface Events {
+  onSave: () => void;
+  onSaveAs: () => void;
+  onPrint: () => void;
+  onUndo: () => void;
+  onRedo: () => void;
+}
+
 export class AppState {
   constructor() {
     makeObservable(this, {
@@ -77,6 +85,7 @@ export class AppState {
   theme: Theme;
   heights: Heights;
   opened: boolean;
+  events?: Events;
   //unopened
   recents: FileInfo[];
   //opened

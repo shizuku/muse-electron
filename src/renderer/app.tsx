@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { ipcRenderer } from "electron";
 import { Welcome } from "./components/welcome";
-import "antd/dist/antd.css";
-import "./app.css";
 import { Content } from "./components/content";
 import { Toolbar } from "./components/toolbar";
 import { Header } from "./components/header";
@@ -10,9 +8,10 @@ import { Footer } from "./components/footer";
 import Store from "electron-store";
 import { getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
-import { Events, EventsContext } from "./EventsContext";
 import { AppState, AppStateContext, FileInfo } from "./AppStateContext";
 import { MuseConfig } from "./components/muse-notation";
+
+import "./app.css";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
@@ -35,7 +34,7 @@ const App: React.FC = () => {
     re.sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
-  const events: Events = {
+  state.events = {
     onSave: () => {
       if (state.isNew) {
         ipcRenderer.send("save-as", state.filePath, state.data);
@@ -81,21 +80,19 @@ const App: React.FC = () => {
   return (
     <div id="app">
       <AppStateContext.Provider value={state}>
-        <EventsContext.Provider value={events}>
-          {state.opened ? (
-            <>
-              <Header />
-              <Toolbar />
-              <Content />
-              <Footer />
-            </>
-          ) : (
-            <>
-              <Header />
-              <Welcome />
-            </>
-          )}
-        </EventsContext.Provider>
+        {state.opened ? (
+          <>
+            <Header />
+            <Toolbar />
+            <Content />
+            <Footer />
+          </>
+        ) : (
+          <>
+            <Header />
+            <Welcome />
+          </>
+        )}
       </AppStateContext.Provider>
     </div>
   );

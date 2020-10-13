@@ -6,7 +6,6 @@ import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
 import "./style.css";
-import { EventsContext } from "../../EventsContext";
 import { AppStateContext } from "../../AppStateContext";
 import { useObserver } from "mobx-react";
 
@@ -101,12 +100,12 @@ export const FuncButtom: FC<FuncButtonProps> = ({ children, onClick }) => {
 
 export const FuncBar: FC = () => {
   return (
-    <EventsContext.Consumer>
-      {(events) => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <div className="toolbar__functions">
           <FuncButtom
             onClick={() => {
-              events.onSave();
+              state.events?.onSave();
             }}
           >
             <SaveOutlined />
@@ -119,7 +118,7 @@ export const FuncBar: FC = () => {
           </FuncButtom>
         </div>
       )}
-    </EventsContext.Consumer>
+    </AppStateContext.Consumer>
   );
 };
 
