@@ -1,14 +1,20 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { MuseNotation } from "../muse-notation";
-import { useObserver } from "mobx-react";
+import { observer, Observer } from "mobx-react";
 import { AppStateContext } from "../../AppStateContext";
 import "./style.css";
 
-export const Content: FC = () => {
-  return useObserver(() => (
+export const Content: FC = observer(() => {
+  return (
     <AppStateContext.Consumer>
       {(state) => (
-        <div className="content" style={{ height: state.heights.content }}>
+        <div
+          className="content"
+          style={{ height: state.heights.content }}
+          ref={(e) => {
+            console.log(state.heights);
+          }}
+        >
           <div className="notaiton-content">
             {state.notation ? (
               <MuseNotation notation={state.notation} />
@@ -19,5 +25,5 @@ export const Content: FC = () => {
         </div>
       )}
     </AppStateContext.Consumer>
-  ));
-};
+  );
+});

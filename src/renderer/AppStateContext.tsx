@@ -1,4 +1,4 @@
-import { computed, makeObservable, observable } from "mobx";
+import { action, computed, observable } from "mobx";
 import { createContext } from "react";
 import { MuseConfig, Notation } from "./components/muse-notation";
 
@@ -8,14 +8,12 @@ export interface FileInfo {
 }
 
 export class Config {
-  constructor() {
-    makeObservable(this);
-  }
+  @observable pageWidth: number = 0;
+  constructor() {}
 }
 
 export class Theme {
   constructor() {
-    makeObservable(this);
     this.colorBackground = "#FFFFFF";
     this.colorPrimary = "#20A0FF";
     this.colorPrimaryLight = "#58B7FF";
@@ -24,32 +22,24 @@ export class Theme {
     this.colorWarning = "#F7BA2A";
     this.colorDanger = "#FF4949";
   }
-  colorBackground: string;
-  colorPrimary: string;
-  colorPrimaryLight: string;
-  colorPrimaryDark: string;
-  colorSuccess: string;
-  colorWarning: string;
-  colorDanger: string;
+  @observable colorBackground: string;
+  @observable colorPrimary: string;
+  @observable colorPrimaryLight: string;
+  @observable colorPrimaryDark: string;
+  @observable colorSuccess: string;
+  @observable colorWarning: string;
+  @observable colorDanger: string;
 }
 
 export class Heights {
-  constructor() {
-    makeObservable(this, {
-      wh: observable,
-      header: observable,
-      toolbar: observable,
-      content: computed,
-      footer: observable,
-    });
-  }
-  wh: number = 0;
-  header: number = 0;
-  toolbar: number = 0;
-  get content(): number {
+  constructor() {}
+  @observable wh: number = 0;
+  @observable header: number = 0;
+  @observable toolbar: number = 0;
+  @computed get content(): number {
     return this.wh - this.header - this.toolbar - this.footer;
   }
-  footer: number = 0;
+  @observable footer: number = 0;
 }
 
 export interface Events {
@@ -62,14 +52,6 @@ export interface Events {
 
 export class AppState {
   constructor() {
-    makeObservable(this, {
-      heights: observable,
-      opened: observable,
-      recents: observable,
-      notation: observable,
-      data: computed,
-      isNew: observable,
-    });
     this.config = new Config();
     this.theme = new Theme();
     this.opened = false;
@@ -81,22 +63,22 @@ export class AppState {
     this.notation = undefined;
   }
   //all
-  config: Config;
-  theme: Theme;
-  heights: Heights;
-  opened: boolean;
-  events?: Events;
+  @observable config: Config;
+  @observable theme: Theme;
+  @observable heights: Heights;
+  @observable opened: boolean;
+  @observable events?: Events;
   //unopened
-  recents: FileInfo[];
+  @observable recents: FileInfo[];
   //opened
-  fileName: string;
-  filePath: string;
-  notation?: Notation;
-  get data(): string {
+  @observable fileName: string;
+  @observable filePath: string;
+  @observable notation?: Notation;
+  @computed get data(): string {
     return JSON.stringify(this.notation?.code());
   }
   isNew: boolean;
-  open(
+  @action open(
     fileName: string,
     filePath: string,
     data: string,
@@ -109,11 +91,11 @@ export class AppState {
     this.notation = new Notation(JSON.parse(data), config);
     this.isNew = isNew;
   }
-  close() {
+  @action close() {
     this.notation = undefined;
     this.opened = false;
   }
-  loadRecents(recents: FileInfo[]) {
+  @action loadRecents(recents: FileInfo[]) {
     this.recents = recents;
   }
 }

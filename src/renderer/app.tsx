@@ -12,10 +12,11 @@ import { AppState, AppStateContext, FileInfo } from "./AppStateContext";
 import { MuseConfig } from "./components/muse-notation";
 
 import "./app.css";
+import { observer } from "mobx-react";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
-const App: React.FC = () => {
+const App: React.FC = observer(() => {
   let state = new AppState();
   state.heights.wh = document.body.clientHeight;
   const addFile = (f: FileInfo) => {
@@ -77,6 +78,9 @@ const App: React.FC = () => {
       state.heights.wh = document.body.clientHeight;
     };
   });
+  useEffect(() => {
+    state.loadRecents(store.get("recent-files"));
+  });
   return (
     <div id="app">
       <AppStateContext.Provider value={state}>
@@ -96,6 +100,6 @@ const App: React.FC = () => {
       </AppStateContext.Provider>
     </div>
   );
-};
+});
 
 export default App;

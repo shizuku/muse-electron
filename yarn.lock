@@ -4548,22 +4548,22 @@ mkdirp@^1.0.3:
   resolved "https://registry.npm.taobao.org/mkdirp/download/mkdirp-1.0.4.tgz?cache=0&sync_timestamp=1587535418745&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmkdirp%2Fdownload%2Fmkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha1-PrXtYmInVteaXw4qIh3+utdcL34=
 
-mobx-react-lite@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npm.taobao.org/mobx-react-lite/download/mobx-react-lite-3.0.0.tgz#f39b1cb23262ce539829d47217551e04bf14a8b7"
-  integrity sha1-85scsjJizlOYKdRyF1UeBL8UqLc=
+mobx-react-lite@^2.2.0:
+  version "2.2.2"
+  resolved "https://registry.npm.taobao.org/mobx-react-lite/download/mobx-react-lite-2.2.2.tgz#87c217dc72b4e47b22493daf155daf3759f868a6"
+  integrity sha1-h8IX3HK05HsiST2vFV2vN1n4aKY=
 
-mobx-react@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.npm.taobao.org/mobx-react/download/mobx-react-7.0.0.tgz#c2eb0c3f79ade93ffb07b1ffa07cbaeb5f04e9b6"
-  integrity sha1-wusMP3mt6T/7B7H/oHy6618E6bY=
+mobx-react@^6.3.0:
+  version "6.3.1"
+  resolved "https://registry.npm.taobao.org/mobx-react/download/mobx-react-6.3.1.tgz#204f9756e42e19d91cb6598837063b7e7de87c52"
+  integrity sha1-IE+XVuQuGdkctlmINwY7fn3ofFI=
   dependencies:
-    mobx-react-lite "^3.0.0"
+    mobx-react-lite "^2.2.0"
 
-mobx@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.npm.taobao.org/mobx/download/mobx-6.0.1.tgz#ec23520848527bf7834d7b4c0b54b2a8eb6e7c14"
-  integrity sha1-7CNSCEhSe/eDTXtMC1SyqOtufBQ=
+mobx@^5.15.6:
+  version "5.15.7"
+  resolved "https://registry.npm.taobao.org/mobx/download/mobx-5.15.7.tgz#b9a5f2b6251f5d96980d13c78e9b5d8d4ce22665"
+  integrity sha1-uaXytiUfXZaYDRPHjptdjUziJmU=
 
 moment@^2.24.0, moment@^2.25.3:
   version "2.29.0"

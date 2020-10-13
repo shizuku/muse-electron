@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { useObserver } from "mobx-react";
+import { observer } from "mobx-react";
 import { AppStateContext } from "../../AppStateContext";
 import "./style.css";
 
-export const Footer: FC = () => {
-  return useObserver(() => (
+export const Footer: FC = observer(() => {
+  return (
     <AppStateContext.Consumer>
       {(state) => (
         <div
@@ -21,5 +21,5 @@ export const Footer: FC = () => {
         </div>
       )}
     </AppStateContext.Consumer>
-  ));
-};
+  );
+});
