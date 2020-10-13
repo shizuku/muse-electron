@@ -1,25 +1,23 @@
 import React, { FC } from "react";
-import { FileContext } from "../../FileContext";
-import { Heights } from "../../app";
-import { MuseConfig, MuseNotation, Notation } from "../muse-notation";
+import { MuseNotation } from "../muse-notation";
 import { useObserver } from "mobx-react";
+import { AppStateContext } from "../../AppStateContext";
 import "./style.css";
 
-export const Content: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
-  let hc = useObserver(() => {
-    return h.content;
-  });
-  return (
-    <FileContext.Consumer>
-      {(f) => (
-        <div className="content" style={{ height: hc }}>
+export const Content: FC = () => {
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
+        <div className="content" style={{ height: state.heights.content }}>
           <div className="notaiton-content">
-            <MuseNotation
-              notation={new Notation(JSON.parse(f.data), new MuseConfig())}
-            />
+            {state.notation ? (
+              <MuseNotation notation={state.notation} />
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       )}
-    </FileContext.Consumer>
-  );
+    </AppStateContext.Consumer>
+  ));
 };

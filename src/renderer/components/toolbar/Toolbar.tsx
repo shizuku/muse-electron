@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 import { ActiveContext } from "./ActiveContext";
@@ -6,14 +6,15 @@ import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
 import "./style.css";
-import { Heights } from "../../app";
-import { ThemeContext } from "../../ThemeContext";
+import { EventsContext } from "../../EventsContext";
+import { AppStateContext } from "../../AppStateContext";
+import { useObserver } from "mobx-react";
 
 export const Tab: FC<{ label: string }> = ({ label, children }) => {
   let [hover, setHover] = useState(false);
-  return (
-    <ThemeContext.Consumer>
-      {(theme) => (
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <ActiveContext.Consumer>
           {(a) => (
             <div
@@ -26,11 +27,11 @@ export const Tab: FC<{ label: string }> = ({ label, children }) => {
               style={
                 hover
                   ? a.active !== label
-                    ? { background: theme.colorPrimaryDark }
-                    : { background: theme.colorBackground }
+                    ? { background: state.theme.colorPrimaryDark }
+                    : { background: state.theme.colorBackground }
                   : a.active !== label
-                  ? { background: theme.colorPrimary }
-                  : { background: theme.colorBackground }
+                  ? { background: state.theme.colorPrimary }
+                  : { background: state.theme.colorBackground }
               }
               onMouseEnter={() => {
                 setHover(true);
@@ -44,14 +45,14 @@ export const Tab: FC<{ label: string }> = ({ label, children }) => {
           )}
         </ActiveContext.Consumer>
       )}
-    </ThemeContext.Consumer>
-  );
+    </AppStateContext.Consumer>
+  ));
 };
 
 export const Pane: FC<{ label: string }> = ({ label, children }) => {
-  return (
-    <ThemeContext.Consumer>
-      {(theme) => (
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <ActiveContext.Consumer>
           {(a) => (
             <div
@@ -59,22 +60,27 @@ export const Pane: FC<{ label: string }> = ({ label, children }) => {
                 active: a.active === label,
                 inactive: a.active !== label,
               })}
-              style={{ background: theme.colorBackground }}
+              style={{ background: state.theme.colorBackground }}
             >
               {children}
             </div>
           )}
         </ActiveContext.Consumer>
       )}
-    </ThemeContext.Consumer>
-  );
+    </AppStateContext.Consumer>
+  ));
 };
 
-export const FunButtom: FC = ({ children }) => {
+export interface FuncButtonProps {
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  children?: React.ReactNode;
+}
+
+export const FuncButtom: FC<FuncButtonProps> = ({ children, onClick }) => {
   let [hover, setHover] = useState(false);
-  return (
-    <ThemeContext.Consumer>
-      {(theme) => (
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <div
           className="toolbar__button"
           onMouseEnter={() => {
@@ -83,45 +89,58 @@ export const FunButtom: FC = ({ children }) => {
           onMouseLeave={() => {
             setHover(false);
           }}
-          style={hover ? { background: theme.colorPrimaryDark } : {}}
+          onClick={onClick}
+          style={hover ? { background: state.theme.colorPrimaryDark } : {}}
         >
           <div className="toolbar__button-container">{children}</div>
         </div>
       )}
-    </ThemeContext.Consumer>
+    </AppStateContext.Consumer>
+  ));
+};
+
+export const FuncBar: FC = () => {
+  return (
+    <EventsContext.Consumer>
+      {(events) => (
+        <div className="toolbar__functions">
+          <FuncButtom
+            onClick={() => {
+              events.onSave();
+            }}
+          >
+            <SaveOutlined />
+          </FuncButtom>
+          <FuncButtom>
+            <UndoOutlined />
+          </FuncButtom>
+          <FuncButtom>
+            <RedoOutlined />
+          </FuncButtom>
+        </div>
+      )}
+    </EventsContext.Consumer>
   );
 };
 
-export const Toolbar: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
+export const Toolbar: FC = () => {
   let [active, setActive] = useState<string>("start");
-  let r = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    h.toolbar = r.current?.clientHeight || 0;
-  });
-  return (
-    <ThemeContext.Consumer>
-      {(theme) => (
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <div
           className="toolbar"
-          ref={r}
-          style={{ background: theme.colorPrimary }}
+          ref={(e) => {
+            state.heights.toolbar = e?.clientHeight || 0;
+          }}
+          style={{ background: state.theme.colorPrimary }}
         >
           <ActiveContext.Provider value={{ active, setActive }}>
             <div
               className="toolbar__tabs"
-              style={{ background: theme.colorPrimary }}
+              style={{ background: state.theme.colorPrimary }}
             >
-              <div className="toolbar__functions">
-                <FunButtom>
-                  <SaveOutlined />
-                </FunButtom>
-                <FunButtom>
-                  <UndoOutlined />
-                </FunButtom>
-                <FunButtom>
-                  <RedoOutlined />
-                </FunButtom>
-              </div>
+              <FuncBar />
               <Tab label="file">
                 <FileTab />
               </Tab>
@@ -146,6 +165,6 @@ export const Toolbar: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
           </ActiveContext.Provider>
         </div>
       )}
-    </ThemeContext.Consumer>
-  );
+    </AppStateContext.Consumer>
+  ));
 };

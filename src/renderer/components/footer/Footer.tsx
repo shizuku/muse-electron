@@ -1,27 +1,25 @@
-import React, { FC, useEffect, useRef } from "react";
-import { Heights } from "../../app";
-import { ThemeContext } from "../../ThemeContext";
+import React, { FC } from "react";
+import { useObserver } from "mobx-react";
+import { AppStateContext } from "../../AppStateContext";
 import "./style.css";
 
-export const Footer: FC<{ h: Heights }> = ({ h }: { h: Heights }) => {
-  let r = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    h.footer = r.current?.clientHeight || 0;
-  });
-  return (
-    <ThemeContext.Consumer>
-      {(theme) => (
+export const Footer: FC = () => {
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <div
           className="footer"
-          ref={r}
+          ref={(e) => {
+            state.heights.footer = e?.clientHeight || 0;
+          }}
           style={{
-            background: theme.colorPrimary,
-            color: theme.colorBackground,
+            background: state.theme.colorPrimary,
+            color: state.theme.colorBackground,
           }}
         >
           Footer
         </div>
       )}
-    </ThemeContext.Consumer>
-  );
+    </AppStateContext.Consumer>
+  ));
 };

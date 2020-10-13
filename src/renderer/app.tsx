@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ipcRenderer, remote } from "electron";
+import React, { useEffect } from "react";
+import { ipcRenderer } from "electron";
 import { Welcome } from "./components/welcome";
 import "antd/dist/antd.css";
 import "./app.css";
@@ -7,98 +7,96 @@ import { Content } from "./components/content";
 import { Toolbar } from "./components/toolbar";
 import { Header } from "./components/header";
 import { Footer } from "./components/footer";
-import { FileContext, File } from "./FileContext";
-import { FileInfo, RecentContext } from "./RecentContext";
 import Store from "electron-store";
-import { getFileFolder, getFileName } from "../shared/utils";
+import { getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
-import { computed, observable } from "mobx";
-import { defaultTheme, ThemeContext } from "./ThemeContext";
+import { Events, EventsContext } from "./EventsContext";
+import { AppState, AppStateContext, FileInfo } from "./AppStateContext";
+import { MuseConfig } from "./components/muse-notation";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
-export class Heights {
-  @observable wh: number = 0;
-  @observable header: number = 0;
-  @observable toolbar: number = 0;
-  @computed get content(): number {
-    return this.wh - this.header - this.toolbar - this.footer;
-  }
-  @observable footer: number = 0;
-}
-
 const App: React.FC = () => {
-  let [file, setFile] = useState<File>({
-    fileName: "",
-    filePath: "",
-    data: "",
-  });
-  let r = (store.get("recent-files") as FileInfo[]) || [];
-  let [files, setFiles] = useState<FileInfo[]>(r);
+  let state = new AppState();
+  state.heights.wh = document.body.clientHeight;
   const addFile = (f: FileInfo) => {
-    let re = [...files];
+    let re = state.recents;
     for (let i = 0; i < re.length; ++i) {
       if (re[i].path === f.path) {
         re[i].time = f.time;
-        setFiles(re);
+        state.recents = re;
         re.sort((a, b) => b.time - a.time);
         store.set("recent-files", re);
         return;
       }
     }
     re.push(f);
-    setFiles(re);
+    state.recents = re;
     re.sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
-  let h = new Heights();
-  h.wh = document.body.clientHeight;
+  const events: Events = {
+    onSave: () => {
+      if (state.isNew) {
+        ipcRenderer.send("save-as", state.filePath, state.data);
+      } else {
+      }
+    },
+    onSaveAs: () => {},
+    onPrint: () => {},
+    onUndo: () => {},
+    onRedo: () => {},
+  };
   useEffect(() => {
     ipcRenderer.on(
       "open-file-reply",
-      (event, filePath: string, content: string) => {
+      (event, filePath: string, data: string) => {
         let fileName = getFileName(filePath);
-        let fileFolder = getFileFolder(filePath);
-        console.log(fileFolder);
-        if (content !== "") {
-          setFile({ filePath, fileName, data: content });
+        if (data !== "") {
+          state.open(fileName, filePath, data, new MuseConfig(), false);
           addFile({
-            name: fileName,
             path: filePath,
-            folder: fileFolder,
             time: Date.now(),
           });
         }
       }
     );
+    ipcRenderer.on(
+      "new-file-reply",
+      (event, filePath: string, data: string) => {
+        state.open("New File", filePath, data, new MuseConfig(), true);
+      }
+    );
+  });
+  useEffect(() => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
       ipcRenderer.send("toggle-dev-tools");
     });
+  });
+  useEffect(() => {
     window.onresize = () => {
-      h.wh = document.body.clientHeight;
+      state.heights.wh = document.body.clientHeight;
     };
   });
   return (
     <div id="app">
-      <RecentContext.Provider value={{ files, addFile }}>
-        <FileContext.Provider value={file}>
-          <ThemeContext.Provider value={defaultTheme}>
-            {file.data === "" ? (
-              <>
-                <Header h={h} />
-                <Welcome />
-              </>
-            ) : (
-              <>
-                <Header h={h} />
-                <Toolbar h={h} />
-                <Content h={h} />
-                <Footer h={h} />
-              </>
-            )}
-          </ThemeContext.Provider>
-        </FileContext.Provider>
-      </RecentContext.Provider>
+      <AppStateContext.Provider value={state}>
+        <EventsContext.Provider value={events}>
+          {state.opened ? (
+            <>
+              <Header />
+              <Toolbar />
+              <Content />
+              <Footer />
+            </>
+          ) : (
+            <>
+              <Header />
+              <Welcome />
+            </>
+          )}
+        </EventsContext.Provider>
+      </AppStateContext.Provider>
     </div>
   );
 };

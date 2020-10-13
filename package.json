@@ -29,7 +29,8 @@
             "win32"
           ],
           "config": {
-            "name": "muse_electron"
+            "name": "muse_electron",
+            "noMsi": "false"
           }
         },
         {
@@ -121,8 +122,8 @@
     "hotkeys-js": "^3.8.1",
     "i18next": "^19.8.0",
     "i18next-browser-languagedetector": "^6.0.1",
-    "mobx": "^5.15.6",
-    "mobx-react": "^6.3.0",
+    "mobx": "^6.0.1",
+    "mobx-react": "^7.0.0",
     "react": "^16.13.1",
     "react-dnd": "^11.1.3",
     "react-dom": "^16.13.1",

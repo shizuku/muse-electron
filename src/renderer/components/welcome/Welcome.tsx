@@ -7,24 +7,24 @@ import {
 } from "@ant-design/icons";
 import "./style.css";
 import { ipcRenderer } from "electron";
-import { RecentContext } from "../../RecentContext";
-import { ThemeContext } from "../../ThemeContext";
 import { Menu, MenuItem } from "../menu";
+import { AppStateContext } from "../../AppStateContext";
+import { getFileFolder, getFileName } from "../../../shared/utils";
 
 export const Welcome: FC = () => {
   return (
-    <ThemeContext.Consumer>
-      {(theme) => (
+    <AppStateContext.Consumer>
+      {(state) => (
         <div className="welcome">
           <div
             className="welcome__sider"
-            style={{ background: theme.colorPrimary }}
+            style={{ background: state.theme.colorPrimary }}
           >
             <Menu
               style={{
-                background: theme.colorPrimary,
+                background: state.theme.colorPrimary,
                 marginTop: "5rem",
-                color: theme.colorBackground,
+                color: state.theme.colorBackground,
               }}
             >
               <MenuItem
@@ -51,38 +51,34 @@ export const Welcome: FC = () => {
           </div>
           <div className="welcome__content">
             <h2>Recent</h2>
-            <RecentContext.Consumer>
-              {({ files }) => (
-                <div className="welcome__recent-files">
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={files}
-                    renderItem={(it) => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={<FileOutlined style={{ fontSize: "3rem" }} />}
-                          title={
-                            <a
-                              onClick={() => {
-                                ipcRenderer.send("open-file", it.path);
-                              }}
-                            >
-                              {it.name}
-                            </a>
-                          }
-                          description={`${it.folder}\t${new Date(
-                            it.time
-                          ).toLocaleString()}`}
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </div>
-              )}
-            </RecentContext.Consumer>
+            <div className="welcome__recent-files">
+              <List
+                itemLayout="horizontal"
+                dataSource={state.recents}
+                renderItem={(it) => (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={<FileOutlined style={{ fontSize: "3rem" }} />}
+                      title={
+                        <a
+                          onClick={() => {
+                            ipcRenderer.send("open-file", it.path);
+                          }}
+                        >
+                          {getFileName(it.path)}
+                        </a>
+                      }
+                      description={`${getFileFolder(it.path)}\t${new Date(
+                        it.time
+                      ).toLocaleString()}`}
+                    />
+                  </List.Item>
+                )}
+              />
+            </div>
           </div>
         </div>
       )}
-    </ThemeContext.Consumer>
+    </AppStateContext.Consumer>
   );
 };
