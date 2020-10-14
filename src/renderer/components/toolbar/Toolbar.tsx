@@ -6,67 +6,61 @@ import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
 import "./style.css";
-import { AppStateContext } from "../../AppStateContext";
+import { useAppState } from "../../AppStateContext";
 import { useObserver } from "mobx-react";
 
 export const Tab: FC<{ label: string }> = ({ label, children }) => {
   let [hover, setHover] = useState(false);
+  let state = useAppState();
   return useObserver(() => (
-    <AppStateContext.Consumer>
-      {(state) => (
-        <ActiveContext.Consumer>
-          {(a) => (
-            <div
-              className={classNames("toolbar__tab", {
-                active: a.active === label,
-              })}
-              onClick={() => {
-                a.setActive(label);
-              }}
-              style={
-                hover
-                  ? a.active !== label
-                    ? { background: state.theme.colorPrimaryDark }
-                    : { background: state.theme.colorBackground }
-                  : a.active !== label
-                  ? { background: state.theme.colorPrimary }
-                  : { background: state.theme.colorBackground }
-              }
-              onMouseEnter={() => {
-                setHover(true);
-              }}
-              onMouseLeave={() => {
-                setHover(false);
-              }}
-            >
-              <div className={"toolbar__tab-container"}>{children}</div>
-            </div>
-          )}
-        </ActiveContext.Consumer>
+    <ActiveContext.Consumer>
+      {(a) => (
+        <div
+          className={classNames("toolbar__tab", {
+            active: a.active === label,
+          })}
+          onClick={() => {
+            a.setActive(label);
+          }}
+          style={
+            hover
+              ? a.active !== label
+                ? { background: state.theme.colorPrimaryDark }
+                : { background: state.theme.colorBackground }
+              : a.active !== label
+              ? { background: state.theme.colorPrimary }
+              : { background: state.theme.colorBackground }
+          }
+          onMouseEnter={() => {
+            setHover(true);
+          }}
+          onMouseLeave={() => {
+            setHover(false);
+          }}
+        >
+          <div className={"toolbar__tab-container"}>{children}</div>
+        </div>
       )}
-    </AppStateContext.Consumer>
+    </ActiveContext.Consumer>
   ));
 };
 
 export const Pane: FC<{ label: string }> = ({ label, children }) => {
+  let state = useAppState();
   return useObserver(() => (
-    <AppStateContext.Consumer>
-      {(state) => (
-        <ActiveContext.Consumer>
-          {(a) => (
-            <div
-              className={classNames("toolbar__content", {
-                active: a.active === label,
-                inactive: a.active !== label,
-              })}
-              style={{ background: state.theme.colorBackground }}
-            >
-              {children}
-            </div>
-          )}
-        </ActiveContext.Consumer>
+    <ActiveContext.Consumer>
+      {(a) => (
+        <div
+          className={classNames("toolbar__content", {
+            active: a.active === label,
+            inactive: a.active !== label,
+          })}
+          style={{ background: state.theme.colorBackground }}
+        >
+          {children}
+        </div>
       )}
-    </AppStateContext.Consumer>
+    </ActiveContext.Consumer>
   ));
 };
 
@@ -77,93 +71,84 @@ export interface FuncButtonProps {
 
 export const FuncButtom: FC<FuncButtonProps> = ({ children, onClick }) => {
   let [hover, setHover] = useState(false);
+  let state = useAppState();
   return useObserver(() => (
-    <AppStateContext.Consumer>
-      {(state) => (
-        <div
-          className="toolbar__button"
-          onMouseEnter={() => {
-            setHover(true);
-          }}
-          onMouseLeave={() => {
-            setHover(false);
-          }}
-          onClick={onClick}
-          style={hover ? { background: state.theme.colorPrimaryDark } : {}}
-        >
-          <div className="toolbar__button-container">{children}</div>
-        </div>
-      )}
-    </AppStateContext.Consumer>
+    <div
+      className="toolbar__button"
+      onMouseEnter={() => {
+        setHover(true);
+      }}
+      onMouseLeave={() => {
+        setHover(false);
+      }}
+      onClick={onClick}
+      style={hover ? { background: state.theme.colorPrimaryDark } : {}}
+    >
+      <div className="toolbar__button-container">{children}</div>
+    </div>
   ));
 };
 
 export const FuncBar: FC = () => {
+  let state = useAppState();
   return (
-    <AppStateContext.Consumer>
-      {(state) => (
-        <div className="toolbar__functions">
-          <FuncButtom
-            onClick={() => {
-              state.events?.onSave();
-            }}
-          >
-            <SaveOutlined />
-          </FuncButtom>
-          <FuncButtom>
-            <UndoOutlined />
-          </FuncButtom>
-          <FuncButtom>
-            <RedoOutlined />
-          </FuncButtom>
-        </div>
-      )}
-    </AppStateContext.Consumer>
+    <div className="toolbar__functions">
+      <FuncButtom
+        onClick={() => {
+          state.events?.onSave();
+        }}
+      >
+        <SaveOutlined />
+      </FuncButtom>
+      <FuncButtom>
+        <UndoOutlined />
+      </FuncButtom>
+      <FuncButtom>
+        <RedoOutlined />
+      </FuncButtom>
+    </div>
   );
 };
 
 export const Toolbar: FC = () => {
   let [active, setActive] = useState<string>("start");
+  let state = useAppState();
   return useObserver(() => (
-    <AppStateContext.Consumer>
-      {(state) => (
+    <div
+      className="toolbar"
+      ref={(e) => {
+        state.heights.toolbar = e?.clientHeight || 0;
+      }}
+      style={{ background: state.theme.colorPrimary }}
+    >
+      <ActiveContext.Provider value={{ active, setActive }}>
         <div
-          className="toolbar"
-          ref={(e) => {
-            state.heights.toolbar = e?.clientHeight || 0;
-          }}
+          className="toolbar__tabs"
           style={{ background: state.theme.colorPrimary }}
         >
-          <ActiveContext.Provider value={{ active, setActive }}>
-            <div
-              className="toolbar__tabs"
-              style={{ background: state.theme.colorPrimary }}
-            >
-              <FuncBar />
-              <Tab label="file">
-                <FileTab />
-              </Tab>
-              <Tab label="start">
-                <StartTab />
-              </Tab>
-              <Tab label="view">
-                <ViewTab />
-              </Tab>
-            </div>
-            <div className="toolbar__contents">
-              <Pane label="file">
-                <File />
-              </Pane>
-              <Pane label="start">
-                <Start />
-              </Pane>
-              <Pane label="view">
-                <View />
-              </Pane>
-            </div>
-          </ActiveContext.Provider>
+          <FuncBar />
+          <Tab label="file">
+            <FileTab />
+          </Tab>
+          <Tab label="start">
+            <StartTab />
+          </Tab>
+          <Tab label="view">
+            <ViewTab />
+          </Tab>
         </div>
-      )}
-    </AppStateContext.Consumer>
+        <div className="toolbar__contents">
+          <Pane label="file">
+            <File />
+          </Pane>
+          <Pane label="start">
+            <Start />
+          </Pane>
+          <Pane label="view">
+            <View />
+          </Pane>
+        </div>
+      </ActiveContext.Provider>
+    </div>
   ));
 };

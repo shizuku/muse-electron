@@ -1,5 +1,6 @@
 import { action, computed, observable } from "mobx";
-import { createContext } from "react";
+import { MobXProviderContext } from "mobx-react";
+import { useContext } from "react";
 import { MuseConfig, Notation } from "./components/muse-notation";
 
 export interface FileInfo {
@@ -100,4 +101,6 @@ export class AppState {
   }
 }
 
-export const AppStateContext = createContext<AppState>(new AppState());
+export function useAppState(): AppState {
+  return useContext(MobXProviderContext).state;
+}

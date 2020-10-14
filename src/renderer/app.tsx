@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import { Welcome } from "./components/welcome";
 import { Content } from "./components/content";
@@ -8,16 +8,15 @@ import { Footer } from "./components/footer";
 import Store from "electron-store";
 import { getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
-import { AppState, AppStateContext, FileInfo } from "./AppStateContext";
+import { AppState, FileInfo, useAppState } from "./AppStateContext";
 import { MuseConfig } from "./components/muse-notation";
-import { useObserver } from "mobx-react";
+import { useObserver, Provider } from "mobx-react";
 import "./app.css";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
-const App: React.FC = () => {
-  let state = new AppState();
-  state.heights.wh = document.body.clientHeight;
+const App: FC = () => {
+  let [state, setState] = useState<AppState>(new AppState());
   const addFile = (f: FileInfo) => {
     let re = state.recents;
     for (let i = 0; i < re.length; ++i) {
@@ -34,18 +33,20 @@ const App: React.FC = () => {
     re.slice().sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
-  state.events = {
-    onSave: () => {
-      if (state.isNew) {
-        ipcRenderer.send("save-as", state.filePath, state.data);
-      } else {
-      }
-    },
-    onSaveAs: () => {},
-    onPrint: () => {},
-    onUndo: () => {},
-    onRedo: () => {},
-  };
+  useEffect(() => {
+    state.events = {
+      onSave: () => {
+        if (state.isNew) {
+          ipcRenderer.send("save-as", state.filePath, state.data);
+        } else {
+        }
+      },
+      onSaveAs: () => {},
+      onPrint: () => {},
+      onUndo: () => {},
+      onRedo: () => {},
+    };
+  });
   useEffect(() => {
     ipcRenderer.on(
       "open-file-reply",
@@ -73,6 +74,7 @@ const App: React.FC = () => {
     });
   });
   useEffect(() => {
+    state.heights.wh = document.body.clientHeight;
     window.onresize = () => {
       state.heights.wh = document.body.clientHeight;
     };
@@ -80,9 +82,22 @@ const App: React.FC = () => {
   useEffect(() => {
     state.loadRecents(store.get("recent-files"));
   });
+  if (state) {
+    return (
+      <Provider state={state}>
+        <AppHolder />
+      </Provider>
+    );
+  } else {
+    return <></>;
+  }
+};
+
+const AppHolder: React.FC = () => {
+  let state = useAppState();
   return useObserver(() => (
     <div id="app">
-      <AppStateContext.Provider value={state}>
+      <Provider appState={state}>
         {state.opened === true ? (
           <>
             <Header />
@@ -96,7 +111,7 @@ const App: React.FC = () => {
             <Welcome />
           </>
         )}
-      </AppStateContext.Provider>
+      </Provider>
     </div>
   ));
 };
