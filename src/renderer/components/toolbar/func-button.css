@@ -1,0 +1,15 @@
+.func-button {
+  display: inline-flex;
+  font-size: 1rem;
+}
+
+.func-button:hover {
+  cursor: pointer;
+}
+
+.func-button__container {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+}

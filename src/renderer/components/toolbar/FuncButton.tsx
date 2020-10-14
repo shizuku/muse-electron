@@ -1,6 +1,5 @@
-import { useObserver } from "mobx-react";
 import React, { FC, useState } from "react";
-import { useAppState } from "../../AppStateContext";
+import "./func-button.css";
 
 export interface FuncButtonProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -9,20 +8,32 @@ export interface FuncButtonProps {
 
 export const FuncButtom: FC<FuncButtonProps> = ({ children, onClick }) => {
   let [hover, setHover] = useState(false);
-  let state = useAppState();
-  return useObserver(() => (
+  let [press, setPress] = useState(false);
+  return (
     <div
-      className="toolbar__button"
+      className="func-button"
       onMouseEnter={() => {
         setHover(true);
       }}
       onMouseLeave={() => {
         setHover(false);
       }}
+      onMouseDown={() => {
+        setPress(true);
+      }}
+      onMouseUp={() => {
+        setPress(false);
+      }}
       onClick={onClick}
-      style={hover ? { background: state.theme.colorPrimaryDark } : {}}
+      style={
+        hover
+          ? press
+            ? { background: "#00000044" }
+            : { background: "#00000022" }
+          : {}
+      }
     >
-      <div className="toolbar__button-container">{children}</div>
+      <div className="func-button__container">{children}</div>
     </div>
-  ));
+  );
 };

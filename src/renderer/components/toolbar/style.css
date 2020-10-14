@@ -11,22 +11,6 @@
   margin-right: 0.2rem;
 }
 
-.toolbar__button {
-  display: inline-flex;
-  font-size: 1rem;
-}
-
-.toolbar__button:hover {
-  cursor: pointer;
-}
-
-.toolbar__button-container {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  margin-top: 0.3rem;
-  margin-bottom: 0.3rem;
-}
-
 .toolbar__tabs {
   display: block;
 }

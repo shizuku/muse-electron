@@ -1,12 +1,13 @@
 import React, { FC, useState } from "react";
 import classNames from "classnames";
+import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
 import { useAppState } from "../../AppStateContext";
 import { useObserver } from "mobx-react";
-import { FuncBar } from "./FuncBar";
+import { FuncButtom } from "./FuncButton";
 import "./style.css";
 
 export const Tab: FC<{ label: string }> = ({ label, children }) => {
@@ -62,6 +63,27 @@ export const Pane: FC<{ label: string }> = ({ label, children }) => {
       )}
     </ActiveContext.Consumer>
   ));
+};
+
+export const FuncBar: FC = () => {
+  let state = useAppState();
+  return (
+    <div className="toolbar__functions">
+      <FuncButtom
+        onClick={() => {
+          state.events?.onSave();
+        }}
+      >
+        <SaveOutlined />
+      </FuncButtom>
+      <FuncButtom>
+        <UndoOutlined />
+      </FuncButtom>
+      <FuncButtom>
+        <RedoOutlined />
+      </FuncButtom>
+    </div>
+  );
 };
 
 export const Toolbar: FC = () => {
