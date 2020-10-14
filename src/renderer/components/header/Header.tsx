@@ -5,61 +5,57 @@ import {
   MinusOutlined,
 } from "@ant-design/icons";
 import { ipcRenderer } from "electron";
-import { Observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import { AppStateContext } from "../../AppStateContext";
 import "./style.css";
 
 export const Header: FC = () => {
-  return (
-    <Observer>
-      {() => (
-        <AppStateContext.Consumer>
-          {(state) => (
+  return useObserver(() => (
+    <AppStateContext.Consumer>
+      {(state) => (
+        <div
+          className="header"
+          ref={(e) => {
+            state.heights.header = e?.clientHeight || 0;
+          }}
+          style={{
+            background: state.theme.colorPrimary,
+            color: state.theme.colorBackground,
+          }}
+        >
+          <div className="header__drag-region"></div>
+          <div className="header__app-logo"></div>
+          <div className="header__window-title">
+            {state.fileName === "" ? `Muse` : `${state.fileName} - Muse`}
+          </div>
+          <div className="header__controls">
             <div
-              className="header"
-              ref={(e) => {
-                state.heights.header = e?.clientHeight || 0;
-              }}
-              style={{
-                background: state.theme.colorPrimary,
-                color: state.theme.colorBackground,
+              className="window-icon minimize"
+              onClick={() => {
+                ipcRenderer.send("app-minimize");
               }}
             >
-              <div className="header__drag-region"></div>
-              <div className="header__app-logo"></div>
-              <div className="header__window-title">
-                {state.fileName === "" ? `Muse` : `${state.fileName} - Muse`}
-              </div>
-              <div className="header__controls">
-                <div
-                  className="window-icon minimize"
-                  onClick={() => {
-                    ipcRenderer.send("app-minimize");
-                  }}
-                >
-                  <MinusOutlined />
-                </div>
-                <div
-                  className="window-icon maximize"
-                  onClick={() => {
-                    ipcRenderer.send("app-maximize");
-                  }}
-                >
-                  <BorderOutlined />
-                </div>
-                <div
-                  className="window-icon close"
-                  onClick={() => {
-                    ipcRenderer.send("app-close");
-                  }}
-                >
-                  <CloseOutlined />
-                </div>
-              </div>
+              <MinusOutlined />
             </div>
-          )}
-        </AppStateContext.Consumer>
+            <div
+              className="window-icon maximize"
+              onClick={() => {
+                ipcRenderer.send("app-maximize");
+              }}
+            >
+              <BorderOutlined />
+            </div>
+            <div
+              className="window-icon close"
+              onClick={() => {
+                ipcRenderer.send("app-close");
+              }}
+            >
+              <CloseOutlined />
+            </div>
+          </div>
+        </div>
       )}
-    </Observer>
-  );
+    </AppStateContext.Consumer>
+  ));
 };

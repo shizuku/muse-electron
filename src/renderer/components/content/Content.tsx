@@ -1,11 +1,11 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { MuseNotation } from "../muse-notation";
-import { observer, Observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import { AppStateContext } from "../../AppStateContext";
 import "./style.css";
 
-export const Content: FC = observer(() => {
-  return (
+export const Content: FC = () => {
+  return useObserver(() => (
     <AppStateContext.Consumer>
       {(state) => (
         <div
@@ -25,5 +25,5 @@ export const Content: FC = observer(() => {
         </div>
       )}
     </AppStateContext.Consumer>
-  );
-});
+  ));
+};

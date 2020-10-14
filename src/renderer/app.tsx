@@ -10,13 +10,12 @@ import { getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
 import { AppState, AppStateContext, FileInfo } from "./AppStateContext";
 import { MuseConfig } from "./components/muse-notation";
-
+import { useObserver } from "mobx-react";
 import "./app.css";
-import { observer } from "mobx-react";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
-const App: React.FC = observer(() => {
+const App: React.FC = () => {
   let state = new AppState();
   state.heights.wh = document.body.clientHeight;
   const addFile = (f: FileInfo) => {
@@ -25,14 +24,14 @@ const App: React.FC = observer(() => {
       if (re[i].path === f.path) {
         re[i].time = f.time;
         state.recents = re;
-        re.sort((a, b) => b.time - a.time);
+        re.slice().sort((a, b) => b.time - a.time);
         store.set("recent-files", re);
         return;
       }
     }
     re.push(f);
     state.recents = re;
-    re.sort((a, b) => b.time - a.time);
+    re.slice().sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
   state.events = {
@@ -81,10 +80,10 @@ const App: React.FC = observer(() => {
   useEffect(() => {
     state.loadRecents(store.get("recent-files"));
   });
-  return (
+  return useObserver(() => (
     <div id="app">
       <AppStateContext.Provider value={state}>
-        {state.opened ? (
+        {state.opened === true ? (
           <>
             <Header />
             <Toolbar />
@@ -99,7 +98,7 @@ const App: React.FC = observer(() => {
         )}
       </AppStateContext.Provider>
     </div>
-  );
-});
+  ));
+};
 
 export default App;
