@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { CSSProperties, FC, useState } from "react";
 import classNames from "classnames";
 import { Tooltip } from "antd";
 import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
@@ -96,13 +96,41 @@ export const FuncBar: FC = () => {
 export const Toolbar: FC = () => {
   let [active, setActive] = useState<string>("start");
   let state = useAppState();
+  let toolbarStyle = () => {
+    switch (state.display) {
+      case "full":
+      case "foldtoolbar":
+        return {
+          display: "block",
+        } as CSSProperties;
+      case "headfoot":
+      case "content":
+        return {
+          display: "none",
+        } as CSSProperties;
+    }
+  };
+  let panesStyle = () => {
+    switch (state.display) {
+      case "full":
+        return {
+          display: "block",
+        } as CSSProperties;
+      case "foldtoolbar":
+      case "headfoot":
+      case "content":
+        return {
+          display: "none",
+        } as CSSProperties;
+    }
+  };
   return useObserver(() => (
     <div
       className="toolbar"
       ref={(e) => {
         state.heights.toolbar = e?.clientHeight || 0;
       }}
-      style={{ background: state.theme.colorPrimary }}
+      style={toolbarStyle()}
     >
       <ActiveContext.Provider value={{ active, setActive }}>
         <div
@@ -120,7 +148,7 @@ export const Toolbar: FC = () => {
             <ViewTab />
           </Tab>
         </div>
-        <div className="toolbar__contents">
+        <div className="toolbar__contents" style={panesStyle()}>
           <Pane label="file">
             <File />
           </Pane>

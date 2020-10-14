@@ -1,10 +1,19 @@
-.header {
+.header__hover-region {
+  position: absolute;
+  float: left;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.header__container {
   top: 0;
   display: block;
   height: 30px;
   background: none;
   overflow: visible;
   -webkit-user-select: none;
+  box-shadow: 0px 6px 6px 0px rgba(29, 29, 29, 0.2);
 }
 
 .header__drag-region {
@@ -36,20 +45,16 @@
 .window-icon {
   line-height: 30px;
   height: 100%;
-  width: 46px;
+  width: 45px;
   font-size: 16px;
   text-align: center;
   display: inline-block;
 }
 
-.close:hover {
-  background: rgba(255, 0, 0, 0.8);
+.hover-red:hover {
+  background: rgba(255, 45, 45, 1);
 }
 
-.minimize:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.maximize:hover {
+.hover-gray:hover {
   background: rgba(255, 255, 255, 0.2);
 }

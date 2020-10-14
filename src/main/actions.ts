@@ -55,4 +55,19 @@ export function createActions(mw: BrowserWindow) {
   ipcMain.on("toggle-dev-tools", () => {
     mw.webContents.toggleDevTools();
   });
+  ipcMain.on("app-close", () => {
+    mw.close();
+  });
+  ipcMain.on("app-minimize", () => {
+    mw.minimize();
+  });
+  ipcMain.on("app-toggle-max", () => {
+    mw.isMaximized() ? mw.unmaximize() : mw.maximize();
+  });
+  ipcMain.on("app-toggle-full-screen", () => {
+    mw.setFullScreen(!mw.fullScreen);
+  });
+  ipcMain.on("app-close-modified", (event, title, message) => {
+    dialog.showMessageBox(mw, { type: "question", message, title });
+  });
 }

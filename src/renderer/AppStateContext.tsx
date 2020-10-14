@@ -52,11 +52,19 @@ export interface Events {
   onClose: () => void;
 }
 
+//full: show all element,
+//foldtoolbar: fold toolbar
+//hidetoolbar: hide toolbar
+//headfoot: only show header, footer and content
+//content: only show content
+type DisplayStyle = "full" | "foldtoolbar" | "headfoot" | "content";
+
 export class AppState {
   constructor() {
     this.config = new Config();
     this.theme = new Theme();
     this.opened = false;
+    this.display = "full";
     this.heights = new Heights();
     this.recents = [];
     this.isNew = false;
@@ -71,6 +79,7 @@ export class AppState {
   @observable heights: Heights;
   @observable opened: boolean;
   @observable events?: Events;
+  @observable display: DisplayStyle;
   //unopened
   @observable recents: FileInfo[];
   //opened

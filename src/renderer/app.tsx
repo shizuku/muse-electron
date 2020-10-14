@@ -61,7 +61,17 @@ const App: FC = () => {
       onPrint: () => {},
       onUndo: () => {},
       onRedo: () => {},
-      onClose:()=>{}
+      onClose: () => {
+        if (state.modified) {
+          ipcRenderer.send(
+            "app-close-modified",
+            "Not Save",
+            "There are some modify not saved, do you want to save it before exit?"
+          );
+        } else {
+          ipcRenderer.send("app-close");
+        }
+      },
     };
   });
   useEffect(() => {

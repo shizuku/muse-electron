@@ -1,4 +1,13 @@
-.footer {
+.footer__hover-region {
+  height: 18px;
+  position: absolute;
+  float: left;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer__container {
   box-shadow: 0px -6px 6px 0px rgba(29, 29, 29, 0.2);
   -webkit-user-select: none;
 }
