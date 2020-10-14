@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import classNames from "classnames";
+import { Tooltip } from "antd";
 import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./File";
@@ -69,19 +70,25 @@ export const FuncBar: FC = () => {
   let state = useAppState();
   return (
     <div className="toolbar__functions">
-      <FuncButtom
-        onClick={() => {
-          state.events?.onSave();
-        }}
-      >
-        <SaveOutlined />
-      </FuncButtom>
-      <FuncButtom>
-        <UndoOutlined />
-      </FuncButtom>
-      <FuncButtom>
-        <RedoOutlined />
-      </FuncButtom>
+      <Tooltip placement="topLeft" title="Save" mouseEnterDelay={1}>
+        <FuncButtom
+          onClick={() => {
+            state.events?.onSave();
+          }}
+        >
+          <SaveOutlined />
+        </FuncButtom>
+      </Tooltip>
+      <Tooltip placement="topLeft" title="Undo" mouseEnterDelay={1}>
+        <FuncButtom>
+          <UndoOutlined />
+        </FuncButtom>
+      </Tooltip>
+      <Tooltip placement="topLeft" title="Redo" mouseEnterDelay={1}>
+        <FuncButtom>
+          <RedoOutlined />
+        </FuncButtom>
+      </Tooltip>
     </div>
   );
 };

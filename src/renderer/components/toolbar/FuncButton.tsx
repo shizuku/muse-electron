@@ -4,26 +4,46 @@ import "./func-button.css";
 export interface FuncButtonProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   children?: React.ReactNode;
+  onMouseEnter?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onMouseLeave?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
 }
 
-export const FuncButtom: FC<FuncButtonProps> = ({ children, onClick }) => {
+export const FuncButtom: FC<FuncButtonProps> = ({
+  children,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+}) => {
   let [hover, setHover] = useState(false);
   let [press, setPress] = useState(false);
+  const ome = () => {
+    setHover(true);
+  };
+  const oml = () => {
+    setHover(false);
+  };
+  const omd = () => {
+    setPress(true);
+  };
+  const omu = () => {
+    setPress(false);
+  };
   return (
     <div
       className="func-button"
-      onMouseEnter={() => {
-        setHover(true);
+      onFocus={onFocus}
+      onMouseEnter={(ev) => {
+        if (onMouseEnter) onMouseEnter(ev);
+        ome();
       }}
-      onMouseLeave={() => {
-        setHover(false);
+      onMouseLeave={(ev) => {
+        if (onMouseLeave) onMouseLeave(ev);
+        oml();
       }}
-      onMouseDown={() => {
-        setPress(true);
-      }}
-      onMouseUp={() => {
-        setPress(false);
-      }}
+      onMouseDown={omd}
+      onMouseUp={omu}
       onClick={onClick}
       style={
         hover

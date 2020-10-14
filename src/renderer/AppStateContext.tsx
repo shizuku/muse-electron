@@ -49,6 +49,7 @@ export interface Events {
   onPrint: () => void;
   onUndo: () => void;
   onRedo: () => void;
+  onClose: () => void;
 }
 
 export class AppState {
@@ -59,6 +60,7 @@ export class AppState {
     this.heights = new Heights();
     this.recents = [];
     this.isNew = false;
+    this.modified = false;
     this.fileName = "";
     this.filePath = "";
     this.notation = undefined;
@@ -72,6 +74,7 @@ export class AppState {
   //unopened
   @observable recents: FileInfo[];
   //opened
+  @observable modified: boolean;
   @observable fileName: string;
   @observable filePath: string;
   @observable notation?: Notation;

@@ -8,12 +8,27 @@ import { Footer } from "./components/footer";
 import Store from "electron-store";
 import { getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
+import { notification } from "antd";
 import { AppState, FileInfo, useAppState } from "./AppStateContext";
 import { MuseConfig } from "./components/muse-notation";
 import { useObserver, Provider } from "mobx-react";
 import "./app.css";
+import { IconType, NotificationPlacement } from "antd/lib/notification";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
+
+const openNotificationWithIcon = (
+  type: IconType,
+  message: string,
+  description: string,
+  placement: NotificationPlacement
+) => {
+  notification[type]({
+    message,
+    description,
+    placement,
+  });
+};
 
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
@@ -39,12 +54,14 @@ const App: FC = () => {
         if (state.isNew) {
           ipcRenderer.send("save-as", state.filePath, state.data);
         } else {
+          ipcRenderer.send("save", state.filePath, state.data);
         }
       },
       onSaveAs: () => {},
       onPrint: () => {},
       onUndo: () => {},
       onRedo: () => {},
+      onClose:()=>{}
     };
   });
   useEffect(() => {
@@ -67,6 +84,18 @@ const App: FC = () => {
         state.open("New File", filePath, data, new MuseConfig(), true);
       }
     );
+    ipcRenderer.on("save-reply", (event, result) => {
+      if (result === "success") {
+        console.log("save success");
+      } else {
+        openNotificationWithIcon(
+          "warning",
+          "Save Failed",
+          "There is some thing worng when saveing the file.",
+          "bottomRight"
+        );
+      }
+    });
   });
   useEffect(() => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
