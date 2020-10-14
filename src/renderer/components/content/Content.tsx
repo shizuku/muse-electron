@@ -7,13 +7,7 @@ import "./style.css";
 export const Content: FC = () => {
   let state = useAppState();
   return useObserver(() => (
-    <div
-      className="content"
-      style={{ height: state.heights.content }}
-      ref={(e) => {
-        console.log(state.heights);
-      }}
-    >
+    <div className="content" style={{ height: state.heights.content }}>
       <div className="notaiton-content">
         {state.notation ? <MuseNotation notation={state.notation} /> : <></>}
       </div>
