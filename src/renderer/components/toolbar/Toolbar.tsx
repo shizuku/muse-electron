@@ -1,13 +1,13 @@
 import React, { FC, useState } from "react";
-import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import classNames from "classnames";
 import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
-import "./style.css";
 import { useAppState } from "../../AppStateContext";
 import { useObserver } from "mobx-react";
+import { FuncBar } from "./FuncBar";
+import "./style.css";
 
 export const Tab: FC<{ label: string }> = ({ label, children }) => {
   let [hover, setHover] = useState(false);
@@ -62,52 +62,6 @@ export const Pane: FC<{ label: string }> = ({ label, children }) => {
       )}
     </ActiveContext.Consumer>
   ));
-};
-
-export interface FuncButtonProps {
-  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  children?: React.ReactNode;
-}
-
-export const FuncButtom: FC<FuncButtonProps> = ({ children, onClick }) => {
-  let [hover, setHover] = useState(false);
-  let state = useAppState();
-  return useObserver(() => (
-    <div
-      className="toolbar__button"
-      onMouseEnter={() => {
-        setHover(true);
-      }}
-      onMouseLeave={() => {
-        setHover(false);
-      }}
-      onClick={onClick}
-      style={hover ? { background: state.theme.colorPrimaryDark } : {}}
-    >
-      <div className="toolbar__button-container">{children}</div>
-    </div>
-  ));
-};
-
-export const FuncBar: FC = () => {
-  let state = useAppState();
-  return (
-    <div className="toolbar__functions">
-      <FuncButtom
-        onClick={() => {
-          state.events?.onSave();
-        }}
-      >
-        <SaveOutlined />
-      </FuncButtom>
-      <FuncButtom>
-        <UndoOutlined />
-      </FuncButtom>
-      <FuncButtom>
-        <RedoOutlined />
-      </FuncButtom>
-    </div>
-  );
 };
 
 export const Toolbar: FC = () => {
