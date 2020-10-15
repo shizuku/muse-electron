@@ -8,11 +8,6 @@ export interface FileInfo {
   time: number;
 }
 
-export class Config {
-  @observable pageWidth: number = 0;
-  constructor() {}
-}
-
 export class Theme {
   constructor() {
     this.colorBackground = "#FFFFFF";
@@ -61,7 +56,7 @@ export type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
   constructor() {
-    this.config = new Config();
+    this.config = new MuseConfig();
     this.theme = new Theme();
     this.opened = false;
     this.display = "full";
@@ -78,7 +73,7 @@ export class AppState {
     this.notation = undefined;
   }
   //all
-  @observable config: Config;
+  @observable config: MuseConfig;
   @observable theme: Theme;
   @observable heights: Heights;
   @observable opened: boolean;
@@ -103,13 +98,12 @@ export class AppState {
     fileName: string,
     filePath: string,
     data: string,
-    config: MuseConfig,
     isNew: boolean
   ) {
     this.opened = true;
     this.fileName = fileName;
     this.filePath = filePath;
-    this.notation = new Notation(JSON.parse(data), config);
+    this.notation = new Notation(JSON.parse(data), this.config);
     this.isNew = isNew;
   }
   @action close() {
