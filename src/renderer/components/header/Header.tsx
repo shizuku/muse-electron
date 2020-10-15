@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
-import { useAppState } from "../../AppStateContext";
+import { useAppState } from "../app";
 import "./style.css";
 import { Popover } from "antd";
 import { FuncBar } from "../func-bar";

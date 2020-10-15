@@ -1,7 +1,7 @@
 import { action, computed, observable } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
-import { MuseConfig, Notation } from "./components/muse-notation";
+import { MuseConfig, Notation } from "../muse-notation";
 
 export interface FileInfo {
   path: string;
@@ -57,7 +57,7 @@ export interface Events {
 //hidetoolbar: hide toolbar
 //headfoot: only show header, footer and content
 //content: only show content
-type DisplayStyle = "full" | "headfoot" | "content";
+export type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
   constructor() {

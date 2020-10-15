@@ -8,7 +8,7 @@ import {
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
 import { Menu, MenuItem } from "../menu";
-import { useAppState } from "../../AppStateContext";
+import { useAppState } from "../app";
 import { getFileFolder, getFileName } from "../../../shared/utils";
 import "./style.css";
 

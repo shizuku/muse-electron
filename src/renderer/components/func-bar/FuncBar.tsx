@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Tooltip } from "antd";
 import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
-import { useAppState } from "../../AppStateContext";
+import { useAppState } from "../app";
 import { FuncButtom } from "./FuncButton";
 import "./style.css";
 

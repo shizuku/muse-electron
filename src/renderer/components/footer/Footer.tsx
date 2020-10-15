@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
-import { useAppState } from "../../AppStateContext";
+import { useAppState } from "../app";
 import "./style.css";
 
 export const Footer: FC = () => {

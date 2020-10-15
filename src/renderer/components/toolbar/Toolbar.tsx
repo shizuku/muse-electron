@@ -4,7 +4,7 @@ import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
-import { useAppState } from "../../AppStateContext";
+import { useAppState } from "../app";
 import { useObserver } from "mobx-react";
 import "./style.css";
 

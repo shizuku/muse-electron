@@ -1,19 +1,19 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
-import { Welcome } from "./components/welcome";
-import { Content } from "./components/content";
-import { Toolbar } from "./components/toolbar";
-import { Header } from "./components/header";
-import { Footer } from "./components/footer";
 import Store from "electron-store";
-import { getFileName } from "../shared/utils";
 import hotkeys from "hotkeys-js";
 import { notification } from "antd";
-import { AppState, FileInfo, useAppState } from "./AppStateContext";
-import { MuseConfig } from "./components/muse-notation";
 import { useObserver, Provider } from "mobx-react";
-import "./app.css";
 import { IconType, NotificationPlacement } from "antd/lib/notification";
+import { Welcome } from "../welcome";
+import { Content } from "../content";
+import { Toolbar } from "../toolbar";
+import { Header } from "../header";
+import { Footer } from "../footer";
+import { getFileName } from "../../../shared/utils";
+import { AppState, FileInfo, useAppState } from "./AppStateContext";
+import { MuseConfig } from "../muse-notation";
+import "./app.css";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
