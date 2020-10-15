@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Tooltip } from "antd";
 import { SaveOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import { useAppState } from "../app";
-import { FuncButtom } from "./FuncButton";
+import { FuncButtom } from "./func-button";
 import "./style.css";
 
 export const FuncBar: FC = () => {

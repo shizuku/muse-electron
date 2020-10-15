@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import "./func-button.css";
+import "./style.css";
 
 export interface FuncButtonProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
