@@ -52,11 +52,7 @@ const DisplayPopup: FC = () => {
   );
 };
 
-export const HeaderHolder: FC<{ hover: boolean }> = ({
-  hover,
-}: {
-  hover: boolean;
-}) => {
+export const Header: FC = () => {
   let state = useAppState();
   let styleHover = () => {
     switch (state.display) {
@@ -104,12 +100,12 @@ export const HeaderHolder: FC<{ hover: boolean }> = ({
   };
   return useObserver(() => (
     <div
-      className="header__container"
+      className="header"
       ref={(e) => {
         let h = e?.clientHeight || 0;
         state.heights.header = h;
       }}
-      style={hover ? styleHover() : styleUnhover()}
+      style={state.headerHover ? styleHover() : styleUnhover()}
     >
       <div className="header__drag-region"></div>
       <div className="header__app-logo"></div>
@@ -160,27 +156,6 @@ export const HeaderHolder: FC<{ hover: boolean }> = ({
           <CloseOutlined />
         </div>
       </div>
-    </div>
-  ));
-};
-
-export const Header: FC = () => {
-  let [hover, setHover] = useState(false);
-  return useObserver(() => (
-    <div className="header">
-      <div
-        className="header__hover-region"
-        style={{ height: 18 }}
-        onMouseEnter={() => {
-          console.log("enter");
-          if (!hover) setHover(true);
-        }}
-        onMouseLeave={() => {
-          console.log("leave");
-          if (hover) setHover(false);
-        }}
-      ></div>
-      <HeaderHolder hover={hover} />
     </div>
   ));
 };

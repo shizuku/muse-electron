@@ -117,6 +117,21 @@ const App: FC = () => {
     window.onresize = () => {
       state.heights.wh = document.body.clientHeight;
     };
+    window.addEventListener("mousemove", (e) => {
+      if (e.clientY < 30 && e.clientY > 0) {
+        state.headerHover = true;
+        state.footerHover = false;
+      } else if (
+        e.clientY < state.heights.wh &&
+        e.clientY > state.heights.wh - 30
+      ) {
+        state.headerHover = false;
+        state.footerHover = true;
+      } else {
+        state.headerHover = false;
+        state.footerHover = false;
+      }
+    });
   });
   useEffect(() => {
     state.loadRecents(store.get("recent-files"));

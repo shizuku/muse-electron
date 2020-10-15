@@ -1,12 +1,4 @@
-.header__hover-region {
-  position: absolute;
-  float: left;
-  left: 0;
-  top: 0;
-  width: 100%;
-}
-
-.header__container {
+.header {
   top: 0;
   display: block;
   height: 30px;

@@ -65,6 +65,8 @@ export class AppState {
     this.theme = new Theme();
     this.opened = false;
     this.display = "full";
+    this.headerHover = false;
+    this.footerHover = false;
     this.heights = new Heights();
     this.recents = [];
     this.isNew = false;
@@ -80,6 +82,8 @@ export class AppState {
   @observable opened: boolean;
   @observable events?: Events;
   @observable display: DisplayStyle;
+  @observable headerHover: boolean;
+  @observable footerHover: boolean;
   //unopened
   @observable recents: FileInfo[];
   //opened
