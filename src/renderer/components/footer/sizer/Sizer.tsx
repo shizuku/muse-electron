@@ -1,7 +1,55 @@
 import React, { FC } from "react";
-import { Slider, InputNumber } from "antd";
+import { InputNumber, Popover } from "antd";
 import { useAppState } from "../../app";
 import "./style.css";
+import { useObserver } from "mobx-react";
+
+const floatEqual = (a: number, b: number) => a - b > -10e-20 && a - b < 10e-20;
+
+const PopItem: FC<{ x: number; s: string }> = ({
+  x,
+  s,
+}: {
+  x: number;
+  s: string;
+}) => {
+  let state = useAppState();
+  return useObserver(() => (
+    <div
+      className="pop-item"
+      style={
+        floatEqual(state.config.x, x)
+          ? { background: state.theme.colorPrimaryLight }
+          : {}
+      }
+      onClick={() => (state.config.x = x)}
+    >
+      {s}
+    </div>
+  ));
+};
+
+const PopContent: FC = () => {
+  let state = useAppState();
+  let fw =
+    (state.windowDim.contentW / state.windowDim.notationW) * state.config.x;
+  let fh =
+    (state.windowDim.contentH / state.windowDim.notationH) * state.config.x;
+  return useObserver(() => (
+    <div className="pop-content">
+      <PopItem x={fw} s="Fit width" />
+      <PopItem x={fh} s="Fit height" />
+      <PopItem x={Math.min(fw, fh)} s="Fit screen" />
+      <PopItem x={3} s="300%" />
+      <PopItem x={2.5} s="250%" />
+      <PopItem x={1.5} s="150%" />
+      <PopItem x={1} s="100%" />
+      <PopItem x={0.75} s="75%" />
+      <PopItem x={0.5} s="50%" />
+      <PopItem x={0.25} s="25%" />
+    </div>
+  ));
+};
 
 export const Sizer: FC = () => {
   let state = useAppState();
@@ -19,17 +67,20 @@ export const Sizer: FC = () => {
     }
     state.config.x = x / 100;
   };
-  return (
+  return useObserver(() => (
     <div className="sizer">
-      <InputNumber
-        size="small"
-        defaultValue={100}
-        min={10}
-        max={500}
-        formatter={(value) => `${value}%`}
-        parser={(value) => parseInt(value?.replace("%", "") || "100")}
-        onChange={onChange}
-      />
+      <Popover content={<PopContent />}>
+        <InputNumber
+          size="small"
+          defaultValue={state.config.x * 100}
+          min={10}
+          max={500}
+          formatter={(value) => `${parseInt(value?.toString() || "100")}%`}
+          parser={(value) => parseInt(value?.replace("%", "") || "100")}
+          value={state.config.x * 100}
+          onChange={onChange}
+        />
+      </Popover>
     </div>
-  );
+  ));
 };

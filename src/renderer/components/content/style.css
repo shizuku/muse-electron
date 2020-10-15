@@ -2,11 +2,17 @@
   -webkit-user-select: none;
 }
 
-.notaiton-content {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+.notaiton-container {
   display: block;
   height: 100%;
-  text-align: center;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+
+.notaion-outer {
+  display: flex;
+
+}
+.notation {
+  display: inline-flex;
+  margin: 0 auto;
 }

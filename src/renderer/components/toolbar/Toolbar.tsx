@@ -83,7 +83,7 @@ export const Toolbar: FC = () => {
     <div
       className="toolbar"
       ref={(e) => {
-        state.heights.toolbar = e?.clientHeight || 0;
+        state.windowDim.toolbar = e?.clientHeight || 0;
       }}
       style={toolbarStyle()}
     >

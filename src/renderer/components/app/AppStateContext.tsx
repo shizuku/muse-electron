@@ -27,15 +27,23 @@ export class Theme {
   @observable colorDanger: string;
 }
 
-export class Heights {
+export class WindowDim {
   constructor() {}
   @observable wh: number = 0;
+  @observable ww: number = 0;
+  @observable x: number = 0;
+  @observable y: number = 0;
   @observable header: number = 0;
+  @observable footer: number = 0;
   @observable toolbar: number = 0;
-  @computed get content(): number {
+  //target
+  @computed get contentH(): number {
     return this.wh - this.header - this.toolbar - this.footer;
   }
-  @observable footer: number = 0;
+  @observable contentW: number = 0;
+  //current
+  @observable notationH: number = 0;
+  @observable notationW: number = 0;
 }
 
 export interface Events {
@@ -48,8 +56,6 @@ export interface Events {
 }
 
 //full: show all element,
-//foldtoolbar: fold toolbar
-//hidetoolbar: hide toolbar
 //headfoot: only show header, footer and content
 //content: only show content
 export type DisplayStyle = "full" | "headfoot" | "content";
@@ -64,7 +70,7 @@ export class AppState {
     this.footerHover = false;
     this.fullScreenStatus = false;
     this.maxStatus = false;
-    this.heights = new Heights();
+    this.windowDim = new WindowDim();
     this.recents = [];
     this.isNew = false;
     this.modified = false;
@@ -75,7 +81,7 @@ export class AppState {
   //all
   @observable config: MuseConfig;
   @observable theme: Theme;
-  @observable heights: Heights;
+  @observable windowDim: WindowDim;
   @observable opened: boolean;
   @observable events?: Events;
   @observable display: DisplayStyle;

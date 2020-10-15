@@ -11,18 +11,38 @@ export const Content: FC = () => {
       case "full":
       case "headfoot":
         return {
-          height: state.heights.content,
+          height: state.windowDim.contentH,
         } as CSSProperties;
       case "content":
         return {
-          height: state.heights.wh,
+          height: state.windowDim.wh,
         } as CSSProperties;
     }
   };
   return useObserver(() => (
     <div className="content" style={style()}>
-      <div className="notaiton-content">
-        {state.notation ? <MuseNotation notation={state.notation} /> : <></>}
+      <div
+        className="notaiton-container"
+        ref={(e) => {
+          state.windowDim.contentW = e?.clientWidth || 0;
+        }}
+        
+      >
+        <div className="notaion-outer">
+          <div
+            className="notation"
+            ref={(e) => {
+              state.windowDim.notationH = e?.scrollHeight || 0;
+              state.windowDim.notationW = e?.scrollWidth || 0;
+            }}
+          >
+            {state.notation ? (
+              <MuseNotation notation={state.notation} />
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   ));

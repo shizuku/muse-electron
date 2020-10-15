@@ -54,12 +54,17 @@ export const Footer: FC = () => {
       className="footer"
       ref={(e) => {
         let h = e?.clientHeight || 0;
-        state.heights.footer = h;
+        state.windowDim.footer = h;
         setMaxHeight(maxHeight > h ? maxHeight : h);
       }}
       style={state.footerHover ? styleHover() : styleUnhover()}
     >
-      <Sizer />
+      <div className="footer__group-left"></div>
+      <div className="footer__group-right">
+        <div className="tooter__item">
+          <Sizer />
+        </div>
+      </div>
     </footer>
   ));
 };

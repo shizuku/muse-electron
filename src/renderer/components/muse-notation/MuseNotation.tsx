@@ -219,7 +219,7 @@ const MuseNotationInfo: React.FC<MuseNotationInfoProps> = ({
 @observer
 class MuseNotation extends React.Component<{ notation: Notation }, {}> {
   render() {
-    let margin = 1;
+    let margin = this.props.notation.config.notationMargin;
     let clazz = "muse-notation";
     return (
       <svg

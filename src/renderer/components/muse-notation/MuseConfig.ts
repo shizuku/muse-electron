@@ -55,4 +55,7 @@ export default class MuseConfig {
   @computed get pageIndexFontSize() {
     return this.x * 20;
   }
+  @computed get notationMargin() {
+    return this.x * 10;
+  }
 }

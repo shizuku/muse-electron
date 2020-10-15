@@ -8,16 +8,16 @@ import {
   FullscreenExitOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons";
+import { Popover } from "antd";
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
+import { FuncBar } from "../func-bar";
 import { useAppState } from "../app";
 import "./style.css";
-import { Popover } from "antd";
-import { FuncBar } from "../func-bar";
 
 const DisplayPopup: FC = () => {
   let state = useAppState();
-  return (
+  return useObserver(() => (
     <div className="display-popup">
       <div
         className="display-popup__item"
@@ -59,7 +59,7 @@ const DisplayPopup: FC = () => {
         Only show content
       </div>
     </div>
-  );
+  ));
 };
 
 export const Header: FC = () => {
@@ -117,7 +117,7 @@ export const Header: FC = () => {
       className="header"
       ref={(e) => {
         let h = e?.clientHeight || 0;
-        state.heights.header = h;
+        state.windowDim.header = h;
       }}
       style={state.headerHover ? styleHover() : styleUnhover()}
     >

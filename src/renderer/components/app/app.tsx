@@ -12,7 +12,6 @@ import { Header } from "../header";
 import { Footer } from "../footer";
 import { getFileName } from "../../../shared/utils";
 import { AppState, FileInfo, useAppState } from "./AppStateContext";
-import { MuseConfig } from "../muse-notation";
 import "./app.css";
 
 const store = new Store({ name: "user", defaults: { "recent-files": [] } });
@@ -48,9 +47,7 @@ const App: FC = () => {
     re.slice().sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
-  const loadConfig = () => {
-    state.loadRecents(store.get("recent-files"));
-  };
+  const loadConfig = () => state.loadRecents(store.get("recent-files"));
   useEffect(() => {
     state.events = {
       onSave: () => {
@@ -83,7 +80,7 @@ const App: FC = () => {
       (event, filePath: string, data: string) => {
         let fileName = getFileName(filePath);
         if (data !== "") {
-          state.open(fileName, filePath, data, new MuseConfig(), false);
+          state.open(fileName, filePath, data, false);
           addFile({
             path: filePath,
             time: Date.now(),
@@ -94,7 +91,7 @@ const App: FC = () => {
     ipcRenderer.on(
       "new-file-reply",
       (event, filePath: string, data: string) => {
-        state.open("New File", filePath, data, new MuseConfig(), true);
+        state.open("New File", filePath, data, true);
       }
     );
     ipcRenderer.on("save-reply", (event, result) => {
@@ -128,17 +125,19 @@ const App: FC = () => {
     });
   });
   useEffect(() => {
-    state.heights.wh = document.body.clientHeight;
+    state.windowDim.wh = document.body.clientHeight;
+    state.windowDim.ww = document.body.clientWidth;
     window.onresize = () => {
-      state.heights.wh = document.body.clientHeight;
+      state.windowDim.wh = document.body.clientHeight;
+      state.windowDim.ww = document.body.clientWidth;
     };
     window.addEventListener("mousemove", (e) => {
       if (e.clientY < 30 && e.clientY > 0) {
         state.headerHover = true;
         state.footerHover = false;
       } else if (
-        e.clientY < state.heights.wh &&
-        e.clientY > state.heights.wh - 30
+        e.clientY < state.windowDim.wh &&
+        e.clientY > state.windowDim.wh - 30
       ) {
         state.headerHover = false;
         state.footerHover = true;
