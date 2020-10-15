@@ -59,10 +59,13 @@ export function createActions(mw: BrowserWindow) {
     mw.close();
   });
   ipcMain.on("app-minimize", () => {
-    mw.minimize();
+    if (mw.isMinimizable()) mw.minimize();
   });
   ipcMain.on("app-toggle-max", () => {
-    mw.isMaximized() ? mw.unmaximize() : mw.maximize();
+    if (mw.isMaximizable()) {
+      mw.isMaximized() ? mw.unmaximize() : mw.maximize();
+    }
+    mw.webContents.send("max-status", mw.isMaximized());
   });
   ipcMain.on("app-toggle-full-screen", () => {
     mw.setFullScreen(!mw.fullScreen);

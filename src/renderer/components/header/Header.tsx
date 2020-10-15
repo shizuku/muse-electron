@@ -1,6 +1,7 @@
 import React, { CSSProperties, FC, useState } from "react";
 import {
   CloseOutlined,
+  AppstoreOutlined,
   BorderOutlined,
   MinusOutlined,
   FullscreenOutlined,
@@ -176,7 +177,7 @@ export const Header: FC = () => {
             ipcRenderer.send("app-toggle-max");
           }}
         >
-          <BorderOutlined />
+          {state.maxStatus ? <AppstoreOutlined /> : <BorderOutlined />}
         </div>
         <div
           className="window-icon hover-red"

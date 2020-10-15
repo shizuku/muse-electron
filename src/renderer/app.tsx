@@ -48,6 +48,9 @@ const App: FC = () => {
     re.slice().sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
+  const loadConfig = () => {
+    state.loadRecents(store.get("recent-files"));
+  };
   useEffect(() => {
     state.events = {
       onSave: () => {
@@ -106,8 +109,11 @@ const App: FC = () => {
         );
       }
     });
-    ipcRenderer.on("full-screen-status", (event, status: boolean) => {
+    ipcRenderer.on("full-screen-status", (e, status: boolean) => {
       state.fullScreenStatus = status;
+    });
+    ipcRenderer.on("max-status", (e, status: boolean) => {
+      state.maxStatus = status;
     });
   });
   useEffect(() => {
@@ -116,6 +122,9 @@ const App: FC = () => {
     });
     hotkeys("f11", { keyup: true, keydown: false }, () => {
       ipcRenderer.send("app-toggle-full-screen");
+    });
+    hotkeys("ctrl+s", { keyup: true, keydown: false }, () => {
+      state.events?.onSave();
     });
   });
   useEffect(() => {
@@ -139,9 +148,7 @@ const App: FC = () => {
       }
     });
   });
-  useEffect(() => {
-    state.loadRecents(store.get("recent-files"));
-  });
+  useEffect(() => loadConfig());
   if (state) {
     return (
       <Provider state={state}>
