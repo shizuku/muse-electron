@@ -1,6 +1,7 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
 import { useAppState } from "../app";
+import { Sizer } from "./sizer";
 import "./style.css";
 
 export const Footer: FC = () => {
@@ -49,7 +50,7 @@ export const Footer: FC = () => {
     }
   };
   return useObserver(() => (
-    <div
+    <footer
       className="footer"
       ref={(e) => {
         let h = e?.clientHeight || 0;
@@ -58,7 +59,7 @@ export const Footer: FC = () => {
       }}
       style={state.footerHover ? styleHover() : styleUnhover()}
     >
-      Footer
-    </div>
+      <Sizer />
+    </footer>
   ));
 };

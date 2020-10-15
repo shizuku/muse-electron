@@ -1,0 +1,7 @@
+.sizer {
+  display: inline-block;
+  position: relative;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
