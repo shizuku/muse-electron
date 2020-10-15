@@ -4,6 +4,7 @@ import {
   BorderOutlined,
   MinusOutlined,
   FullscreenOutlined,
+  FullscreenExitOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons";
 import { ipcRenderer } from "electron";
@@ -21,6 +22,11 @@ const DisplayPopup: FC = () => {
         onClick={() => {
           state.display = "full";
         }}
+        style={
+          state.display === "full"
+            ? { background: state.theme.colorPrimaryLight }
+            : {}
+        }
       >
         Show All
       </div>
@@ -29,6 +35,11 @@ const DisplayPopup: FC = () => {
         onClick={() => {
           state.display = "foldtoolbar";
         }}
+        style={
+          state.display === "foldtoolbar"
+            ? { background: state.theme.colorPrimaryLight }
+            : {}
+        }
       >
         Fold toolbar
       </div>
@@ -37,6 +48,11 @@ const DisplayPopup: FC = () => {
         onClick={() => {
           state.display = "headfoot";
         }}
+        style={
+          state.display === "headfoot"
+            ? { background: state.theme.colorPrimaryLight }
+            : {}
+        }
       >
         Hide toolbar
       </div>
@@ -45,6 +61,11 @@ const DisplayPopup: FC = () => {
         onClick={() => {
           state.display = "content";
         }}
+        style={
+          state.display === "content"
+            ? { background: state.theme.colorPrimaryLight }
+            : {}
+        }
       >
         Only show content
       </div>
@@ -87,15 +108,21 @@ export const Header: FC = () => {
           color: state.theme.colorBackground,
         } as CSSProperties;
       case "content":
-        return {
-          display: "none",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
-        } as CSSProperties;
+        return (state.opened
+          ? {
+              display: "none",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              background: state.theme.colorPrimary,
+              color: state.theme.colorBackground,
+            }
+          : {
+              display: "block",
+              background: state.theme.colorPrimary,
+              color: state.theme.colorBackground,
+            }) as CSSProperties;
     }
   };
   return useObserver(() => (
@@ -115,7 +142,7 @@ export const Header: FC = () => {
       <div className="header__controls">
         <Popover
           placement="topLeft"
-          title={"dada"}
+          title={"Display style"}
           content={<DisplayPopup />}
           trigger="click"
         >
@@ -129,7 +156,11 @@ export const Header: FC = () => {
             ipcRenderer.send("app-toggle-full-screen");
           }}
         >
-          <FullscreenOutlined />
+          {state.fullScreenStatus ? (
+            <FullscreenExitOutlined />
+          ) : (
+            <FullscreenOutlined />
+          )}
         </div>
         <div
           className="window-icon hover-gray"

@@ -50,3 +50,11 @@
 .hover-gray:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+.display-popup__item {
+  padding: 0.5rem;
+}
+
+.display-popup__item:hover {
+  cursor: pointer;
+}

@@ -106,10 +106,16 @@ const App: FC = () => {
         );
       }
     });
+    ipcRenderer.on("full-screen-status", (event, status: boolean) => {
+      state.fullScreenStatus = status;
+    });
   });
   useEffect(() => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
       ipcRenderer.send("toggle-dev-tools");
+    });
+    hotkeys("f11", { keyup: true, keydown: false }, () => {
+      ipcRenderer.send("app-toggle-full-screen");
     });
   });
   useEffect(() => {

@@ -66,6 +66,7 @@ export function createActions(mw: BrowserWindow) {
   });
   ipcMain.on("app-toggle-full-screen", () => {
     mw.setFullScreen(!mw.fullScreen);
+    mw.webContents.send("full-screen-status", mw.fullScreen);
   });
   ipcMain.on("app-close-modified", (event, title, message) => {
     dialog.showMessageBox(mw, { type: "question", message, title });

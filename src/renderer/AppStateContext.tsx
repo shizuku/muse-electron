@@ -67,6 +67,8 @@ export class AppState {
     this.display = "full";
     this.headerHover = false;
     this.footerHover = false;
+    this.fullScreenStatus = false;
+    this.maxStatus = false;
     this.heights = new Heights();
     this.recents = [];
     this.isNew = false;
@@ -84,6 +86,8 @@ export class AppState {
   @observable display: DisplayStyle;
   @observable headerHover: boolean;
   @observable footerHover: boolean;
+  @observable fullScreenStatus: boolean;
+  @observable maxStatus: boolean;
   //unopened
   @observable recents: FileInfo[];
   //opened
