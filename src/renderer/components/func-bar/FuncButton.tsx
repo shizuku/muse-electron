@@ -3,10 +3,10 @@ import "./func-button.css";
 
 export interface FuncButtonProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  children?: React.ReactNode;
   onMouseEnter?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onMouseLeave?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  children?: React.ReactNode;
 }
 
 export const FuncButtom: FC<FuncButtonProps> = ({

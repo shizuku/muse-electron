@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useState } from "react";
+import React, { CSSProperties, FC } from "react";
 import {
   CloseOutlined,
   AppstoreOutlined,
@@ -13,6 +13,7 @@ import { useObserver } from "mobx-react";
 import { useAppState } from "../../AppStateContext";
 import "./style.css";
 import { Popover } from "antd";
+import { FuncBar } from "../func-bar";
 
 const DisplayPopup: FC = () => {
   let state = useAppState();
@@ -30,19 +31,6 @@ const DisplayPopup: FC = () => {
         }
       >
         Show All
-      </div>
-      <div
-        className="display-popup__item"
-        onClick={() => {
-          state.display = "foldtoolbar";
-        }}
-        style={
-          state.display === "foldtoolbar"
-            ? { background: state.theme.colorPrimaryLight }
-            : {}
-        }
-      >
-        Fold toolbar
       </div>
       <div
         className="display-popup__item"
@@ -79,7 +67,6 @@ export const Header: FC = () => {
   let styleHover = () => {
     switch (state.display) {
       case "full":
-      case "foldtoolbar":
       case "headfoot":
         return {
           display: "block",
@@ -101,7 +88,6 @@ export const Header: FC = () => {
   let styleUnhover = () => {
     switch (state.display) {
       case "full":
-      case "foldtoolbar":
       case "headfoot":
         return {
           display: "block",
@@ -136,7 +122,7 @@ export const Header: FC = () => {
       style={state.headerHover ? styleHover() : styleUnhover()}
     >
       <div className="header__drag-region"></div>
-      <div className="header__app-logo"></div>
+      {state.opened ? <FuncBar /> : <></>}
       <div className="header__window-title">
         {state.fileName === "" ? `Muse` : `${state.fileName} - Muse`}
       </div>

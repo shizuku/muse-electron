@@ -9,7 +9,6 @@ export const Footer: FC = () => {
   let styleHover = () => {
     switch (state.display) {
       case "full":
-      case "foldtoolbar":
       case "headfoot":
         return {
           display: "block",
@@ -31,7 +30,6 @@ export const Footer: FC = () => {
   let styleUnhover = () => {
     switch (state.display) {
       case "full":
-      case "foldtoolbar":
       case "headfoot":
         return {
           display: "block",

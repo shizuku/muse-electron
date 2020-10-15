@@ -9,7 +9,6 @@ export const Content: FC = () => {
   let style = () => {
     switch (state.display) {
       case "full":
-      case "foldtoolbar":
       case "headfoot":
         return {
           height: state.heights.content,

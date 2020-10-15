@@ -1,0 +1,10 @@
+.func-bar {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  -webkit-user-select: none;
+  -webkit-app-region: no-drag;
+}

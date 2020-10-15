@@ -1,0 +1,18 @@
+.func-button {
+  display: inline-block;
+  font-size: 1rem;
+  height: 30px;
+  width: 30px;
+}
+
+.func-button:hover {
+  cursor: pointer;
+}
+
+.func-button__container {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

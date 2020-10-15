@@ -57,7 +57,7 @@ export interface Events {
 //hidetoolbar: hide toolbar
 //headfoot: only show header, footer and content
 //content: only show content
-type DisplayStyle = "full" | "foldtoolbar" | "headfoot" | "content";
+type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
   constructor() {
