@@ -7,13 +7,17 @@ import {
   FullscreenOutlined,
   FullscreenExitOutlined,
   MenuFoldOutlined,
+  SaveOutlined,
+  UndoOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
-import { Popover } from "antd";
+import { Popover, Tooltip } from "antd";
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
 import { FuncBar } from "../func-bar";
 import { useAppState } from "../app";
 import "./style.css";
+import { FuncButtom } from "../func-bar/func-button";
 
 const DisplayPopup: FC = () => {
   let state = useAppState();
@@ -122,7 +126,31 @@ export const Header: FC = () => {
       style={state.headerHover ? styleHover() : styleUnhover()}
     >
       <div className="header__drag-region"></div>
-      {state.opened ? <FuncBar /> : <></>}
+      {state.opened ? (
+        <FuncBar>
+          <Tooltip placement="topLeft" title="Save" mouseEnterDelay={1}>
+            <FuncButtom
+              onClick={() => {
+                state.events?.onSave();
+              }}
+            >
+              <SaveOutlined />
+            </FuncButtom>
+          </Tooltip>
+          <Tooltip placement="topLeft" title="Undo" mouseEnterDelay={1}>
+            <FuncButtom>
+              <UndoOutlined />
+            </FuncButtom>
+          </Tooltip>
+          <Tooltip placement="topLeft" title="Redo" mouseEnterDelay={1}>
+            <FuncButtom>
+              <RedoOutlined />
+            </FuncButtom>
+          </Tooltip>
+        </FuncBar>
+      ) : (
+        <></>
+      )}
       <div className="header__window-title">
         {state.fileName === "" ? `Muse` : `${state.fileName} - Muse`}
       </div>

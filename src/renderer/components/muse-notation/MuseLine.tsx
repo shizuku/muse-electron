@@ -30,7 +30,7 @@ export class Line implements Codec, SelectionLine {
     return h;
   }
   @computed get x() {
-    return this.page.x;
+    return this.config.pageMarginHorizontal;
   }
   @computed get y() {
     return this.page.linesY[this.index];

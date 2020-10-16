@@ -5,7 +5,9 @@ export default class MuseConfig {
   @observable pageE = 1.414;
   @observable noteFontFamily = "serif";
   @observable textFontFamily = "serif";
-  @observable showBorder = false;
+  @observable showBorder = true;
+  @observable pageLine = 1;
+  @observable vertical = true;
 
   @computed get noteHeight() {
     return this.x * 22;

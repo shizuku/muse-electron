@@ -1,3 +1,4 @@
+import { useObserver } from "mobx-react";
 import React, { FC, useState } from "react";
 import "./style.css";
 
@@ -6,6 +7,7 @@ export interface FuncButtonProps {
   onMouseEnter?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onMouseLeave?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
+  active?: boolean;
   children?: React.ReactNode;
 }
 
@@ -15,9 +17,11 @@ export const FuncButtom: FC<FuncButtonProps> = ({
   onMouseEnter,
   onMouseLeave,
   onFocus,
+  active,
 }) => {
   let [hover, setHover] = useState(false);
   let [press, setPress] = useState(false);
+  console.log(active);
   const ome = () => {
     setHover(true);
   };
@@ -30,7 +34,7 @@ export const FuncButtom: FC<FuncButtonProps> = ({
   const omu = () => {
     setPress(false);
   };
-  return (
+  return useObserver(() => (
     <div
       className="func-button"
       onFocus={onFocus}
@@ -48,12 +52,14 @@ export const FuncButtom: FC<FuncButtonProps> = ({
       style={
         hover
           ? press
-            ? { background: "#00000044" }
+            ? active || false
+              ? { background: "#00000066" }
+              : { background: "#00000044" }
             : { background: "#00000022" }
           : {}
       }
     >
       <div className="func-button__container">{children}</div>
     </div>
-  );
+  ));
 };

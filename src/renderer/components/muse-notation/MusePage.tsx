@@ -1,11 +1,11 @@
-import React from "react";
+import React, { FC } from "react";
 import MuseConfig from "./MuseConfig";
 import MuseLine, { ILine, Line } from "./MuseLine";
 import { Border, OuterBorder } from "./Border";
 import Codec from "./Codec";
 import { computed, observable } from "mobx";
 import { Notation } from "./MuseNotation";
-import { observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import { SelectionPage } from "./Selector";
 
 export interface IPage {
@@ -29,12 +29,23 @@ export class Page implements Codec, SelectionPage {
     );
   }
   @computed get x() {
-    return this.config.pageMarginHorizontal;
+    if (this.config.vertical) {
+      return this.config.pageMarginHorizontal;
+    } else {
+      return (
+        this.config.pageMarginHorizontal + this.index * this.config.pageWidth
+      );
+    }
   }
   @computed get y() {
-    return (
-      this.marginTop + this.index * (this.config.pageWidth * this.config.pageE)
-    );
+    if (this.config.vertical) {
+      return (
+        this.marginTop +
+        this.index * (this.config.pageWidth * this.config.pageE)
+      );
+    } else {
+      return this.marginTop;
+    }
   }
   @computed get marginTop() {
     let mt = 0;
@@ -148,70 +159,47 @@ const PageIndex: React.FC<PageIndexProps> = ({
   );
 };
 
-@observer
-class MusePage extends React.Component<{ page: Page }> {
-  render() {
-    let clazz = "muse-page";
-    return (
-      <g
-        className={clazz}
-        transform={
-          "translate(" +
-          (this.props.page.x - this.props.page.marginLeft) +
-          "," +
-          (this.props.page.y - this.props.page.marginTop) +
-          ")"
-        }
-        width={
-          this.props.page.width +
-          this.props.page.marginLeft +
-          this.props.page.marginRight
-        }
-        height={
-          this.props.page.height +
-          this.props.page.marginTop +
-          this.props.page.marginBottom
-        }
-      >
-        <Border
-          w={this.props.page.width}
-          h={this.props.page.height}
-          x={this.props.page.x}
-          y={this.props.page.marginTop}
-          clazz={clazz}
-          show={this.props.page.isSelect}
-        />
-        <OuterBorder
-          w={
-            this.props.page.width +
-            this.props.page.marginLeft +
-            this.props.page.marginLeft
-          }
-          h={
-            this.props.page.height +
-            this.props.page.marginTop +
-            this.props.page.marginBottom
-          }
-          clazz={clazz}
-          show={true}
-        />
-        <PageIndex
-          index={this.props.page.index}
-          x={this.props.page.marginLeft + this.props.page.width / 2}
-          y={
-            this.props.page.marginTop +
-            this.props.page.height +
-            this.props.page.marginBottom / 2
-          }
-          clazz={clazz}
-          config={this.props.page.config}
-        />
-        {this.props.page.lines.map((it, idx) => (
-          <MuseLine key={idx} line={it} />
-        ))}
-      </g>
-    );
-  }
-}
+const MusePage: FC<{ page: Page }> = ({ page }) => {
+  let clazz = "muse-page";
+  return useObserver(() => (
+    <g
+      className={clazz}
+      transform={
+        "translate(" +
+        (page.x - page.marginLeft) +
+        "," +
+        (page.y - page.marginTop) +
+        ")"
+      }
+      width={page.width + page.marginLeft + page.marginRight}
+      height={page.height + page.marginTop + page.marginBottom}
+    >
+      <Border
+        w={page.width}
+        h={page.height}
+        x={page.x}
+        y={page.marginTop}
+        clazz={clazz}
+        show={page.isSelect}
+      />
+      <OuterBorder
+        w={page.width + page.marginLeft + page.marginLeft}
+        h={page.height + page.marginTop + page.marginBottom}
+        clazz={clazz}
+        show={true}
+      />
+      <PageIndex
+        index={page.index}
+        x={page.marginLeft + page.width / 2}
+        y={page.marginTop + page.height + page.marginBottom / 2}
+        clazz={clazz}
+        config={page.config}
+      />
+      {page.lines.map((it, idx) => (
+        <MuseLine key={idx} line={it} />
+      ))}
+    </g>
+  ));
+};
 
 export default MusePage;

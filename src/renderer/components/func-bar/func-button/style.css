@@ -1,7 +1,7 @@
 .func-button {
   display: inline-block;
   font-size: 1rem;
-  height: 30px;
+  height: 100%;
   width: 30px;
 }
 

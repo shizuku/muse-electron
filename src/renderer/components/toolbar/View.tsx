@@ -15,13 +15,21 @@ export const View: FC = () => {
   return (
     <div className="pane-container">
       <Menu mode="horizontal">
-        <MenuItem icon={<BorderVerticleOutlined />} size="m" onClick={() => {}}>
+        <MenuItem
+          icon={<BorderVerticleOutlined />}
+          size="m"
+          onClick={() => {
+            state.config.vertical = true;
+          }}
+        >
           {"Vertical"}
         </MenuItem>
         <MenuItem
           icon={<BorderHorizontalOutlined />}
           size="m"
-          onClick={() => {}}
+          onClick={() => {
+            state.config.vertical = false;
+          }}
         >
           {"Horizontal"}
         </MenuItem>

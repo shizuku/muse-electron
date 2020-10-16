@@ -1,7 +1,13 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
+import {
+  BorderHorizontalOutlined,
+  BorderVerticleOutlined,
+} from "@ant-design/icons";
 import { useAppState } from "../app";
 import { Sizer } from "./sizer";
+import { FuncBar } from "../func-bar";
+import { FuncButtom } from "../func-bar/func-button";
 import "./style.css";
 
 export const Footer: FC = () => {
@@ -61,7 +67,25 @@ export const Footer: FC = () => {
     >
       <div className="footer__group-left"></div>
       <div className="footer__group-right">
-        <div className="tooter__item">
+        <FuncBar>
+          <FuncButtom
+            onClick={() => {
+              state.config.vertical = true;
+            }}
+            active={state.config.vertical === true}
+          >
+            <BorderVerticleOutlined />
+          </FuncButtom>
+          <FuncButtom
+            onClick={() => {
+              state.config.vertical = false;
+            }}
+            active={state.config.vertical === false}
+          >
+            <BorderHorizontalOutlined />
+          </FuncButtom>
+        </FuncBar>
+        <div className="footer__item">
           <Sizer />
         </div>
       </div>

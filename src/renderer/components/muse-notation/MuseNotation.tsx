@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import MuseConfig from "./MuseConfig";
 import MusePage, { IPage, Page } from "./MusePage";
 import { Border, OuterBorder } from "./Border";
 import Codec from "./Codec";
 import { computed, observable } from "mobx";
-import { observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import { SelectionNotation } from "./Selector";
 
 export class NotationInfo {
@@ -33,13 +33,25 @@ export class Notation implements Codec, SelectionNotation {
   @observable info: NotationInfo = new NotationInfo();
   @computed get height() {
     let h = 0;
-    this.pages.forEach(
-      (it) => (h += it.height + it.marginTop + it.marginBottom)
-    );
+    if (this.config.vertical) {
+      this.pages.forEach(
+        (it) => (h += it.height + it.marginTop + it.marginBottom)
+      );
+    } else {
+      h = this.config.pageWidth * this.config.pageE;
+    }
     return h;
   }
   @computed get width() {
-    return this.config.pageWidth;
+    let w = 0;
+    if (this.config.vertical) {
+      w = this.config.pageWidth;
+    } else {
+      this.pages.forEach(
+        (it) => (w += it.width + it.marginLeft + it.marginRight)
+      );
+    }
+    return w;
   }
   constructor(o: INotation, config: MuseConfig) {
     this.config = config;
@@ -216,48 +228,41 @@ const MuseNotationInfo: React.FC<MuseNotationInfoProps> = ({
   );
 };
 
-@observer
-class MuseNotation extends React.Component<{ notation: Notation }, {}> {
-  render() {
-    let margin = this.props.notation.config.notationMargin;
-    let clazz = "muse-notation";
-    return (
-      <svg
-        className="muse"
-        width={this.props.notation.width + margin * 2}
-        height={this.props.notation.height + margin * 2}
+const MuseNotation: FC<{ notation: Notation }> = ({ notation }) => {
+  let margin = notation.config.notationMargin;
+  let clazz = "muse-notation";
+  return useObserver(() => (
+    <svg
+      className="muse"
+      width={notation.width + margin * 2}
+      height={notation.height + margin * 2}
+    >
+      <g
+        className={clazz}
+        transform={"translate(" + margin + "," + margin + ")"}
+        width={notation.width}
+        height={notation.height}
       >
-        <g
-          className={clazz}
-          transform={"translate(" + margin + "," + margin + ")"}
-          width={this.props.notation.width}
-          height={this.props.notation.height}
-        >
-          <MuseNotationInfo
-            info={this.props.notation.info}
-            config={this.props.notation.config}
-            clazz={clazz}
-          />
-          <Border
-            w={this.props.notation.width}
-            h={this.props.notation.height}
-            x={0}
-            y={0}
-            clazz={clazz}
-            show={this.props.notation.isSelect}
-          />
-          <OuterBorder
-            w={this.props.notation.width}
-            h={this.props.notation.height}
-            clazz={clazz}
-          />
-          {this.props.notation.pages.map((it, idx) => (
-            <MusePage key={idx} page={it} />
-          ))}
-        </g>
-      </svg>
-    );
-  }
-}
+        <MuseNotationInfo
+          info={notation.info}
+          config={notation.config}
+          clazz={clazz}
+        />
+        <Border
+          w={notation.width}
+          h={notation.height}
+          x={0}
+          y={0}
+          clazz={clazz}
+          show={notation.isSelect}
+        />
+        <OuterBorder w={notation.width} h={notation.height} clazz={clazz} />
+        {notation.pages.map((it, idx) => (
+          <MusePage key={idx} page={it} />
+        ))}
+      </g>
+    </svg>
+  ));
+};
 
 export default MuseNotation;

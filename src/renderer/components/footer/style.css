@@ -7,12 +7,14 @@
 
 .footer__group-right {
   display: inline-flex;
-  position: absolute;
+  position: relative;
   right: 0;
   float: right;
+  height: 100%;
 }
 
-.tooter__item {
+.footer__item {
+  height: 100%;
   line-height: 28px;
   align-items: center;
   margin: 0 5px;
