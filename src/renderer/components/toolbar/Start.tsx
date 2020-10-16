@@ -2,7 +2,9 @@ import React, { FC } from "react";
 import {
   BorderHorizontalOutlined,
   BorderVerticleOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
+import { useObserver } from "mobx-react";
 import { Menu, MenuItem } from "../menu";
 
 export const StartTab: FC = () => {
@@ -10,20 +12,13 @@ export const StartTab: FC = () => {
 };
 
 export const Start: FC = () => {
-  return (
+  return useObserver(() => (
     <div>
       <Menu mode="horizontal">
-        <MenuItem icon={<BorderVerticleOutlined />} size="m" onClick={() => {}}>
-          {"Vertical"}
-        </MenuItem>
-        <MenuItem
-          icon={<BorderHorizontalOutlined />}
-          size="m"
-          onClick={() => {}}
-        >
-          {"Horizontal"}
+        <MenuItem icon={<SaveOutlined />} size="m" onClick={() => {}}>
+          {"Auto save"}
         </MenuItem>
       </Menu>
     </div>
-  );
+  ));
 };

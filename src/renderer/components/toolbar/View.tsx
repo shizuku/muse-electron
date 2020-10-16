@@ -3,6 +3,7 @@ import {
   BorderHorizontalOutlined,
   BorderVerticleOutlined,
 } from "@ant-design/icons";
+import { useObserver } from "mobx-react";
 import { Menu, MenuItem } from "../menu";
 import { useAppState } from "../app";
 
@@ -12,7 +13,7 @@ export const ViewTab: FC = () => {
 
 export const View: FC = () => {
   let state = useAppState();
-  return (
+  return useObserver(() => (
     <div className="pane-container">
       <Menu mode="horizontal">
         <MenuItem
@@ -21,6 +22,7 @@ export const View: FC = () => {
           onClick={() => {
             state.config.vertical = true;
           }}
+          active={state.config.vertical === true}
         >
           {"Vertical"}
         </MenuItem>
@@ -30,10 +32,11 @@ export const View: FC = () => {
           onClick={() => {
             state.config.vertical = false;
           }}
+          active={state.config.vertical === false}
         >
           {"Horizontal"}
         </MenuItem>
       </Menu>
     </div>
-  );
+  ));
 };

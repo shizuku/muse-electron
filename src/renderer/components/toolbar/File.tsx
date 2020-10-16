@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import { useObserver } from "mobx-react";
 import { Menu, MenuItem } from "../menu";
 import { useAppState } from "../app";
 
@@ -9,7 +10,7 @@ export const FileTab: FC = () => {
 
 export const File: FC = () => {
   let state = useAppState();
-  return (
+  return useObserver(() => (
     <div className="pane-container">
       <Menu mode="horizontal">
         <MenuItem
@@ -23,5 +24,5 @@ export const File: FC = () => {
         </MenuItem>
       </Menu>
     </div>
-  );
+  ));
 };

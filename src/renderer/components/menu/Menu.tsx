@@ -34,6 +34,7 @@ export interface MenuItemProps {
   icon?: React.ReactElement;
   size?: "xl" | "l" | "m" | "s";
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  active?: boolean;
   children?: React.ReactNode;
 }
 
@@ -41,6 +42,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   icon,
   size,
   onClick,
+  active,
   children,
 }) => {
   const iconSize: Record<string, number> = {
@@ -59,10 +61,18 @@ export const MenuItem: FC<MenuItemProps> = ({
     <div
       className="menu-item"
       onClick={onClick}
-      style={{
-        width: iconSize[size || "m"] * 4,
-        height: iconSize[size || "m"] * 4,
-      }}
+      style={
+        active === true
+          ? {
+              background: "#00000055",
+              width: iconSize[size || "m"] * 4,
+              height: iconSize[size || "m"] * 4,
+            }
+          : {
+              width: iconSize[size || "m"] * 4,
+              height: iconSize[size || "m"] * 4,
+            }
+      }
     >
       <div
         className="menu-item__container"

@@ -21,7 +21,6 @@ export const FuncButtom: FC<FuncButtonProps> = ({
 }) => {
   let [hover, setHover] = useState(false);
   let [press, setPress] = useState(false);
-  console.log(active);
   const ome = () => {
     setHover(true);
   };
@@ -50,11 +49,11 @@ export const FuncButtom: FC<FuncButtonProps> = ({
       onMouseUp={omu}
       onClick={onClick}
       style={
-        hover
+        active || false
+          ? { background: "#00000055" }
+          : hover
           ? press
-            ? active || false
-              ? { background: "#00000066" }
-              : { background: "#00000044" }
+            ? { background: "#00000044" }
             : { background: "#00000022" }
           : {}
       }
