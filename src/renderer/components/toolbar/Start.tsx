@@ -3,6 +3,7 @@ import {
   BorderHorizontalOutlined,
   BorderVerticleOutlined,
   SaveOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 import { useObserver } from "mobx-react";
 import { Menu, MenuItem } from "../menu";
@@ -15,8 +16,8 @@ export const Start: FC = () => {
   return useObserver(() => (
     <div>
       <Menu mode="horizontal">
-        <MenuItem icon={<SaveOutlined />} size="m" onClick={() => {}}>
-          {"Auto save"}
+        <MenuItem icon={<ProfileOutlined />} size="m" onClick={() => {}}>
+          {"Meta data"}
         </MenuItem>
       </Menu>
     </div>

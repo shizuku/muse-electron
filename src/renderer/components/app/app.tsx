@@ -57,8 +57,11 @@ const App: FC = () => {
           ipcRenderer.send("save", state.filePath, state.data);
         }
       },
-      onSaveAs: () => {},
+      onSaveAs: () => {
+        ipcRenderer.send("save-as", state.filePath, state.data);
+      },
       onPrint: () => {},
+      onExport: () => {},
       onUndo: () => {},
       onRedo: () => {},
       onClose: () => {

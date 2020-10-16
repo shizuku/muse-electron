@@ -50,6 +50,7 @@ export interface Events {
   onSave: () => void;
   onSaveAs: () => void;
   onPrint: () => void;
+  onExport: () => void;
   onUndo: () => void;
   onRedo: () => void;
   onClose: () => void;
@@ -76,6 +77,7 @@ export class AppState {
     this.modified = false;
     this.fileName = "";
     this.filePath = "";
+    this.autoSave = false;
     this.notation = undefined;
   }
   //all
@@ -95,6 +97,7 @@ export class AppState {
   @observable modified: boolean;
   @observable fileName: string;
   @observable filePath: string;
+  @observable autoSave: boolean;
   @observable notation?: Notation;
   @computed get data(): string {
     return JSON.stringify(this.notation?.code());
