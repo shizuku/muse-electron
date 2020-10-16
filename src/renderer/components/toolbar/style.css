@@ -5,6 +5,7 @@
 }
 
 .toolbar__tabs {
+  padding-left: 10px;
   display: block;
 }
 
@@ -24,11 +25,15 @@
   margin-bottom: 0.3rem;
 }
 
-.toolbar__content.inactive {
+.toolbar__pane.inactive {
   display: none;
 }
 
-.toolbar__content {
+.toolbar__pane {
   display: block;
-  height: 6rem;
+  margin: 0 10px;
+}
+
+.pane-container {
+  display: flex;
 }

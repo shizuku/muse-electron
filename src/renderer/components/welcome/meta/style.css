@@ -1,0 +1,26 @@
+.meta {
+  display: block;
+}
+
+.meta__avator {
+  display: inline;
+}
+
+.meta__content {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.meta__title {
+  font-size: 1rem;
+}
+
+.meta__descrption {
+  display: inline;
+}
+
+.meta__time {
+  display: inline;
+  position: relative;
+  right: 0;
+}

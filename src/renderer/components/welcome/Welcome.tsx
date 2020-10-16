@@ -11,6 +11,7 @@ import { Menu, MenuItem } from "../menu";
 import { useAppState } from "../app";
 import { getFileFolder, getFileName } from "../../../shared/utils";
 import "./style.css";
+import { Meta } from "./meta";
 
 export const Welcome: FC = () => {
   let state = useAppState();
@@ -26,6 +27,7 @@ export const Welcome: FC = () => {
             marginTop: "5rem",
             color: state.theme.colorBackground,
           }}
+          mode="vertical"
         >
           <MenuItem
             key="0"
@@ -57,7 +59,7 @@ export const Welcome: FC = () => {
             dataSource={state.recents}
             renderItem={(it) => (
               <List.Item>
-                <List.Item.Meta
+                <Meta
                   avatar={<FileOutlined style={{ fontSize: "3rem" }} />}
                   title={
                     <a
@@ -68,9 +70,8 @@ export const Welcome: FC = () => {
                       {getFileName(it.path)}
                     </a>
                   }
-                  description={`${getFileFolder(it.path)}\t${new Date(
-                    it.time
-                  ).toLocaleString()}`}
+                  description={`${getFileFolder(it.path)}`}
+                  time={`${new Date(it.time).toLocaleString()}`}
                 />
               </List.Item>
             )}

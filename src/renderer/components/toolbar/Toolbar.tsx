@@ -50,7 +50,7 @@ export const Pane: FC<{ label: string }> = ({ label, children }) => {
     <ActiveContext.Consumer>
       {(a) => (
         <div
-          className={classNames("toolbar__content", {
+          className={classNames("toolbar__pane", {
             active: a.active === label,
             inactive: a.active !== label,
           })}
@@ -102,7 +102,7 @@ export const Toolbar: FC = () => {
             <ViewTab />
           </Tab>
         </div>
-        <div className="toolbar__contents">
+        <div className="toolbar__panes">
           <Pane label="file">
             <File />
           </Pane>

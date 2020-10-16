@@ -4,11 +4,27 @@ import "./style.css";
 export interface MenuProps {
   style?: React.CSSProperties;
   children?: React.ReactNode;
+  mode?: "vertical" | "horizontal" | "inline";
 }
 
-export const Menu: FC<MenuProps> = ({ style, children }) => {
+export const Menu: FC<MenuProps> = ({ style, children, mode }) => {
+  let display = "";
+  switch (mode) {
+    case "horizontal":
+      display = "flex";
+      break;
+    case "vertical":
+      display = "block";
+      break;
+    case "inline":
+      display = "inline";
+      break;
+    default:
+      display = "flex";
+      break;
+  }
   return (
-    <div className="menu" style={style}>
+    <div className="menu" style={{ display, ...style }}>
       {children}
     </div>
   );
