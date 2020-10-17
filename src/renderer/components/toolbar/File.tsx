@@ -21,21 +21,21 @@ export const File: FC = () => {
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={() => state.events?.onSave()}
+          onClick={state.events?.onSave}
         >
           {"Save"}
         </MenuItem>
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={() => state.events?.onSaveAs()}
+          onClick={state.events?.onSaveAs}
         >
           {"Save as"}
         </MenuItem>
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={() => (state.autoSave = !state.autoSave)}
+          onClick={state.events?.onAutoSave}
           active={state.autoSave}
         >
           {"Auto save"}
@@ -43,21 +43,21 @@ export const File: FC = () => {
         <MenuItem
           icon={<PrinterOutlined />}
           size="m"
-          onClick={() => state.events?.onPrint()}
+          onClick={state.events?.onPrint}
         >
           {"Print"}
         </MenuItem>
         <MenuItem
           icon={<ExportOutlined />}
           size="m"
-          onClick={() => state.events?.onExport()}
+          onClick={state.events?.onExport}
         >
           {"Export"}
         </MenuItem>
         <MenuItem
           icon={<CloseCircleOutlined />}
           size="m"
-          onClick={() => state.close()}
+          onClick={state.events?.onClose}
         >
           {"Close"}
         </MenuItem>

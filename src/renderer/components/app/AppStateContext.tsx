@@ -47,13 +47,19 @@ export class WindowDim {
 }
 
 export interface Events {
+  onSetDisplay: (s: DisplayStyle) => void;
   onSave: () => void;
   onSaveAs: () => void;
+  onAutoSave: () => void;
   onPrint: () => void;
   onExport: () => void;
+  onClose: () => void;
   onUndo: () => void;
   onRedo: () => void;
-  onClose: () => void;
+  onEditMetaData: () => void;
+  onSetV: () => void;
+  onSetH: () => void;
+  onExit: () => void;
 }
 
 //full: show all element,

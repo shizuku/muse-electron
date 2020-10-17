@@ -25,9 +25,7 @@ const DisplayPopup: FC = () => {
     <div className="display-popup">
       <div
         className="display-popup__item"
-        onClick={() => {
-          state.display = "full";
-        }}
+        onClick={() => state.events?.onSetDisplay("full")}
         style={
           state.display === "full"
             ? { background: state.theme.colorPrimaryLight }
@@ -38,9 +36,7 @@ const DisplayPopup: FC = () => {
       </div>
       <div
         className="display-popup__item"
-        onClick={() => {
-          state.display = "headfoot";
-        }}
+        onClick={() => state.events?.onSetDisplay("headfoot")}
         style={
           state.display === "headfoot"
             ? { background: state.theme.colorPrimaryLight }
@@ -51,9 +47,7 @@ const DisplayPopup: FC = () => {
       </div>
       <div
         className="display-popup__item"
-        onClick={() => {
-          state.display = "content";
-        }}
+        onClick={() => state.events?.onSetDisplay("content")}
         style={
           state.display === "content"
             ? { background: state.theme.colorPrimaryLight }
@@ -129,11 +123,7 @@ export const Header: FC = () => {
       {state.opened ? (
         <FuncBar>
           <Tooltip placement="topLeft" title="Save" mouseEnterDelay={1}>
-            <FuncButtom
-              onClick={() => {
-                state.events?.onSave();
-              }}
-            >
+            <FuncButtom onClick={state.events?.onSave}>
               <SaveOutlined />
             </FuncButtom>
           </Tooltip>

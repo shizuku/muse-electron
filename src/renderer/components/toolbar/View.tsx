@@ -19,9 +19,7 @@ export const View: FC = () => {
         <MenuItem
           icon={<BorderVerticleOutlined />}
           size="m"
-          onClick={() => {
-            state.config.vertical = true;
-          }}
+          onClick={state.events?.onSetV}
           active={state.config.vertical === true}
         >
           {"Vertical"}
@@ -29,9 +27,7 @@ export const View: FC = () => {
         <MenuItem
           icon={<BorderHorizontalOutlined />}
           size="m"
-          onClick={() => {
-            state.config.vertical = false;
-          }}
+          onClick={state.events?.onSetH}
           active={state.config.vertical === false}
         >
           {"Horizontal"}

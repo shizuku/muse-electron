@@ -69,17 +69,13 @@ export const Footer: FC = () => {
       <div className="footer__group-right">
         <FuncBar>
           <FuncButtom
-            onClick={() => {
-              state.config.vertical = true;
-            }}
+            onClick={state.events?.onSetV}
             active={state.config.vertical === true}
           >
             <BorderVerticleOutlined />
           </FuncButtom>
           <FuncButtom
-            onClick={() => {
-              state.config.vertical = false;
-            }}
+            onClick={state.events?.onSetH}
             active={state.config.vertical === false}
           >
             <BorderHorizontalOutlined />

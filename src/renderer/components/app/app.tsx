@@ -10,8 +10,13 @@ import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
 import { getFileName } from "../../../shared/utils";
-import { AppState, FileInfo, useAppState } from "./AppStateContext";
-import { loadConfig, store } from "./store";
+import {
+  AppState,
+  DisplayStyle,
+  FileInfo,
+  useAppState,
+} from "./AppStateContext";
+import { loadConfigs, saveConfig } from "./store";
 import "./app.css";
 
 const openNotificationWithIcon = (
@@ -36,17 +41,21 @@ const App: FC = () => {
         re[i].time = f.time;
         state.recents = re;
         re.slice().sort((a, b) => b.time - a.time);
-        store.set("recent-files", re);
+        saveConfig("recent-files", re);
         return;
       }
     }
     re.push(f);
     state.recents = re;
     re.slice().sort((a, b) => b.time - a.time);
-    store.set("recent-files", re);
+    saveConfig("recent-files", re);
   };
   useEffect(() => {
     state.events = {
+      onSetDisplay: (s: DisplayStyle) => {
+        state.display = s;
+        saveConfig("display", state.display);
+      },
       onSave: () => {
         if (state.isNew) {
           ipcRenderer.send("save-as", state.filePath, state.data);
@@ -57,11 +66,25 @@ const App: FC = () => {
       onSaveAs: () => {
         ipcRenderer.send("save-as", state.filePath, state.data);
       },
+      onAutoSave: () => {
+        state.autoSave = !state.autoSave;
+        saveConfig("auto-save", state.autoSave);
+      },
       onPrint: () => {},
       onExport: () => {},
+      onClose: () => state.close(),
       onUndo: () => {},
       onRedo: () => {},
-      onClose: () => {
+      onEditMetaData: () => {},
+      onSetH: () => {
+        state.config.vertical = false;
+        saveConfig("vertical", state.config.vertical);
+      },
+      onSetV: () => {
+        state.config.vertical = true;
+        saveConfig("vertical", state.config.vertical);
+      },
+      onExit: () => {
         if (state.modified) {
           ipcRenderer.send(
             "app-close-modified",
@@ -148,8 +171,11 @@ const App: FC = () => {
     });
   });
   useEffect(() => {
-    let c = loadConfig();
+    let c = loadConfigs();
     state.loadRecents(c.recents);
+    state.config.vertical = c.vertical;
+    state.autoSave = c.autoSave;
+    state.display = c.display;
   });
   if (state) {
     return (
