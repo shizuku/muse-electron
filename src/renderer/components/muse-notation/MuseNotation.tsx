@@ -31,27 +31,41 @@ export class Notation implements Codec, SelectionNotation {
   @observable pages: Page[] = [];
   @observable isSelect = false;
   @observable info: NotationInfo = new NotationInfo();
-  @computed get height() {
-    let h = 0;
+  @computed get nx() {
     if (this.config.vertical) {
-      this.pages.forEach(
-        (it) => (h += it.height + it.marginTop + it.marginBottom)
-      );
+      return this.config.pageLine > this.pages.length
+        ? this.pages.length
+        : this.config.pageLine;
     } else {
-      h = this.config.pageWidth * this.config.pageE;
+      let p = parseInt(`${this.pages.length / this.config.pageLine}`, 10);
+      let q = this.pages.length % this.config.pageLine;
+      if (q === 0) {
+        return p;
+      } else {
+        return p + 1;
+      }
     }
-    return h;
+  }
+  @computed get ny() {
+    if (this.config.vertical) {
+      let p = parseInt(`${this.pages.length / this.config.pageLine}`, 10);
+      let q = this.pages.length % this.config.pageLine;
+      if (q === 0) {
+        return p;
+      } else {
+        return p + 1;
+      }
+    } else {
+      return this.config.pageLine > this.pages.length
+        ? this.pages.length
+        : this.config.pageLine;
+    }
+  }
+  @computed get height() {
+    return this.config.pageHeight * this.ny;
   }
   @computed get width() {
-    let w = 0;
-    if (this.config.vertical) {
-      w = this.config.pageWidth;
-    } else {
-      this.pages.forEach(
-        (it) => (w += it.width + it.marginLeft + it.marginRight)
-      );
-    }
-    return w;
+    return this.config.pageWidth * this.nx;
   }
   constructor(o: INotation, config: MuseConfig) {
     this.config = config;

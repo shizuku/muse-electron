@@ -23,29 +23,28 @@ export class Page implements Codec, SelectionPage {
   }
   @computed get height() {
     return (
-      this.config.pageWidth * this.config.pageE -
-      this.config.pageMarginVertical -
-      this.marginTop
+      this.config.pageHeight - this.config.pageMarginVertical - this.marginTop
     );
   }
-  @computed get x() {
+  @computed get xp() {
     if (this.config.vertical) {
-      return this.config.pageMarginHorizontal;
+      return this.index % this.config.pageLine;
     } else {
-      return (
-        this.config.pageMarginHorizontal + this.index * this.config.pageWidth
-      );
+      return parseInt(`${this.index / this.config.pageLine}`, 10);
     }
   }
-  @computed get y() {
+  @computed get yp() {
     if (this.config.vertical) {
-      return (
-        this.marginTop +
-        this.index * (this.config.pageWidth * this.config.pageE)
-      );
+      return parseInt(`${this.index / this.config.pageLine}`, 10);
     } else {
-      return this.marginTop;
+      return this.index % this.config.pageLine;
     }
+  }
+  @computed get x() {
+    return this.marginLeft + this.xp * this.config.pageWidth;
+  }
+  @computed get y() {
+    return this.marginTop + this.yp * this.config.pageHeight;
   }
   @computed get marginTop() {
     let mt = 0;

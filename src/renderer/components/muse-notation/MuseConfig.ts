@@ -2,11 +2,10 @@ import { observable, computed } from "mobx";
 
 export default class MuseConfig {
   @observable x = 1.0;
-  @observable pageE = 1.414;
   @observable noteFontFamily = "serif";
   @observable textFontFamily = "serif";
   @observable showBorder = true;
-  @observable pageLine = 1;
+  @observable pageLine = 2;
   @observable vertical = true;
 
   @computed get noteHeight() {
@@ -35,6 +34,9 @@ export default class MuseConfig {
   }
   @computed get pageWidth() {
     return this.x * 1000;
+  }
+  @computed get pageHeight() {
+    return this.x * 1414;
   }
   @computed get pageMarginHorizontal() {
     return this.x * 100;
