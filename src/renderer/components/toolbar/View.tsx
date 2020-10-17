@@ -1,9 +1,6 @@
 import React, { FC } from "react";
-import {
-  BorderHorizontalOutlined,
-  BorderVerticleOutlined,
-} from "@ant-design/icons";
 import { useObserver } from "mobx-react";
+import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { Menu, MenuItem } from "../menu";
 import { useAppState } from "../app";
 
@@ -17,7 +14,7 @@ export const View: FC = () => {
     <div className="pane-container">
       <Menu mode="horizontal">
         <MenuItem
-          icon={<BorderVerticleOutlined />}
+          icon={<LayoutVerticalOutlined />}
           size="m"
           onClick={state.events?.onSetV}
           active={state.config.vertical === true}
@@ -25,7 +22,7 @@ export const View: FC = () => {
           {"Vertical"}
         </MenuItem>
         <MenuItem
-          icon={<BorderHorizontalOutlined />}
+          icon={<LayoutHorizontalOutlined />}
           size="m"
           onClick={state.events?.onSetH}
           active={state.config.vertical === false}

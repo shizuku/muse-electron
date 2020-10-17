@@ -16,8 +16,9 @@ import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
 import { FuncBar } from "../func-bar";
 import { useAppState } from "../app";
-import "./style.css";
+import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
 import { FuncButtom } from "../func-bar/func-button";
+import "./style.css";
 
 const DisplayPopup: FC = () => {
   let state = useAppState();
@@ -181,7 +182,7 @@ export const Header: FC = () => {
             ipcRenderer.send("app-toggle-max");
           }}
         >
-          {state.maxStatus ? <AppstoreOutlined /> : <BorderOutlined />}
+          {state.maxStatus ? <MinimizeOutlined /> : <MaxmizeOutlined />}
         </div>
         <div
           className="window-icon hover-red"

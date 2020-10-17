@@ -1,1 +1,6 @@
-export { LayoutVerticalOutlined, LayoutHorizontalOutlined } from "./icons";
+export {
+  LayoutVerticalOutlined,
+  LayoutHorizontalOutlined,
+  MaxmizeOutlined,
+  MinimizeOutlined,
+} from "./icons";
