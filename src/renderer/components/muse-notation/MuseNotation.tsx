@@ -33,12 +33,12 @@ export class Notation implements Codec, SelectionNotation {
   @observable info: NotationInfo = new NotationInfo();
   @computed get nx() {
     if (this.config.vertical) {
-      return this.config.pageLine > this.pages.length
+      return this.config.pagePerLine > this.pages.length
         ? this.pages.length
-        : this.config.pageLine;
+        : this.config.pagePerLine;
     } else {
-      let p = parseInt(`${this.pages.length / this.config.pageLine}`, 10);
-      let q = this.pages.length % this.config.pageLine;
+      let p = parseInt(`${this.pages.length / this.config.pagePerLine}`, 10);
+      let q = this.pages.length % this.config.pagePerLine;
       if (q === 0) {
         return p;
       } else {
@@ -48,17 +48,17 @@ export class Notation implements Codec, SelectionNotation {
   }
   @computed get ny() {
     if (this.config.vertical) {
-      let p = parseInt(`${this.pages.length / this.config.pageLine}`, 10);
-      let q = this.pages.length % this.config.pageLine;
+      let p = parseInt(`${this.pages.length / this.config.pagePerLine}`, 10);
+      let q = this.pages.length % this.config.pagePerLine;
       if (q === 0) {
         return p;
       } else {
         return p + 1;
       }
     } else {
-      return this.config.pageLine > this.pages.length
+      return this.config.pagePerLine > this.pages.length
         ? this.pages.length
-        : this.config.pageLine;
+        : this.config.pagePerLine;
     }
   }
   @computed get height() {

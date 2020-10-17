@@ -2,6 +2,7 @@ import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
 import { useAppState } from "../app";
 import { Sizer } from "./sizer";
+import { Liner } from "./liner";
 import { FuncBar } from "../func-bar";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { FuncButtom } from "../func-bar/func-button";
@@ -64,20 +65,25 @@ export const Footer: FC = () => {
     >
       <div className="footer__group-left"></div>
       <div className="footer__group-right">
-        <FuncBar>
-          <FuncButtom
-            onClick={state.events?.onSetV}
-            active={state.config.vertical === true}
-          >
-            <LayoutVerticalOutlined />
-          </FuncButtom>
-          <FuncButtom
-            onClick={state.events?.onSetH}
-            active={state.config.vertical === false}
-          >
-            <LayoutHorizontalOutlined />
-          </FuncButtom>
-        </FuncBar>
+        <div className="footer__item">
+          <FuncBar>
+            <FuncButtom
+              onClick={state.events?.onSetV}
+              active={state.config.vertical === true}
+            >
+              <LayoutVerticalOutlined />
+            </FuncButtom>
+            <FuncButtom
+              onClick={state.events?.onSetH}
+              active={state.config.vertical === false}
+            >
+              <LayoutHorizontalOutlined />
+            </FuncButtom>
+          </FuncBar>
+        </div>
+        <div className="footer__item">
+          <Liner />
+        </div>
         <div className="footer__item">
           <Sizer />
         </div>

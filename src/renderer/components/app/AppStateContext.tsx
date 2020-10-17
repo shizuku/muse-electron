@@ -6,6 +6,9 @@ import { MuseConfig, Notation } from "../muse-notation";
 export interface FileInfo {
   path: string;
   time: number;
+  size: number;
+  line: number;
+  vertical: boolean;
 }
 
 export class Theme {
@@ -102,8 +105,9 @@ export class AppState {
   //opened
   @observable modified: boolean;
   @observable fileName: string;
-  @observable filePath: string;
   @observable autoSave: boolean;
+  @observable filePath: string;
+  @observable currentFile?: FileInfo;
   @observable notation?: Notation;
   @computed get data(): string {
     return JSON.stringify(this.notation?.code());

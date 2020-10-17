@@ -1,18 +1,12 @@
 import React, { FC } from "react";
+import { useObserver } from "mobx-react";
 import { InputNumber, Popover } from "antd";
 import { useAppState } from "../../app";
 import "./style.css";
-import { useObserver } from "mobx-react";
 
 const floatEqual = (a: number, b: number) => a - b > -10e-20 && a - b < 10e-20;
 
-const PopItem: FC<{ x: number; s: string }> = ({
-  x,
-  s,
-}: {
-  x: number;
-  s: string;
-}) => {
+const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
   let state = useAppState();
   return useObserver(() => (
     <div
@@ -40,6 +34,7 @@ const PopContent: FC = () => {
       <PopItem x={fw} s="Fit width" />
       <PopItem x={fh} s="Fit height" />
       <PopItem x={Math.min(fw, fh)} s="Fit screen" />
+      <PopItem x={Math.max(fw, fh)} s="Fit content" />
       <PopItem x={3} s="300%" />
       <PopItem x={2.5} s="250%" />
       <PopItem x={1.5} s="150%" />
@@ -60,7 +55,7 @@ export const Sizer: FC = () => {
         x = v;
         break;
       case "string":
-        x = parseInt(v);
+        x = parseFloat(v);
         break;
       default:
         x = 100;

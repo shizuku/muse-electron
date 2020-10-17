@@ -28,16 +28,16 @@ export class Page implements Codec, SelectionPage {
   }
   @computed get xp() {
     if (this.config.vertical) {
-      return this.index % this.config.pageLine;
+      return this.index % this.config.pagePerLine;
     } else {
-      return parseInt(`${this.index / this.config.pageLine}`, 10);
+      return parseInt(`${this.index / this.config.pagePerLine}`, 10);
     }
   }
   @computed get yp() {
     if (this.config.vertical) {
-      return parseInt(`${this.index / this.config.pageLine}`, 10);
+      return parseInt(`${this.index / this.config.pagePerLine}`, 10);
     } else {
-      return this.index % this.config.pageLine;
+      return this.index % this.config.pagePerLine;
     }
   }
   @computed get x() {
