@@ -8,11 +8,16 @@
 
 .meta__content {
   display: inline-block;
+  flex: 1;
   margin-left: 1rem;
 }
 
 .meta__title {
   font-size: 1rem;
+}
+
+.meta__descrption-time {
+  display: block;
 }
 
 .meta__descrption {
@@ -21,6 +26,6 @@
 
 .meta__time {
   display: inline;
-  position: relative;
+  position: absolute;
   right: 0;
 }

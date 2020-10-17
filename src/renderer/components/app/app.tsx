@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
-import Store from "electron-store";
 import hotkeys from "hotkeys-js";
 import { notification } from "antd";
 import { useObserver, Provider } from "mobx-react";
@@ -12,9 +11,8 @@ import { Header } from "../header";
 import { Footer } from "../footer";
 import { getFileName } from "../../../shared/utils";
 import { AppState, FileInfo, useAppState } from "./AppStateContext";
+import { loadConfig, store } from "./store";
 import "./app.css";
-
-const store = new Store({ name: "user", defaults: { "recent-files": [] } });
 
 const openNotificationWithIcon = (
   type: IconType,
@@ -47,7 +45,6 @@ const App: FC = () => {
     re.slice().sort((a, b) => b.time - a.time);
     store.set("recent-files", re);
   };
-  const loadConfig = () => state.loadRecents(store.get("recent-files"));
   useEffect(() => {
     state.events = {
       onSave: () => {
@@ -150,7 +147,10 @@ const App: FC = () => {
       }
     });
   });
-  useEffect(() => loadConfig());
+  useEffect(() => {
+    let c = loadConfig();
+    state.loadRecents(c.recents);
+  });
   if (state) {
     return (
       <Provider state={state}>
