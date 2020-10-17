@@ -63,7 +63,11 @@ export const Footer: FC = () => {
       }}
       style={state.footerHover ? styleHover() : styleUnhover()}
     >
-      <div className="footer__group-left"></div>
+      <div className="footer__group-left">
+        <div className="time">
+          {new Date(state.currentFile?.time || 0).toLocaleString()}
+        </div>
+      </div>
       <div className="footer__group-right">
         <div className="footer__item">
           <FuncBar>

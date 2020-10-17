@@ -5,12 +5,32 @@
   -webkit-user-select: none;
 }
 
+.footer__group-left {
+  display: inline-flex;
+  position: relative;
+  left: 0;
+  float: left;
+  height: 100%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.time {
+  display: inline-block;
+  position: relative;
+  line-height: 28px;
+  height: 28px;
+  text-align: center;
+}
+
 .footer__group-right {
   display: inline-flex;
   position: relative;
   right: 0;
   float: right;
   height: 100%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .footer__item {

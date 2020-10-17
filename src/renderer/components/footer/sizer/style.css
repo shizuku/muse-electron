@@ -1,12 +1,11 @@
 .sizer {
-  margin-right: 0.5rem;
-  display: block;
+  display: inline-block;
   position: relative;
   right: 0;
   height: 100%;
   align-items: center;
   overflow: hidden;
-  width: 100px;
+
 }
 
 .pop-item {

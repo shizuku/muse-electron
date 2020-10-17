@@ -16,7 +16,7 @@ const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
           ? { background: state.theme.colorPrimaryLight }
           : {}
       }
-      onClick={() => (state.config.x = x)}
+      onClick={() => state.events?.onSetSizer(x)}
     >
       {s}
     </div>

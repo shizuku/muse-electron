@@ -121,27 +121,30 @@ export const Header: FC = () => {
       style={state.headerHover ? styleHover() : styleUnhover()}
     >
       <div className="header__drag-region"></div>
-      {state.opened ? (
-        <FuncBar>
-          <Tooltip placement="topLeft" title="Save" mouseEnterDelay={1}>
-            <FuncButtom onClick={state.events?.onSave}>
-              <SaveOutlined />
-            </FuncButtom>
-          </Tooltip>
-          <Tooltip placement="topLeft" title="Undo" mouseEnterDelay={1}>
-            <FuncButtom>
-              <UndoOutlined />
-            </FuncButtom>
-          </Tooltip>
-          <Tooltip placement="topLeft" title="Redo" mouseEnterDelay={1}>
-            <FuncButtom>
-              <RedoOutlined />
-            </FuncButtom>
-          </Tooltip>
-        </FuncBar>
-      ) : (
-        <></>
-      )}
+      <div className="header__group-left">
+        {state.opened ? (
+          <FuncBar>
+            <Tooltip placement="topLeft" title="Save" mouseEnterDelay={1}>
+              <FuncButtom onClick={state.events?.onSave}>
+                <SaveOutlined />
+              </FuncButtom>
+            </Tooltip>
+            <Tooltip placement="topLeft" title="Undo" mouseEnterDelay={1}>
+              <FuncButtom>
+                <UndoOutlined />
+              </FuncButtom>
+            </Tooltip>
+            <Tooltip placement="topLeft" title="Redo" mouseEnterDelay={1}>
+              <FuncButtom>
+                <RedoOutlined />
+              </FuncButtom>
+            </Tooltip>
+          </FuncBar>
+        ) : (
+          <></>
+        )}
+      </div>
+
       <div className="header__window-title">
         {state.fileName === "" ? `Muse` : `${state.fileName} - Muse`}
       </div>

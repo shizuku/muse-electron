@@ -18,6 +18,16 @@
   -webkit-app-region: drag;
 }
 
+.header__group-left {
+  display: inline-flex;
+  position: relative;
+  left: 0;
+  float: left;
+  height: 100%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
 .header__window-title {
   display: inline-block;
   line-height: 30px;

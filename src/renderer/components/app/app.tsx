@@ -9,7 +9,6 @@ import { Content } from "../content";
 import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
-import { getFileName } from "../../../shared/utils";
 import {
   AppState,
   DisplayStyle,
@@ -34,21 +33,9 @@ const openNotificationWithIcon = (
 
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
-  const addFile = (f: FileInfo) => {
-    let re = state.recents;
-    for (let i = 0; i < re.length; ++i) {
-      if (re[i].path === f.path) {
-        re[i].time = f.time;
-        state.recents = re;
-        re.slice().sort((a, b) => b.time - a.time);
-        saveConfig("recent-files", re);
-        return;
-      }
-    }
-    re.push(f);
-    state.recents = re;
-    re.slice().sort((a, b) => b.time - a.time);
-    saveConfig("recent-files", re);
+  const saveFileConfig = () => {
+    state.addRecentFile(state.currentFile);
+    saveConfig("recent-files", state.recents);
   };
   useEffect(() => {
     state.events = {
@@ -58,17 +45,27 @@ const App: FC = () => {
       },
       onSave: () => {
         if (state.isNew) {
-          ipcRenderer.send("save-as", state.filePath, state.data);
+          ipcRenderer.send("save-as", state.currentFile?.path, state.data);
         } else {
-          ipcRenderer.send("save", state.filePath, state.data);
+          ipcRenderer.send("save", state.currentFile?.path, state.data);
         }
       },
       onSaveAs: () => {
-        ipcRenderer.send("save-as", state.filePath, state.data);
+        ipcRenderer.send("save-as", state.currentFile?.path, state.data);
       },
       onAutoSave: () => {
         state.autoSave = !state.autoSave;
         saveConfig("auto-save", state.autoSave);
+      },
+      onSetSizer: (x: number) => {
+        state.config.x = x;
+        if (state.currentFile) state.currentFile.size = x;
+        saveFileConfig();
+      },
+      onSetLiner: (x: number) => {
+        state.config.pagePerLine = x;
+        if (state.currentFile) state.currentFile.line = x;
+        saveFileConfig();
       },
       onPrint: () => {},
       onExport: () => {},
@@ -78,11 +75,13 @@ const App: FC = () => {
       onEditMetaData: () => {},
       onSetH: () => {
         state.config.vertical = false;
-        saveConfig("vertical", state.config.vertical);
+        if (state.currentFile) state.currentFile.vertical = false;
+        saveFileConfig();
       },
       onSetV: () => {
         state.config.vertical = true;
-        saveConfig("vertical", state.config.vertical);
+        if (state.currentFile) state.currentFile.vertical = true;
+        saveFileConfig();
       },
       onExit: () => {
         if (state.modified) {
@@ -98,23 +97,16 @@ const App: FC = () => {
     };
   });
   useEffect(() => {
-    ipcRenderer.on(
-      "open-file-reply",
-      (event, filePath: string, data: string) => {
-        let fileName = getFileName(filePath);
-        if (data !== "") {
-          state.open(fileName, filePath, data, false);
-          addFile({
-            path: filePath,
-            time: Date.now(),
-          });
-        }
+    ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
+      if (data !== "") {
+        state.open(path, data, false);
+        saveFileConfig();
       }
-    );
+    });
     ipcRenderer.on(
       "new-file-reply",
       (event, filePath: string, data: string) => {
-        state.open("New File", filePath, data, true);
+        state.open(filePath, data, true);
       }
     );
     ipcRenderer.on("save-reply", (event, result) => {
@@ -173,7 +165,6 @@ const App: FC = () => {
   useEffect(() => {
     let c = loadConfigs();
     state.loadRecents(c.recents);
-    state.config.vertical = c.vertical;
     state.autoSave = c.autoSave;
     state.display = c.display;
   });

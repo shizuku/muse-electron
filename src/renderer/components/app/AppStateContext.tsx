@@ -1,6 +1,7 @@
 import { action, computed, observable } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
+import { getFileName } from "../../../shared/utils";
 import { MuseConfig, Notation } from "../muse-notation";
 
 export interface FileInfo {
@@ -54,6 +55,8 @@ export interface Events {
   onSave: () => void;
   onSaveAs: () => void;
   onAutoSave: () => void;
+  onSetSizer: (x: number) => void;
+  onSetLiner: (l: number) => void;
   onPrint: () => void;
   onExport: () => void;
   onClose: () => void;
@@ -84,8 +87,6 @@ export class AppState {
     this.recents = [];
     this.isNew = false;
     this.modified = false;
-    this.fileName = "";
-    this.filePath = "";
     this.autoSave = false;
     this.notation = undefined;
   }
@@ -104,26 +105,30 @@ export class AppState {
   @observable recents: FileInfo[];
   //opened
   @observable modified: boolean;
-  @observable fileName: string;
+  @computed get fileName() {
+    return getFileName(this.currentFile?.path || "New File.muse");
+  }
   @observable autoSave: boolean;
-  @observable filePath: string;
   @observable currentFile?: FileInfo;
   @observable notation?: Notation;
   @computed get data(): string {
     return JSON.stringify(this.notation?.code());
   }
   isNew: boolean;
-  @action open(
-    fileName: string,
-    filePath: string,
-    data: string,
-    isNew: boolean
-  ) {
+  @action open(path: string, data: string, isNew: boolean) {
     this.opened = true;
-    this.fileName = fileName;
-    this.filePath = filePath;
     this.notation = new Notation(JSON.parse(data), this.config);
     this.isNew = isNew;
+    this.currentFile = this.addRecentFile({
+      path,
+      time: Date.now(),
+      line: 1,
+      size: 1,
+      vertical: true,
+    });
+    this.config.vertical = this.currentFile?.vertical || true;
+    this.config.pagePerLine = this.currentFile?.line || 1;
+    this.config.x = this.currentFile?.size || 1;
   }
   @action close() {
     this.notation = undefined;
@@ -131,6 +136,23 @@ export class AppState {
   }
   @action loadRecents(recents: FileInfo[]) {
     this.recents = recents;
+  }
+  @action addRecentFile(f?: FileInfo): FileInfo | undefined {
+    if (f) {
+      for (let i = 0; i < this.recents.length; ++i) {
+        if (this.recents[i].path === f.path) {
+          this.recents[i].time = f.time;
+          this.recents.slice().sort((a, b) => b.time - a.time);
+          return this.recents[i];
+        }
+      }
+      this.recents.push(f);
+      this.recents.slice().sort((a, b) => b.time - a.time);
+      return f;
+    } else return undefined;
+  }
+  @action removeFile(path: string) {
+    this.recents.filter((it) => it.path !== path);
   }
 }
 

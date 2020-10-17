@@ -14,7 +14,7 @@ const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
           ? { background: state.theme.colorPrimaryLight }
           : {}
       }
-      onClick={() => (state.config.pagePerLine = x)}
+      onClick={() => state.events?.onSetLiner(x)}
     >
       {s}
     </div>
