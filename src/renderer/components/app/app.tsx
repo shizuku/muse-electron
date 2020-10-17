@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
-import { notification } from "antd";
+import { notification, Spin } from "antd";
 import { useObserver, Provider } from "mobx-react";
 import { IconType, NotificationPlacement } from "antd/lib/notification";
 import { Welcome } from "../welcome";
@@ -9,14 +9,11 @@ import { Content } from "../content";
 import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
-import {
-  AppState,
-  DisplayStyle,
-  FileInfo,
-  useAppState,
-} from "./AppStateContext";
+import { generateScreenshot, getImageData } from "../../../shared/utils";
+import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
 import "./app.css";
+import { getImageArrayBuffer } from "../../../shared/utils/exportor";
 
 const openNotificationWithIcon = (
   type: IconType,
@@ -68,7 +65,9 @@ const App: FC = () => {
         saveFileConfig();
       },
       onPrint: () => {},
-      onExport: () => {},
+      onExport: () => {
+        ipcRenderer.send("export");
+      },
       onClose: () => state.close(),
       onUndo: () => {},
       onRedo: () => {},
@@ -127,6 +126,30 @@ const App: FC = () => {
     ipcRenderer.on("max-status", (e, status: boolean) => {
       state.maxStatus = status;
     });
+    ipcRenderer.on("export-reply", (e, path) => {
+      if (state.r) {
+        generateScreenshot(state.r).then((c) => {
+          // getImageData(c).then((s) => {
+          //   ipcRenderer.send("export-data", path, s);
+          // });
+          getImageArrayBuffer(c).then((s) => {
+            ipcRenderer.send("export-data", path, s);
+            state.appLoading = true;
+          });
+        });
+      }
+    });
+    ipcRenderer.on("export-data-reply", (e, code) => {
+      if (code === "success") {
+        state.appLoading = false;
+        openNotificationWithIcon(
+          "success",
+          "Export success",
+          "",
+          "bottomRight"
+        );
+      }
+    });
   });
   useEffect(() => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
@@ -183,21 +206,23 @@ const AppHolder: React.FC = () => {
   let state = useAppState();
   return useObserver(() => (
     <div id="app">
-      <Provider appState={state}>
-        {state.opened === true ? (
-          <>
+      {state.opened === true ? (
+        <>
+          <Spin spinning={state.appLoading}>
             <Header />
             <Toolbar />
             <Content />
             <Footer />
-          </>
-        ) : (
-          <>
+          </Spin>
+        </>
+      ) : (
+        <>
+          <Spin spinning={state.appLoading}>
             <Header />
             <Welcome />
-          </>
-        )}
-      </Provider>
+          </Spin>
+        </>
+      )}
     </div>
   ));
 };

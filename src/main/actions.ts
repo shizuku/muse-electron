@@ -74,4 +74,19 @@ export function createActions(mw: BrowserWindow) {
   ipcMain.on("app-close-modified", (event, title, message) => {
     dialog.showMessageBox(mw, { type: "question", message, title });
   });
+  ipcMain.on("export", (e) => {
+    dialog.showSaveDialog({}).then((v) => {
+      if (v.filePath) {
+        e.reply("export-reply", v.filePath);
+      }
+    });
+  });
+  ipcMain.on("export-data", (e, path, data) => {
+    // writeFile(path, data, "base64", () => {
+    //   e.reply("export-data-reply", "success");
+    // });
+    writeFile(path, Buffer.from(data), "binary", () => {
+      e.reply("export-data-reply", "success");
+    });
+  });
 }

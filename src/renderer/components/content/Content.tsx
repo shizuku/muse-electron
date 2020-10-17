@@ -26,7 +26,6 @@ export const Content: FC = () => {
         ref={(e) => {
           state.windowDim.contentW = e?.clientWidth || 0;
         }}
-        
       >
         <div className="notaion-outer">
           <div
@@ -34,6 +33,7 @@ export const Content: FC = () => {
             ref={(e) => {
               state.windowDim.notationH = e?.scrollHeight || 0;
               state.windowDim.notationW = e?.scrollWidth || 0;
+              state.r = e as HTMLElement;
             }}
           >
             {state.notation ? (
