@@ -5,6 +5,9 @@ const noTitle = "No title";
 const newFileContent = `{"title":"${noTitle}","subtitle":"","author":"","rhythmic":"","speed":"","C":"C","pages":[{"lines":[{"tracks":[{"bars":[{"notes":[{"n":"0@0|0"}]}]}]}]}]}`;
 
 export function createActions(mw: BrowserWindow) {
+  ipcMain.on("get-locale", (e) => {
+    e.reply("get-locale-reply", app.getLocale());
+  });
   ipcMain.on("new-file", (event, type) => {
     let p = "";
     event.reply("new-file-reply", p, newFileContent);

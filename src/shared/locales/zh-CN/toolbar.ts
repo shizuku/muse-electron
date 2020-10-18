@@ -1,0 +1,15 @@
+export const toolbar: Record<string, string> = {
+  "toolbar-file": "文件",
+  "toolbar-file-save": "保存",
+  "toolbar-file-save-as": "另存为",
+  "toolbar-file-auto-save": "自动保存",
+  "toolbar-file-export": "导出",
+  "toolbar-file-close": "关闭",
+  "toolbar-start": "开始",
+  "toolbar-start-undo": "撤销",
+  "toolbar-start-redo": "重做",
+  "toolbar-start-meta-data": "元信息",
+  "toolbar-view": "视图",
+  "toolbar-view-horizontal": "横向排布",
+  "toolbar-view-vertical": "竖向排布",
+};

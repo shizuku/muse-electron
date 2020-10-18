@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useObserver } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { InputNumber, Popover } from "antd";
 import { useAppState } from "../../app";
 import "./style.css";
@@ -23,6 +24,7 @@ const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
 
 const PopContent: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   let fw =
     parseInt(
       `${
@@ -44,10 +46,10 @@ const PopContent: FC = () => {
   console.log(fw, fh);
   return useObserver(() => (
     <div className="pop-content">
-      <PopItem x={fw} s="Fit width" />
-      <PopItem x={fh} s="Fit height" />
-      <PopItem x={Math.min(fw, fh)} s="Fit screen" />
-      <PopItem x={Math.max(fw, fh)} s="Fit content" />
+      <PopItem x={fw} s={t("footer-sizer-fit-width")} />
+      <PopItem x={fh} s={t("footer-sizer-fit-height")} />
+      <PopItem x={Math.min(fw, fh)} s={t("footer-sizer-fit-screen")} />
+      <PopItem x={Math.max(fw, fh)} s={t("footer-sizer-fit-content")} />
       <PopItem x={3} s="300%" />
       <PopItem x={2.5} s="250%" />
       <PopItem x={1.5} s="150%" />
@@ -61,6 +63,7 @@ const PopContent: FC = () => {
 
 export const Sizer: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   const onChange = (v: string | number | undefined) => {
     let x = 0;
     switch (typeof v) {
@@ -77,7 +80,7 @@ export const Sizer: FC = () => {
   };
   return useObserver(() => (
     <div className="sizer">
-      <Popover content={<PopContent />}>
+      <Popover content={<PopContent />} title={t("footer-sizer")}>
         <InputNumber
           size="small"
           defaultValue={state.config.x * 100}

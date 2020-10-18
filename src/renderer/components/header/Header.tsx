@@ -14,6 +14,7 @@ import {
 import { Popover, Tooltip } from "antd";
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { FuncBar } from "../func-bar";
 import { useAppState } from "../app";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
@@ -22,6 +23,7 @@ import "./style.css";
 
 const DisplayPopup: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   return useObserver(() => (
     <div className="display-popup">
       <div
@@ -33,7 +35,7 @@ const DisplayPopup: FC = () => {
             : {}
         }
       >
-        Show All
+        {t("header-display-show-all")}
       </div>
       <div
         className="display-popup__item"
@@ -44,7 +46,7 @@ const DisplayPopup: FC = () => {
             : {}
         }
       >
-        Hide toolbar
+        {t("header-display-headfoot")}
       </div>
       <div
         className="display-popup__item"
@@ -55,7 +57,7 @@ const DisplayPopup: FC = () => {
             : {}
         }
       >
-        Only show content
+        {t("header-display-content")}
       </div>
     </div>
   ));
@@ -63,6 +65,7 @@ const DisplayPopup: FC = () => {
 
 export const Header: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   let styleHover = () => {
     switch (state.display) {
       case "full":
@@ -124,17 +127,29 @@ export const Header: FC = () => {
       <div className="header__group-left">
         {state.opened ? (
           <FuncBar>
-            <Tooltip placement="topLeft" title="Save" mouseEnterDelay={1}>
+            <Tooltip
+              placement="topLeft"
+              title={t("toolbar-file-save")}
+              mouseEnterDelay={1}
+            >
               <FuncButtom onClick={state.events?.onSave}>
                 <SaveOutlined />
               </FuncButtom>
             </Tooltip>
-            <Tooltip placement="topLeft" title="Undo" mouseEnterDelay={1}>
+            <Tooltip
+              placement="topLeft"
+              title={t("toolbar-start-undo")}
+              mouseEnterDelay={1}
+            >
               <FuncButtom>
                 <UndoOutlined />
               </FuncButtom>
             </Tooltip>
-            <Tooltip placement="topLeft" title="Redo" mouseEnterDelay={1}>
+            <Tooltip
+              placement="topLeft"
+              title={t("toolbar-start-redo")}
+              mouseEnterDelay={1}
+            >
               <FuncButtom>
                 <RedoOutlined />
               </FuncButtom>
@@ -153,7 +168,7 @@ export const Header: FC = () => {
       <div className="header__controls">
         <Popover
           placement="topLeft"
-          title={"Display style"}
+          title={t("header-display")}
           content={<DisplayPopup />}
           trigger="click"
         >

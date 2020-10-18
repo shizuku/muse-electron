@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "../menu";
 import { useAppState } from "../app";
 import { getFileFolder, getFileName } from "../../../shared/utils";
@@ -15,6 +16,7 @@ import { Meta } from "./meta";
 
 export const Welcome: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   return useObserver(() => (
     <div className="welcome">
       <div
@@ -37,7 +39,7 @@ export const Welcome: FC = () => {
               ipcRenderer.send("new-file");
             }}
           >
-            New File
+            {t("welcome-new-file")}
           </MenuItem>
           <MenuItem
             key="1"
@@ -47,12 +49,12 @@ export const Welcome: FC = () => {
               ipcRenderer.send("open-file");
             }}
           >
-            Open
+            {t("welcome-open")}
           </MenuItem>
         </Menu>
       </div>
       <div className="welcome__content">
-        <h2>Recent</h2>
+        <h2>{t("welcome-recent")}</h2>
         <div className="welcome__recent-files">
           <List
             itemLayout="horizontal"

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { useObserver } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { InputNumber, Popover } from "antd";
 import { useAppState } from "../../app";
 import "./style.css";
@@ -35,6 +36,7 @@ const PopContent: FC = () => {
 
 export const Liner: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   const onChange = (v: string | number | undefined) => {
     let x = 0;
     switch (typeof v) {
@@ -51,7 +53,7 @@ export const Liner: FC = () => {
   };
   return useObserver(() => (
     <div className="liner">
-      <Popover content={<PopContent />}>
+      <Popover content={<PopContent />} title={t("footer-liner")}>
         <InputNumber
           size="small"
           defaultValue={state.config.pagePerLine}

@@ -1,15 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { ConfigProvider } from "antd";
-import zhCN from "antd/es/locale/zh_CN";
-import enUS from "antd/es/locale/en_US";
 import "antd/dist/antd.css";
+import "../shared/locales";
 import { App } from "./components/app";
 import "./index.css";
+import { ipcRenderer } from "electron";
 
-ReactDOM.render(
-  <ConfigProvider locale={enUS}>
-    <App />
-  </ConfigProvider>,
-  document.getElementById("root")
-);
+ReactDOM.render(<App />, document.getElementById("root"));
+
+ipcRenderer.send("get-locale");

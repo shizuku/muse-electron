@@ -1,0 +1,15 @@
+export const toolbar: Record<string, string> = {
+  "toolbar-file": "File",
+  "toolbar-file-save": "Save",
+  "toolbar-file-save-as": "Save as",
+  "toolbar-file-auto-save": "Auto save",
+  "toolbar-file-export": "Export",
+  "toolbar-file-close": "Close",
+  "toolbar-start": "Start",
+  "toolbar-start-undo": "Undo",
+  "toolbar-start-redo": "Redo",
+  "toolbar-start-meta-data": "Meta data",
+  "toolbar-view": "View",
+  "toolbar-view-horizontal": "Horizontal",
+  "toolbar-view-vertical": "Vertical",
+};

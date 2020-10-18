@@ -1,8 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
-import { Modal, notification, Spin, Input, Form } from "antd";
+import { Modal, notification, Spin, Input, Form, ConfigProvider } from "antd";
+import { Locale } from "antd/lib/locale-provider";
+import zhCN from "antd/es/locale/zh_CN";
+import enUS from "antd/es/locale/en_US";
 import { useObserver, Provider } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { IconType, NotificationPlacement } from "antd/lib/notification";
 import { Welcome } from "../welcome";
 import { Content } from "../content";
@@ -17,8 +21,6 @@ import {
 import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
 import "./app.css";
-import { Notation } from "../muse-notation";
-import TextArea from "antd/lib/input/TextArea";
 
 const openNotificationWithIcon = (
   type: IconType,
@@ -35,6 +37,7 @@ const openNotificationWithIcon = (
 
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
+  const { t, i18n } = useTranslation();
   const saveFileConfig = () => {
     state.addRecentFile(state.currentFile);
     saveConfig("recent-files", state.recents);
@@ -157,6 +160,11 @@ const App: FC = () => {
         );
       }
     });
+    ipcRenderer.on("get-locale-reply", (e, code: string) => {
+      console.log(code);
+      i18n.changeLanguage(code);
+      state.locale = code;
+    });
   });
   useEffect(() => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
@@ -252,7 +260,7 @@ const EditMetaModel: FC = () => {
           <Input onChange={onSubTitleChange} value={subTitle} />
         </Form.Item>
         <Form.Item label="Author">
-          <TextArea onChange={onAuthorChange} value={author} rows={4} />
+          <Input.TextArea onChange={onAuthorChange} value={author} rows={4} />
         </Form.Item>
       </Form>
     </Modal>
@@ -261,26 +269,29 @@ const EditMetaModel: FC = () => {
 
 const AppHolder: React.FC = () => {
   let state = useAppState();
+  let locales: Record<string, Locale> = { "en-US": enUS, "zh-CN": zhCN };
   return useObserver(() => (
     <div id="app">
-      {state.opened === true ? (
-        <>
-          <Spin spinning={state.appLoading}>
-            <Header />
-            <Toolbar />
-            <Content />
-            <Footer />
-            <EditMetaModel />
-          </Spin>
-        </>
-      ) : (
-        <>
-          <Spin spinning={state.appLoading}>
-            <Header />
-            <Welcome />
-          </Spin>
-        </>
-      )}
+      <ConfigProvider locale={locales[state.locale]}>
+        {state.opened === true ? (
+          <>
+            <Spin spinning={state.appLoading}>
+              <Header />
+              <Toolbar />
+              <Content />
+              <Footer />
+              <EditMetaModel />
+            </Spin>
+          </>
+        ) : (
+          <>
+            <Spin spinning={state.appLoading}>
+              <Header />
+              <Welcome />
+            </Spin>
+          </>
+        )}
+      </ConfigProvider>
     </div>
   ));
 };

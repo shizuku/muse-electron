@@ -1,20 +1,25 @@
-import { resources } from "./resources";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import { enUS } from "./en-US";
+import { zhCN } from "./zh-CN";
 
-export const availableLanguages = [
-  {
-    value: "en-US",
-    label: "English",
+const resources = {
+  "en-US": {
+    translation: enUS,
   },
-  {
-    value: "zh-CN",
-    lable: "简体中文",
+  "zh-CN": {
+    translation: zhCN,
   },
-];
+};
 
-export type Translator = (k: string) => string;
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en-US",
+  fallbackLng: "en-US",
+  keySeparator: false,
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
-export function getTranslator(locale: string): Translator {
-  return (key: string) => {
-    return resources[locale][key] || key;
-  };
-}
+export default i18n;

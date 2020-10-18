@@ -74,6 +74,7 @@ export type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
   constructor() {
+    this.locale = "en-US";
     this.appLoading = false;
     this.showEditMetaModel = false;
     this.config = new MuseConfig();
@@ -92,6 +93,7 @@ export class AppState {
     this.notation = undefined;
   }
   //all
+  @observable locale: string;
   @observable appLoading: boolean;
   @observable showEditMetaModel: boolean;
   @observable config: MuseConfig;
