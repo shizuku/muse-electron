@@ -64,7 +64,6 @@ const App: FC = () => {
         if (state.currentFile) state.currentFile.line = x;
         saveFileConfig();
       },
-      onPrint: () => {},
       onExport: () => {
         ipcRenderer.send("export");
       },
@@ -72,12 +71,12 @@ const App: FC = () => {
       onUndo: () => {},
       onRedo: () => {},
       onEditMetaData: () => {},
-      onSetH: () => {
+      onSetHorizontal: () => {
         state.config.vertical = false;
         if (state.currentFile) state.currentFile.vertical = false;
         saveFileConfig();
       },
-      onSetV: () => {
+      onSetVertical: () => {
         state.config.vertical = true;
         if (state.currentFile) state.currentFile.vertical = true;
         saveFileConfig();

@@ -57,14 +57,13 @@ export interface Events {
   onAutoSave: () => void;
   onSetSizer: (x: number) => void;
   onSetLiner: (l: number) => void;
-  onPrint: () => void;
   onExport: () => void;
   onClose: () => void;
   onUndo: () => void;
   onRedo: () => void;
   onEditMetaData: () => void;
-  onSetV: () => void;
-  onSetH: () => void;
+  onSetVertical: () => void;
+  onSetHorizontal: () => void;
   onExit: () => void;
 }
 

@@ -16,7 +16,7 @@ export const View: FC = () => {
         <MenuItem
           icon={<LayoutVerticalOutlined />}
           size="m"
-          onClick={state.events?.onSetV}
+          onClick={state.events?.onSetVertical}
           active={state.config.vertical === true}
         >
           {"Vertical"}
@@ -24,7 +24,7 @@ export const View: FC = () => {
         <MenuItem
           icon={<LayoutHorizontalOutlined />}
           size="m"
-          onClick={state.events?.onSetH}
+          onClick={state.events?.onSetHorizontal}
           active={state.config.vertical === false}
         >
           {"Horizontal"}

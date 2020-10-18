@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import {
   CloseCircleOutlined,
   SaveOutlined,
-  PrinterOutlined,
   ExportOutlined,
 } from "@ant-design/icons";
 import { useObserver } from "mobx-react";
@@ -39,13 +38,6 @@ export const File: FC = () => {
           active={state.autoSave}
         >
           {"Auto save"}
-        </MenuItem>
-        <MenuItem
-          icon={<PrinterOutlined />}
-          size="m"
-          onClick={state.events?.onPrint}
-        >
-          {"Print"}
         </MenuItem>
         <MenuItem
           icon={<ExportOutlined />}
