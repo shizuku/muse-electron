@@ -4,15 +4,13 @@ import { InputNumber, Popover } from "antd";
 import { useAppState } from "../../app";
 import "./style.css";
 
-const floatEqual = (a: number, b: number) => a - b > -10e-20 && a - b < 10e-20;
-
 const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
   let state = useAppState();
   return useObserver(() => (
     <div
       className="pop-item"
       style={
-        floatEqual(state.config.x, x)
+        state.config.x - x > -10e-20 && state.config.x - x < 10e-20
           ? { background: state.theme.colorPrimaryLight }
           : {}
       }
@@ -26,9 +24,24 @@ const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
 const PopContent: FC = () => {
   let state = useAppState();
   let fw =
-    (state.windowDim.contentW / state.windowDim.notationW) * state.config.x;
+    parseInt(
+      `${
+        (state.windowDim.contentW / state.windowDim.notationW) *
+        state.config.x *
+        100
+      }`,
+      10
+    ) / 100;
   let fh =
-    (state.windowDim.contentH / state.windowDim.notationH) * state.config.x;
+    parseInt(
+      `${
+        (state.windowDim.contentH / state.windowDim.notationH) *
+        state.config.x *
+        100
+      }`,
+      10
+    ) / 100;
+  console.log(fw, fh);
   return useObserver(() => (
     <div className="pop-content">
       <PopItem x={fw} s="Fit width" />
@@ -52,10 +65,10 @@ export const Sizer: FC = () => {
     let x = 0;
     switch (typeof v) {
       case "number":
-        x = v;
+        x = parseInt(`${v}`, 10);
         break;
       case "string":
-        x = parseFloat(v);
+        x = parseInt(v, 10);
         break;
       default:
         x = 100;
@@ -70,8 +83,8 @@ export const Sizer: FC = () => {
           defaultValue={state.config.x * 100}
           min={10}
           max={500}
-          formatter={(value) => `${parseInt(value?.toString() || "100")}%`}
-          parser={(value) => parseInt(value?.replace("%", "") || "100")}
+          formatter={(value) => `${parseInt(value?.toString() || "100", 10)}%`}
+          parser={(value) => parseInt(value?.replace("%", "") || "100", 10)}
           value={state.config.x * 100}
           onChange={onChange}
         />

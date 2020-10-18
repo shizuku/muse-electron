@@ -1,5 +1,9 @@
 export { getFileFolder, getFileName } from "./file-name";
-export { generateScreenshot, getImageData } from "./exportor";
+export {
+  generateScreenshot,
+  getImageData,
+  getImageArrayBuffer,
+} from "./exportor";
 
 export function mapToArray<T, E>(m: Map<T, E>): { k: T; v: E }[] {
   let r: { k: T; v: E }[] = [];

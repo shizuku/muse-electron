@@ -151,95 +151,88 @@ const MuseNotationInfo: React.FC<MuseNotationInfoProps> = ({
   info,
   config,
   clazz,
-}: MuseNotationInfoProps) => {
+}) => {
   let y = 0;
   y += config.pageMarginVertical;
-  let title = (
-    <text
-      className={clazz + "__info-title"}
-      fontFamily={config.textFontFamily}
-      width={config.pageWidth}
-      textAnchor={"middle"}
-      fontSize={config.infoTitleFontSize}
-      transform={"translate(" + config.pageWidth / 2 + "," + y + ")"}
-    >
-      {info.title}
-    </text>
-  );
+  let titleY = y;
   y += config.infoTitleFontSize + config.infoGap;
-  let subtitle = (
-    <text
-      className={clazz + "__info-subtitle"}
-      fontFamily={config.textFontFamily}
-      width={config.pageWidth}
-      textAnchor={"middle"}
-      fontSize={config.infoSubtitleFontSize}
-      transform={"translate(" + config.pageWidth / 2 + "," + y + ")"}
-    >
-      {info.subtitle}
-    </text>
-  );
   let y1 = y;
   let x = info.author.length;
-  let author = (
-    <g className={clazz + "__info-author"}>
-      {info.author.map((it, idx) => {
-        y1 += config.infoFontSize + config.infoGap;
-        if (idx < x - 2) {
-          y += config.infoFontSize + config.infoGap;
-        }
-        return (
-          <text
-            key={idx}
-            fontFamily={config.textFontFamily}
-            width={config.pageWidth}
-            fontSize={config.infoFontSize}
-            textAnchor={"end"}
-            x={0}
-            transform={
-              "translate(" +
-              (config.pageWidth - config.pageMarginHorizontal) +
-              "," +
-              y1 +
-              ")"
-            }
-          >
-            {it}
-          </text>
-        );
-      })}
-    </g>
-  );
   let y2 = y + (config.infoGap + config.infoSubtitleFontSize);
   let y3 = y2 + (config.infoGap + config.infoFontSize);
-  let rythimic = (
-    <g className={clazz + "__info-rythmic"} width={config.pageWidth}>
-      <text
-        fontFamily={config.textFontFamily}
-        width={config.pageWidth}
-        fontSize={config.infoFontSize}
-        transform={"translate(" + config.pageMarginHorizontal + "," + y2 + ")"}
-      >
-        {info.speed}
-      </text>
-      <text
-        fontFamily={config.textFontFamily}
-        width={config.pageWidth}
-        fontSize={config.infoFontSize}
-        transform={"translate(" + config.pageMarginHorizontal + "," + y3 + ")"}
-      >
-        {`1=${info.C} ${info.rhythmic}`}
-      </text>
-    </g>
-  );
-  return (
+  return useObserver(() => (
     <g className={clazz + "__info"} width={config.pageWidth}>
-      {title}
-      {subtitle}
-      {author}
-      {rythimic}
+      <text
+        className={clazz + "__info-title"}
+        fontFamily={config.textFontFamily}
+        width={config.pageWidth}
+        textAnchor={"middle"}
+        fontSize={config.infoTitleFontSize}
+        transform={"translate(" + config.pageWidth / 2 + "," + titleY + ")"}
+      >
+        {info.title}
+      </text>
+      <text
+        className={clazz + "__info-subtitle"}
+        fontFamily={config.textFontFamily}
+        width={config.pageWidth}
+        textAnchor={"middle"}
+        fontSize={config.infoSubtitleFontSize}
+        transform={"translate(" + config.pageWidth / 2 + "," + y + ")"}
+      >
+        {info.subtitle}
+      </text>
+      <g className={clazz + "__info-author"}>
+        {info.author.map((it, idx) => {
+          y1 += config.infoFontSize + config.infoGap;
+          if (idx < x - 2) {
+            y += config.infoFontSize + config.infoGap;
+          }
+          return (
+            <text
+              key={idx}
+              fontFamily={config.textFontFamily}
+              width={config.pageWidth}
+              fontSize={config.infoFontSize}
+              textAnchor={"end"}
+              x={0}
+              transform={
+                "translate(" +
+                (config.pageWidth - config.pageMarginHorizontal) +
+                "," +
+                y1 +
+                ")"
+              }
+            >
+              {it}
+            </text>
+          );
+        })}
+      </g>
+      <g className={clazz + "__info-rythmic"} width={config.pageWidth}>
+        <text
+          fontFamily={config.textFontFamily}
+          width={config.pageWidth}
+          fontSize={config.infoFontSize}
+          transform={
+            "translate(" + config.pageMarginHorizontal + "," + y2 + ")"
+          }
+        >
+          {info.speed}
+        </text>
+        <text
+          fontFamily={config.textFontFamily}
+          width={config.pageWidth}
+          fontSize={config.infoFontSize}
+          transform={
+            "translate(" + config.pageMarginHorizontal + "," + y3 + ")"
+          }
+        >
+          {`1=${info.C} ${info.rhythmic}`}
+        </text>
+      </g>
     </g>
-  );
+  ));
 };
 
 const MuseNotation: FC<{ notation: Notation }> = ({ notation }) => {

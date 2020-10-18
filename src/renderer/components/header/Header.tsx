@@ -146,7 +146,9 @@ export const Header: FC = () => {
       </div>
 
       <div className="header__window-title">
-        {state.fileName === "" ? `Muse` : `${state.fileName} - Muse`}
+        {state.fileName === ""
+          ? `Muse`
+          : `${state.fileName}${state.modified ? "*" : ""} - Muse`}
       </div>
       <div className="header__controls">
         <Popover

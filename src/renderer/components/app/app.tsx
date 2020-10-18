@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
-import { notification, Spin } from "antd";
+import { Modal, notification, Spin, Input, Form } from "antd";
 import { useObserver, Provider } from "mobx-react";
 import { IconType, NotificationPlacement } from "antd/lib/notification";
 import { Welcome } from "../welcome";
@@ -9,11 +9,16 @@ import { Content } from "../content";
 import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
-import { generateScreenshot, getImageData } from "../../../shared/utils";
+import {
+  generateScreenshot,
+  getImageData,
+  getImageArrayBuffer,
+} from "../../../shared/utils";
 import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
 import "./app.css";
-import { getImageArrayBuffer } from "../../../shared/utils/exportor";
+import { Notation } from "../muse-notation";
+import TextArea from "antd/lib/input/TextArea";
 
 const openNotificationWithIcon = (
   type: IconType,
@@ -70,7 +75,9 @@ const App: FC = () => {
       onClose: () => state.close(),
       onUndo: () => {},
       onRedo: () => {},
-      onEditMetaData: () => {},
+      onEditMetaData: () => {
+        state.showEditMetaModel = true;
+      },
       onSetHorizontal: () => {
         state.config.vertical = false;
         if (state.currentFile) state.currentFile.vertical = false;
@@ -110,6 +117,7 @@ const App: FC = () => {
     ipcRenderer.on("save-reply", (event, result) => {
       if (result === "success") {
         console.log("save success");
+        state.modified = false;
       } else {
         openNotificationWithIcon(
           "warning",
@@ -201,6 +209,56 @@ const App: FC = () => {
   }
 };
 
+const EditMetaModel: FC = () => {
+  let state = useAppState();
+  let [title, setTitle] = useState(state.notation?.info.title || "");
+  let [subTitle, setSubTitle] = useState(state.notation?.info.subtitle || "");
+  let [author, setAuthor] = useState(
+    state.notation?.info.author.reduce((a, b) => a + b + "\n", "") || ""
+  );
+  const handleCancel = () => {
+    state.showEditMetaModel = false;
+  };
+  const handleOk = () => {
+    if (state.notation) {
+      state.notation.info.title = title;
+      state.notation.info.subtitle = subTitle;
+      state.notation.info.author = author.split("\n").filter((it) => it !== "");
+    }
+    state.modified = true;
+    state.showEditMetaModel = false;
+  };
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+  const onSubTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubTitle(e.target.value);
+  };
+  const onAuthorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAuthor(e.target.value);
+  };
+  return useObserver(() => (
+    <Modal
+      title="Edit meta data"
+      visible={state.showEditMetaModel}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
+        <Form.Item label="Title">
+          <Input onChange={onTitleChange} value={title} />
+        </Form.Item>
+        <Form.Item label="Subtitle">
+          <Input onChange={onSubTitleChange} value={subTitle} />
+        </Form.Item>
+        <Form.Item label="Author">
+          <TextArea onChange={onAuthorChange} value={author} rows={4} />
+        </Form.Item>
+      </Form>
+    </Modal>
+  ));
+};
+
 const AppHolder: React.FC = () => {
   let state = useAppState();
   return useObserver(() => (
@@ -212,6 +270,7 @@ const AppHolder: React.FC = () => {
             <Toolbar />
             <Content />
             <Footer />
+            <EditMetaModel />
           </Spin>
         </>
       ) : (

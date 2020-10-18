@@ -75,6 +75,7 @@ export type DisplayStyle = "full" | "headfoot" | "content";
 export class AppState {
   constructor() {
     this.appLoading = false;
+    this.showEditMetaModel = false;
     this.config = new MuseConfig();
     this.theme = new Theme();
     this.opened = false;
@@ -91,7 +92,8 @@ export class AppState {
     this.notation = undefined;
   }
   //all
-  appLoading: boolean;
+  @observable appLoading: boolean;
+  @observable showEditMetaModel: boolean;
   @observable config: MuseConfig;
   @observable theme: Theme;
   @observable windowDim: WindowDim;
