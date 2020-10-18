@@ -1,5 +1,6 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
+import { useTranslation } from "react-i18next";
 import { useAppState } from "../app";
 import { Sizer } from "./sizer";
 import { Liner } from "./liner";
@@ -7,9 +8,11 @@ import { FuncBar } from "../func-bar";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { FuncButtom } from "../func-bar/func-button";
 import "./style.css";
+import { Tooltip } from "antd";
 
 export const Footer: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   let [maxHeight, setMaxHeight] = useState(0);
   let styleHover = () => {
     switch (state.display) {
@@ -71,18 +74,30 @@ export const Footer: FC = () => {
       <div className="footer__group-right">
         <div className="footer__item">
           <FuncBar>
-            <FuncButtom
-              onClick={state.events?.onSetVertical}
-              active={state.config.vertical === true}
+            <Tooltip
+              placement="topLeft"
+              title={t("toolbar-view-vertical")}
+              mouseEnterDelay={1}
             >
-              <LayoutVerticalOutlined />
-            </FuncButtom>
-            <FuncButtom
-              onClick={state.events?.onSetHorizontal}
-              active={state.config.vertical === false}
+              <FuncButtom
+                onClick={state.events?.onSetVertical}
+                active={state.config.vertical === true}
+              >
+                <LayoutVerticalOutlined />
+              </FuncButtom>
+            </Tooltip>
+            <Tooltip
+              placement="topLeft"
+              title={t("toolbar-view-horizontal")}
+              mouseEnterDelay={1}
             >
-              <LayoutHorizontalOutlined />
-            </FuncButtom>
+              <FuncButtom
+                onClick={state.events?.onSetHorizontal}
+                active={state.config.vertical === false}
+              >
+                <LayoutHorizontalOutlined />
+              </FuncButtom>
+            </Tooltip>
           </FuncBar>
         </div>
         <div className="footer__item">
