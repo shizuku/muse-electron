@@ -4,6 +4,7 @@ import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
+import { About, AboutTab } from "./About";
 import { useAppState } from "../app";
 import { useObserver } from "mobx-react";
 import "./style.css";
@@ -113,6 +114,9 @@ export const Toolbar: FC = () => {
           <Tab label="view">
             <ViewTab />
           </Tab>
+          <Tab label="about">
+            <AboutTab />
+          </Tab>
         </div>
         <div className="toolbar__panes">
           <Pane label="file">
@@ -123,6 +127,9 @@ export const Toolbar: FC = () => {
           </Pane>
           <Pane label="view">
             <View />
+          </Pane>
+          <Pane label="about">
+            <About />
           </Pane>
         </div>
       </ActiveContext.Provider>

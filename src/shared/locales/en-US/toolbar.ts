@@ -12,4 +12,8 @@ export const toolbar: Record<string, string> = {
   "toolbar-view": "View",
   "toolbar-view-horizontal": "Horizontal",
   "toolbar-view-vertical": "Vertical",
+  "toolbar-about": "About",
+  "toolbar-about-about": "About",
+  "toolbar-about-help": "Help",
+  "toolbar-about-settings": "Settings",
 };

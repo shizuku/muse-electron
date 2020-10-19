@@ -12,4 +12,8 @@ export const toolbar: Record<string, string> = {
   "toolbar-view": "视图",
   "toolbar-view-horizontal": "横向排布",
   "toolbar-view-vertical": "竖向排布",
+  "toolbar-about": "关于",
+  "toolbar-about-about": "关于",
+  "toolbar-about-help": "帮助",
+  "toolbar-about-settings": "设置",
 };

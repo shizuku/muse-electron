@@ -1,7 +1,15 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
-import { Modal, notification, Spin, Input, Form, ConfigProvider } from "antd";
+import {
+  Modal,
+  notification,
+  Spin,
+  Input,
+  Form,
+  ConfigProvider,
+  Button,
+} from "antd";
 import { Locale } from "antd/lib/locale-provider";
 import zhCN from "antd/es/locale/zh_CN";
 import enUS from "antd/es/locale/en_US";
@@ -102,6 +110,10 @@ const App: FC = () => {
           ipcRenderer.send("app-close");
         }
       },
+      onAbout: () => {
+        state.showAboutModel = true;
+      },
+      onSettings: () => {},
     };
   });
   useEffect(() => {
@@ -124,8 +136,8 @@ const App: FC = () => {
       } else {
         openNotificationWithIcon(
           "warning",
-          "Save Failed",
-          "There is some thing worng when saveing the file.",
+          t("notifiction-save-fail"),
+          "",
           "bottomRight"
         );
       }
@@ -154,7 +166,7 @@ const App: FC = () => {
         state.appLoading = false;
         openNotificationWithIcon(
           "success",
-          "Export success",
+          t("notifiction-export-success"),
           "",
           "bottomRight"
         );
@@ -217,8 +229,9 @@ const App: FC = () => {
   }
 };
 
-const EditMetaModel: FC = () => {
+const EditMetaModal: FC = () => {
   let state = useAppState();
+  const { t } = useTranslation();
   let [title, setTitle] = useState(state.notation?.info.title || "");
   let [subTitle, setSubTitle] = useState(state.notation?.info.subtitle || "");
   let [author, setAuthor] = useState(
@@ -247,22 +260,40 @@ const EditMetaModel: FC = () => {
   };
   return useObserver(() => (
     <Modal
-      title="Edit meta data"
+      title={t("modal-meta")}
       visible={state.showEditMetaModel}
       onOk={handleOk}
       onCancel={handleCancel}
     >
       <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
-        <Form.Item label="Title">
+        <Form.Item label={t("modal-meta-title")}>
           <Input onChange={onTitleChange} value={title} />
         </Form.Item>
-        <Form.Item label="Subtitle">
+        <Form.Item label={t("modal-meta-subtitle")}>
           <Input onChange={onSubTitleChange} value={subTitle} />
         </Form.Item>
-        <Form.Item label="Author">
+        <Form.Item label={t("modal-meta-author")}>
           <Input.TextArea onChange={onAuthorChange} value={author} rows={4} />
         </Form.Item>
       </Form>
+    </Modal>
+  ));
+};
+
+const AboutModal: FC = () => {
+  let state = useAppState();
+  const { t } = useTranslation();
+  const cancel = () => {
+    state.showAboutModel = false;
+  };
+  return useObserver(() => (
+    <Modal
+      title={t("modal-about")}
+      visible={state.showAboutModel}
+      onCancel={cancel}
+      footer={[]}
+    >
+      ABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUT
     </Modal>
   ));
 };
@@ -280,7 +311,8 @@ const AppHolder: React.FC = () => {
               <Toolbar />
               <Content />
               <Footer />
-              <EditMetaModel />
+              <EditMetaModal />
+              <AboutModal />
             </Spin>
           </>
         ) : (

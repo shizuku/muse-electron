@@ -65,6 +65,8 @@ export interface Events {
   onSetVertical: () => void;
   onSetHorizontal: () => void;
   onExit: () => void;
+  onAbout: () => void;
+  onSettings: () => void;
 }
 
 //full: show all element,
@@ -77,6 +79,8 @@ export class AppState {
     this.locale = "en-US";
     this.appLoading = false;
     this.showEditMetaModel = false;
+    this.showAboutModel = false;
+    this.showSettings = false;
     this.config = new MuseConfig();
     this.theme = new Theme();
     this.opened = false;
@@ -96,6 +100,8 @@ export class AppState {
   @observable locale: string;
   @observable appLoading: boolean;
   @observable showEditMetaModel: boolean;
+  @observable showAboutModel: boolean;
+  @observable showSettings: boolean;
   @observable config: MuseConfig;
   @observable theme: Theme;
   @observable windowDim: WindowDim;
