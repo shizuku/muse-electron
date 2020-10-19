@@ -135,13 +135,7 @@ interface PageIndexProps {
   config: MuseConfig;
 }
 
-const PageIndex: React.FC<PageIndexProps> = ({
-  index,
-  x,
-  y,
-  clazz,
-  config,
-}: PageIndexProps) => {
+const PageIndex: FC<PageIndexProps> = ({ index, x, y, clazz, config }) => {
   return (
     <g
       className={clazz + "__page-index"}

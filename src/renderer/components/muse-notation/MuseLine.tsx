@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import MuseConfig from "./MuseConfig";
 import MuseTrack, { ITrack, Track } from "./MuseTrack";
 import { Border } from "./Border";
 import Codec from "./Codec";
 import { computed, observable } from "mobx";
-import { observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import { Page } from "./MusePage";
 import { SelectionLine } from "./Selector";
 
@@ -85,48 +85,37 @@ export class Line implements Codec, SelectionLine {
   }
 }
 
-const LineHead: React.FC<{ height: number; clazz: string }> = ({
-  height,
-  clazz,
-}: {
-  height: number;
-  clazz: string;
-}) => {
-  return (
+const LineHead: FC<{ height: number; clazz: string }> = ({ height, clazz }) => {
+  return useObserver(() => (
     <g className={clazz + "__line-head"}>
       <line x1={0} y1={0} x2={0} y2={height} strokeWidth={1} stroke="black" />
     </g>
-  );
+  ));
 };
 
-@observer
-class MuseLine extends React.Component<{ line: Line }> {
-  render() {
-    let clazz = "muse-line";
-    return (
-      <g
-        className={clazz}
-        transform={
-          "translate(" + this.props.line.x + "," + this.props.line.y + ")"
-        }
-        width={this.props.line.width}
-        height={this.props.line.height}
-      >
-        <Border
-          w={this.props.line.width}
-          h={this.props.line.height}
-          x={0}
-          y={0}
-          clazz={clazz}
-          show={this.props.line.isSelect}
-        />
-        <LineHead height={this.props.line.height} clazz={clazz} />
-        {this.props.line.tracks.map((it, idx) => (
-          <MuseTrack key={idx} track={it} />
-        ))}
-      </g>
-    );
-  }
-}
+const MuseLine: FC<{ line: Line }> = ({ line }) => {
+  let clazz = "muse-line";
+  return (
+    <g
+      className={clazz}
+      transform={"translate(" + line.x + "," + line.y + ")"}
+      width={line.width}
+      height={line.height}
+    >
+      <Border
+        w={line.width}
+        h={line.height}
+        x={0}
+        y={0}
+        clazz={clazz}
+        show={line.isSelect}
+      />
+      <LineHead height={line.height} clazz={clazz} />
+      {line.tracks.map((it, idx) => (
+        <MuseTrack key={idx} track={it} />
+      ))}
+    </g>
+  );
+};
 
 export default MuseLine;

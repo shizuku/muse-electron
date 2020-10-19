@@ -1,10 +1,10 @@
-import React from "react";
+import React, { FC } from "react";
 import MuseConfig from "./MuseConfig";
 import MuseNote, { INote, Note } from "./MuseNote";
 import { Border } from "./Border";
 import Codec from "./Codec";
 import { computed, observable } from "mobx";
-import { observer, useObserver } from "mobx-react";
+import { useObserver } from "mobx-react";
 import Fraction from "./Fraction";
 import { Track } from "./MuseTrack";
 import { SelectionBar } from "./Selector";
@@ -140,88 +140,66 @@ export class Bar implements Codec, SelectionBar {
   }
 }
 
-const BarLine: React.FC<{ w: number; h: number; clazz: string }> = (props: {
-  w: number;
-  h: number;
-  clazz: string;
+const BarLine: FC<{ w: number; h: number; clazz: string }> = ({
+  w,
+  h,
+  clazz,
 }) => {
-  let [width, height] = useObserver(() => {
-    return [props.w, props.h];
-  });
-  return (
+  return useObserver(() => (
     <line
-      className={props.clazz + "__bar-line"}
-      x1={width}
+      className={clazz + "__bar-line"}
+      x1={w}
       y1={0}
-      x2={width}
-      y2={height}
+      x2={w}
+      y2={h}
       strokeWidth={1}
       stroke="black"
     />
-  );
+  ));
 };
 
-const BaseLine: React.FC<{ bar: Bar; clazz: string }> = ({
-  bar,
-  clazz,
-}: {
-  bar: Bar;
-  clazz: string;
-}) => {
-  let [baselineGroup, notes] = useObserver(() => {
-    return [bar.baselineGroup, bar.notes];
-  });
-  return (
+const BaseLine: FC<{ bar: Bar; clazz: string }> = ({ bar, clazz }) => {
+  return useObserver(() => (
     <g className={clazz + "__base-line"}>
-      {baselineGroup.map((it, idx) => (
+      {bar.baselineGroup.map((it, idx) => (
         <line
           key={idx}
-          x1={notes[it.s].x}
-          y1={notes[it.s].height + (it.y + 1) * bar.config.pointGap}
-          x2={notes[it.e].x + bar.notes[it.e].width}
-          y2={notes[it.s].height + (it.y + 1) * bar.config.pointGap}
+          x1={bar.notes[it.s].x}
+          y1={bar.notes[it.s].height + (it.y + 1) * bar.config.pointGap}
+          x2={bar.notes[it.e].x + bar.notes[it.e].width}
+          y2={bar.notes[it.s].height + (it.y + 1) * bar.config.pointGap}
           stroke={"black"}
           strokeWidth={1}
         />
       ))}
     </g>
-  );
+  ));
 };
 
-@observer
-class MuseBar extends React.Component<{ bar: Bar }, {}> {
-  render() {
-    let notes = this.props.bar.notes;
-    let clazz = "muse-bar";
-    return (
-      <g
-        className={clazz}
-        transform={
-          "translate(" + this.props.bar.x + "," + this.props.bar.y + ")"
-        }
-        width={this.props.bar.width}
-        height={this.props.bar.height}
-      >
-        <Border
-          w={this.props.bar.width}
-          h={this.props.bar.height}
-          x={0}
-          y={0}
-          clazz={clazz}
-          show={this.props.bar.isSelect}
-        />
-        <BarLine
-          w={this.props.bar.width}
-          h={this.props.bar.height}
-          clazz={clazz}
-        />
-        {notes.map((it, idx) => (
-          <MuseNote key={idx} note={it} />
-        ))}
-        <BaseLine bar={this.props.bar} clazz={clazz} />
-      </g>
-    );
-  }
-}
+const MuseBar: FC<{ bar: Bar }> = ({ bar }) => {
+  let clazz = "muse-bar";
+  return useObserver(() => (
+    <g
+      className={clazz}
+      transform={"translate(" + bar.x + "," + bar.y + ")"}
+      width={bar.width}
+      height={bar.height}
+    >
+      <Border
+        w={bar.width}
+        h={bar.height}
+        x={0}
+        y={0}
+        clazz={clazz}
+        show={bar.isSelect}
+      />
+      <BarLine w={bar.width} h={bar.height} clazz={clazz} />
+      {bar.notes.map((it, idx) => (
+        <MuseNote key={idx} note={it} />
+      ))}
+      <BaseLine bar={bar} clazz={clazz} />
+    </g>
+  ));
+};
 
 export default MuseBar;

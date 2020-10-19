@@ -147,7 +147,7 @@ interface MuseNotationInfoProps {
   clazz: string;
 }
 
-const MuseNotationInfo: React.FC<MuseNotationInfoProps> = ({
+const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
   info,
   config,
   clazz,

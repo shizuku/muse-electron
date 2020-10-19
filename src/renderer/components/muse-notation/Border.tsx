@@ -18,7 +18,7 @@ export const Border: React.FC<BorderProps> = ({
   clazz,
   show = false,
   color = "blue",
-}: BorderProps) => {
+}) => {
   if (show) {
     return (
       <rect
@@ -50,7 +50,7 @@ export const OuterBorder: React.FC<OuterBorderProps> = ({
   clazz,
   show = false,
   color = "gray",
-}: OuterBorderProps) => {
+}) => {
   if (show) {
     return (
       <rect

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import MuseConfig from "./MuseConfig";
 import MuseBar, { Bar, IBar } from "./MuseBar";
 import { Border } from "./Border";
@@ -6,7 +6,7 @@ import Codec from "./Codec";
 import { computed, observable } from "mobx";
 import { Line } from "./MuseLine";
 import Fraction from "./Fraction";
-import { observer } from "mobx-react";
+import { useObserver } from "mobx-react";
 import { SelectionTrack } from "./Selector";
 
 export interface ITrack {
@@ -103,33 +103,28 @@ export class Track implements Codec, SelectionTrack {
   }
 }
 
-@observer
-class MuseTrack extends React.Component<{ track: Track }> {
-  render() {
-    let clazz = "muse-track";
-    return (
-      <g
-        className={clazz}
-        transform={
-          "translate(" + this.props.track.x + "," + this.props.track.y + ")"
-        }
-        width={this.props.track.width}
-        height={this.props.track.height}
-      >
-        <Border
-          w={this.props.track.width}
-          h={this.props.track.height}
-          x={0}
-          y={0}
-          clazz={clazz}
-          show={this.props.track.isSelect}
-        />
-        {this.props.track.bars.map((it, idx) => (
-          <MuseBar key={idx} bar={it} />
-        ))}
-      </g>
-    );
-  }
-}
+const MuseTrack: FC<{ track: Track }> = ({ track }) => {
+  let clazz = "muse-track";
+  return useObserver(() => (
+    <g
+      className={clazz}
+      transform={"translate(" + track.x + "," + track.y + ")"}
+      width={track.width}
+      height={track.height}
+    >
+      <Border
+        w={track.width}
+        h={track.height}
+        x={0}
+        y={0}
+        clazz={clazz}
+        show={track.isSelect}
+      />
+      {track.bars.map((it, idx) => (
+        <MuseBar key={idx} bar={it} />
+      ))}
+    </g>
+  ));
+};
 
 export default MuseTrack;

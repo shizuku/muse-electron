@@ -1,64 +1,16 @@
-import React from "react";
-import { Border, OuterBorder } from "./Border";
+import React, { FC } from "react";
+import { OuterBorder } from "./Border";
 import MuseConfig from "./MuseConfig";
 import Codec from "./Codec";
 import Fraction from "./Fraction";
 import { computed, observable } from "mobx";
-import { observer } from "mobx-react";
-import Selector, { SelectionNote, SelectionSubNote } from "./Selector";
+import { useObserver } from "mobx-react";
+import Selector, { SelectionNote } from "./Selector";
 import { Bar } from "./MuseBar";
+import MuseSubNote, { SubNote } from "./MuseSubNote";
 
 export interface INote {
   n: string;
-}
-
-export class SubNote implements SelectionSubNote {
-  readonly config: MuseConfig;
-  @observable isSelect = false;
-  @observable note: Note;
-  @observable index: number;
-  @observable x: string = "";
-  @observable n: string = "";
-  @observable t: number = 0;
-  constructor(
-    x: string,
-    n: string,
-    t: number,
-    note: Note,
-    index: number,
-    config: MuseConfig
-  ) {
-    this.x = x;
-    this.n = n;
-    this.t = t;
-    this.note = note;
-    this.index = index;
-    this.config = config;
-  }
-  setSelect(s: boolean) {
-    this.isSelect = s;
-  }
-  setNum(n: string) {
-    this.n = n;
-  }
-  reducePoint(h: number) {
-    this.t += h;
-  }
-  reduceLine(l: number) {
-    this.note.l += l;
-    if (this.note.l < 0) {
-      this.note.l = 0;
-    }
-  }
-  reduceTailPoint(p: number) {
-    this.note.p += p;
-    if (this.note.p < 0) {
-      this.note.p = 0;
-    }
-  }
-  getThis() {
-    return this;
-  }
 }
 
 export class Note implements Codec, SelectionNote {
@@ -331,17 +283,6 @@ export class Note implements Codec, SelectionNote {
   }
 }
 
-function castX(x: string) {
-  let m: Record<string, string> = {
-    S: "#",
-    F: "b",
-    DS: "x",
-    DF: "d",
-    N: "n",
-  };
-  return m[x] || "";
-}
-
 function pointGroup(note: Note, clazz: string) {
   return (
     <g className={clazz + "__group-point"}>
@@ -384,97 +325,39 @@ function tailPoint(note: Note, clazz: string) {
   );
 }
 
-interface MuseSubNoteProps {
-  dx: number;
-  y: number;
-  w: number;
-  h: number;
-  subNote: SubNote;
-}
-
-@observer
-class MuseSubNote extends React.Component<MuseSubNoteProps, {}> {
-  render() {
-    return (
-      <g
-        className={"muse-note__subnote"}
-        transform={"translate(" + 0 + "," + this.props.y + ")"}
-        width={this.props.w}
-        height={this.props.h}
-        onClick={() => {
-          Selector.instance.selectSubNote(this.props.subNote);
-        }}
-      >
-        <text
-          fontFamily={this.props.subNote.config.noteFontFamily}
-          fontSize={this.props.subNote.config.noteFontSize}
-          transform={"translate(" + this.props.dx + "," + 0 + ")"}
-        >
-          {this.props.subNote.n}
-        </text>
-        <text
-          fontFamily={this.props.subNote.config.noteFontFamily}
-          fontSize={this.props.subNote.config.sigFontSize}
-          transform={
-            "translate(" +
-            0 +
-            "," +
-            (this.props.subNote.config.sigFontSize -
-              this.props.subNote.config.noteHeight) +
-            ")"
-          }
-        >
-          {castX(this.props.subNote.x)}
-        </text>
-        <Border
-          x={0}
-          y={-this.props.h}
-          w={this.props.w}
-          h={this.props.subNote.config.noteFontSize}
-          clazz={"muse-note__subnote"}
-          show={this.props.subNote.isSelect}
+const MuseNote: FC<{ note: Note }> = ({ note }) => {
+  let clazz = "muse-note";
+  return useObserver(() => (
+    <g
+      className={clazz}
+      transform={"translate(" + note.x + "," + 0 + ")"}
+      width={note.width}
+      height={note.height}
+      onClick={() => {
+        Selector.instance.selectNote(note);
+      }}
+    >
+      <OuterBorder
+        w={note.width}
+        h={note.height + note.marginBottom}
+        clazz={clazz}
+        show={note.isSelect}
+        color={"blue"}
+      />
+      {note.subNotes.map((it, idx) => (
+        <MuseSubNote
+          key={idx}
+          dx={note.dx}
+          y={note.height - note.notesY[idx]}
+          w={note.width}
+          h={22}
+          subNote={it}
         />
-      </g>
-    );
-  }
-}
-
-@observer
-class MuseNote extends React.Component<{ note: Note }, {}> {
-  render() {
-    let clazz = "muse-note";
-    return (
-      <g
-        className={clazz}
-        transform={"translate(" + this.props.note.x + "," + 0 + ")"}
-        width={this.props.note.width}
-        height={this.props.note.height}
-        onClick={() => {
-          Selector.instance.selectNote(this.props.note);
-        }}
-      >
-        <OuterBorder
-          w={this.props.note.width}
-          h={this.props.note.height + this.props.note.marginBottom}
-          clazz={clazz}
-          show={this.props.note.isSelect}
-          color={"blue"}
-        />
-        {this.props.note.subNotes.map((it, idx) => (
-          <MuseSubNote
-            key={idx}
-            dx={this.props.note.dx}
-            y={this.props.note.height - this.props.note.notesY[idx]}
-            w={this.props.note.width}
-            h={22}
-            subNote={it}
-          />
-        ))}
-        {pointGroup(this.props.note, clazz)}
-        {tailPoint(this.props.note, clazz)}
-      </g>
-    );
-  }
-}
+      ))}
+      {pointGroup(note, clazz)}
+      {tailPoint(note, clazz)}
+    </g>
+  ));
+};
 
 export default MuseNote;

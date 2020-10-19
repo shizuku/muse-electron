@@ -1,7 +1,8 @@
 import { Bar } from "./MuseBar";
 import { Line } from "./MuseLine";
 import { Notation } from "./MuseNotation";
-import { Note, SubNote } from "./MuseNote";
+import { Note } from "./MuseNote";
+import { SubNote } from "./MuseSubNote";
 import { Page } from "./MusePage";
 import { Track } from "./MuseTrack";
 
