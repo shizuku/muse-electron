@@ -95,7 +95,7 @@ const LineHead: FC<{ height: number; clazz: string }> = ({ height, clazz }) => {
 
 const MuseLine: FC<{ line: Line }> = ({ line }) => {
   let clazz = "muse-line";
-  return (
+  return useObserver(() => (
     <g
       className={clazz}
       transform={"translate(" + line.x + "," + line.y + ")"}
@@ -108,14 +108,14 @@ const MuseLine: FC<{ line: Line }> = ({ line }) => {
         x={0}
         y={0}
         clazz={clazz}
-        show={line.isSelect}
+        show={line.isSelect || line.config.showBorder}
       />
       <LineHead height={line.height} clazz={clazz} />
       {line.tracks.map((it, idx) => (
         <MuseTrack key={idx} track={it} />
       ))}
     </g>
-  );
+  ));
 };
 
 export default MuseLine;

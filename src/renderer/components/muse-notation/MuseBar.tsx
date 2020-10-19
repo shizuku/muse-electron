@@ -165,9 +165,9 @@ const BaseLine: FC<{ bar: Bar; clazz: string }> = ({ bar, clazz }) => {
         <line
           key={idx}
           x1={bar.notes[it.s].x}
-          y1={bar.notes[it.s].height + (it.y + 1) * bar.config.pointGap}
+          y1={bar.notes[it.s].height + it.y * bar.config.pointGap}
           x2={bar.notes[it.e].x + bar.notes[it.e].width}
-          y2={bar.notes[it.s].height + (it.y + 1) * bar.config.pointGap}
+          y2={bar.notes[it.s].height + it.y * bar.config.pointGap}
           stroke={"black"}
           strokeWidth={1}
         />
@@ -191,7 +191,7 @@ const MuseBar: FC<{ bar: Bar }> = ({ bar }) => {
         x={0}
         y={0}
         clazz={clazz}
-        show={bar.isSelect}
+        show={bar.isSelect || bar.config.showBorder}
       />
       <BarLine w={bar.width} h={bar.height} clazz={clazz} />
       {bar.notes.map((it, idx) => (

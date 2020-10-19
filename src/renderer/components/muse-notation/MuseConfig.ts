@@ -4,7 +4,7 @@ export default class MuseConfig {
   @observable x = 1.0;
   @observable noteFontFamily = "serif";
   @observable textFontFamily = "serif";
-  @observable showBorder = true;
+  @observable showBorder = false;
   @observable pagePerLine = 1;
   @observable vertical = true;
 

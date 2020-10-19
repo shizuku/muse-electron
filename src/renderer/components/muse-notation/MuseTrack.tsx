@@ -118,7 +118,7 @@ const MuseTrack: FC<{ track: Track }> = ({ track }) => {
         x={0}
         y={0}
         clazz={clazz}
-        show={track.isSelect}
+        show={track.isSelect || track.config.showBorder}
       />
       {track.bars.map((it, idx) => (
         <MuseBar key={idx} bar={it} />

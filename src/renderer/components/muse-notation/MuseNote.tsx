@@ -18,18 +18,9 @@ export class Note implements Codec, SelectionNote {
   @observable index: number;
   @observable bar: Bar;
   @observable subNotes: SubNote[] = [];
-  @observable l: number = 0;
-  @observable p: number = 0;
-  @observable d: number = 0;
-  @computed get dx(): number {
-    let dxx = false;
-    this.subNotes.forEach((it) => {
-      if (it.x !== "") {
-        dxx = true;
-      }
-    });
-    return dxx ? this.config.sigFontSize / 2 : 0;
-  }
+  @observable l: number = 0; //__
+  @observable p: number = 0; //..
+  @observable d: number = 0; // _3_
   @computed get time(): Fraction {
     let r = new Fraction();
     r.u = 1;
@@ -65,48 +56,17 @@ export class Note implements Codec, SelectionNote {
     });
     return r;
   }
-  @computed get pointsY(): number[] {
+  @computed get subNotesHeight(): number[] {
+    return this.subNotes.map(
+      (it) => it.height + it.marginTop + it.marginBottom
+    );
+  }
+  @computed get subNotesY(): number[] {
     let r: number[] = [];
-    let py = 0;
-    let ny = 0;
-    let mb = 0;
-    mb += this.l * this.config.pointGap;
-    this.subNotes.forEach((it, idx) => {
-      if (it.t < 0) {
-        if (idx === 0) {
-          let i = -it.t;
-          for (; i > 0; --i) {
-            let x = this.config.pointGap;
-            mb += x / 2;
-            r.push(-mb);
-            mb += x / 2;
-          }
-        }
-        if (idx !== 0) {
-          let i = -it.t;
-          for (; i > 0; --i) {
-            let x = this.config.pointGap;
-            py += x / 2;
-            r.push(py);
-            py += x / 2;
-            ny += x;
-          }
-        }
-      }
-      this.notesY.push(ny);
-      let h = this.config.noteHeight;
-      ny += h;
-      py += h;
-      if (it.t > 0) {
-        let i = it.t;
-        for (; i > 0; --i) {
-          let x = this.config.pointGap;
-          py += x / 2;
-          r.push(py);
-          py += x / 2;
-          ny += x;
-        }
-      }
+    let y = this.height;
+    this.subNotesHeight.forEach((it) => {
+      r.push(y);
+      y -= it;
     });
     return r;
   }
@@ -114,13 +74,19 @@ export class Note implements Codec, SelectionNote {
     let r: number[] = [];
     for (let i = 0; i < this.p; ++i) {
       r.push(
-        this.dx + this.config.noteWidth + (i + 1 / 2) * this.config.tailPointGap
+        this.marginLeft +
+          this.config.noteWidth +
+          (i + 1 / 2) * this.config.tailPointGap
       );
     }
     return r;
   }
   @computed get width(): number {
-    return this.dx + this.config.noteWidth + this.p * this.config.tailPointGap;
+    return (
+      this.marginLeft +
+      this.config.noteWidth +
+      this.p * this.config.tailPointGap
+    );
   }
   @computed get preHeight(): number {
     let h = 0;
@@ -150,6 +116,12 @@ export class Note implements Codec, SelectionNote {
   }
   @computed get x(): number {
     return this.bar.notesX[this.index];
+  }
+  @computed get subNotesMarginLeft(): number[] {
+    return this.subNotes.map((it) => it.preMarginLeft);
+  }
+  @computed get marginLeft(): number {
+    return Math.max(...this.subNotesMarginLeft);
   }
   @computed get preMarginBottom(): number {
     let mb = 0;
@@ -196,7 +168,7 @@ export class Note implements Codec, SelectionNote {
     this.subNotes.splice(
       index,
       0,
-      new SubNote("", "0", 0, this, this.subNotes.length, this.config)
+      new SubNote("0", this, this.subNotes.length, this.config)
     );
     this.subNotes.forEach((it, idx) => (it.index = idx));
   }
@@ -207,7 +179,6 @@ export class Note implements Codec, SelectionNote {
   getThis() {
     return this;
   }
-
   decode(o: INote): void {
     if (o.n !== undefined) {
       let n: string = o.n;
@@ -223,21 +194,7 @@ export class Note implements Codec, SelectionNote {
       }
       let ng = ns.split("|");
       ng.forEach((it, idx) => {
-        for (let i = 0; i < it.length; ++i) {
-          if (
-            (it.charCodeAt(i) <= 57 && it.charCodeAt(i) >= 48) ||
-            it.charCodeAt(i) === 45
-          ) {
-            let x = it.substr(0, i);
-            let n = it.charAt(i);
-            let t = it.substr(i + 1).length;
-            if (t !== 0 && it.charAt(i + 1) === "-") {
-              t = -t;
-            }
-            this.subNotes.push(new SubNote(x, n, t, this, idx, this.config));
-            break;
-          }
-        }
+        this.subNotes.push(new SubNote(it, this, idx, this.config));
       });
       let tg = ts.split("|");
       if (tg.length === 3) {
@@ -262,67 +219,15 @@ export class Note implements Codec, SelectionNote {
   code(): INote {
     let ns: string = "";
     this.subNotes.forEach((it, idx) => {
-      let t = "";
-      if (it.t > 0) {
-        for (let i = 0; i < it.t; ++i) {
-          t += "+";
-        }
-      } else {
-        for (let i = 0; i < -it.t; ++i) {
-          t += "-";
-        }
-      }
       if (idx + 1 >= this.subNotes.length) {
-        ns += `${it.x}${it.n}${t}`;
+        ns += `${it.code()}`;
       } else {
-        ns += `${it.x}${it.n}${t}|`;
+        ns += `${it.code()}|`;
       }
     });
-    let n = `${ns}@${this.l}|${this.p}`;
+    let n = `${ns}@${this.l}|${this.p}|${this.d === 0 ? "" : this.d}`;
     return { n };
   }
-}
-
-function pointGroup(note: Note, clazz: string) {
-  return (
-    <g className={clazz + "__group-point"}>
-      {note.pointsY.map((it, idx) => (
-        <circle
-          key={idx}
-          r={note.config.pointRound}
-          fill="black"
-          transform={
-            "translate(" +
-            (note.dx + note.config.noteWidth / 2) +
-            "," +
-            (note.height - it + note.config.pointGap / 2) +
-            ")"
-          }
-        />
-      ))}
-    </g>
-  );
-}
-
-function tailPoint(note: Note, clazz: string) {
-  return (
-    <g className={clazz + "__tail-point"}>
-      {note.tailPointsX.map((it, idx) => (
-        <circle
-          key={idx}
-          r={note.config.pointRound}
-          fill="black"
-          transform={
-            "translate(" +
-            it +
-            "," +
-            (note.height - note.config.noteHeight / 3) +
-            ")"
-          }
-        />
-      ))}
-    </g>
-  );
 }
 
 const MuseNote: FC<{ note: Note }> = ({ note }) => {
@@ -341,21 +246,28 @@ const MuseNote: FC<{ note: Note }> = ({ note }) => {
         w={note.width}
         h={note.height + note.marginBottom}
         clazz={clazz}
-        show={note.isSelect}
+        show={note.isSelect || note.config.showBorder}
         color={"blue"}
       />
       {note.subNotes.map((it, idx) => (
-        <MuseSubNote
-          key={idx}
-          dx={note.dx}
-          y={note.height - note.notesY[idx]}
-          w={note.width}
-          h={22}
-          subNote={it}
-        />
+        <MuseSubNote key={idx} subNote={it} />
       ))}
-      {pointGroup(note, clazz)}
-      {tailPoint(note, clazz)}
+      <g className={clazz + "__tail-point"}>
+        {note.tailPointsX.map((it, idx) => (
+          <circle
+            key={idx}
+            r={note.config.pointRound}
+            fill="black"
+            transform={
+              "translate(" +
+              it +
+              "," +
+              (note.height - note.config.noteHeight / 3) +
+              ")"
+            }
+          />
+        ))}
+      </g>
     </g>
   ));
 };

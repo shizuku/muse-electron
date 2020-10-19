@@ -173,7 +173,7 @@ const MusePage: FC<{ page: Page }> = ({ page }) => {
         x={page.x}
         y={page.marginTop}
         clazz={clazz}
-        show={page.isSelect}
+        show={page.isSelect || page.config.showBorder}
       />
       <OuterBorder
         w={page.width + page.marginLeft + page.marginLeft}
