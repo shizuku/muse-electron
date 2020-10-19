@@ -8,7 +8,7 @@ import {
 import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuItem } from "../menu";
+import { Menu, MenuItem } from "./menu";
 import { useAppState } from "../app";
 import { getFileFolder, getFileName } from "../../../shared/utils";
 import "./style.css";

@@ -10,7 +10,7 @@ import {
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../app";
-import { Menu, MenuItem } from "../menu";
+import { Menu, MenuItem } from "./menu";
 
 export const StartTab: FC = () => {
   const { t } = useTranslation();

@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuItem } from "../menu";
+import { Menu, MenuItem } from "./menu";
 import { useAppState } from "../app";
 
 export const FileTab: FC = () => {

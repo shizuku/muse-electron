@@ -2,6 +2,7 @@
   display: block;
   -webkit-user-select: none;
   box-shadow: 0px 6px 6px 0px rgba(29, 29, 29, 0.2);
+  font-size: 0.8em;
 }
 
 .toolbar__tabs {
@@ -11,7 +12,7 @@
 
 .toolbar__tab {
   display: inline-flex;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
 
 .toolbar__tab:hover {
