@@ -24,11 +24,23 @@ export const Tab: FC<{ label: string }> = ({ label, children }) => {
           style={
             hover
               ? a.active !== label
-                ? { background: state.theme.colorPrimaryDark }
-                : { background: state.theme.colorBackground }
+                ? {
+                    background: state.theme.colorPrimaryDark,
+                    color: state.theme.colorBackground,
+                  }
+                : {
+                    background: state.theme.colorBackground,
+                    color: state.theme.colorPrimary,
+                  }
               : a.active !== label
-              ? { background: state.theme.colorPrimary }
-              : { background: state.theme.colorBackground }
+              ? {
+                  background: state.theme.colorPrimary,
+                  color: state.theme.colorBackground,
+                }
+              : {
+                  background: state.theme.colorBackground,
+                  color: state.theme.colorPrimary,
+                }
           }
           onMouseEnter={() => {
             setHover(true);

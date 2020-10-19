@@ -111,7 +111,7 @@ export class AppState {
   //opened
   @observable modified: boolean;
   @computed get fileName() {
-    return getFileName(this.currentFile?.path || "New File.muse");
+    return getFileName(this.currentFile?.path || "");
   }
   @observable autoSave: boolean;
   @observable currentFile?: FileInfo;
@@ -139,6 +139,7 @@ export class AppState {
   @action close() {
     this.notation = undefined;
     this.opened = false;
+    this.currentFile = undefined;
   }
   @action loadRecents(recents: FileInfo[]) {
     this.recents = recents;

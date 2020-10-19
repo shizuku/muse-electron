@@ -5,13 +5,13 @@ export const createWindow = () => {
     height: 900,
     width: 1600,
     useContentSize: true,
-    titleBarStyle: 'hidden',
+    titleBarStyle: "hidden",
     frame: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
     },
   });
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
   return mainWindow;
 };
