@@ -12,24 +12,35 @@ export interface FileInfo {
   vertical: boolean;
 }
 
-export class Theme {
-  constructor() {
-    this.colorBackground = "#FFFFFF";
-    this.colorPrimary = "#20A0FF";
-    this.colorPrimaryLight = "#58B7FF";
-    this.colorPrimaryDark = "#1D8CE0";
-    this.colorSuccess = "#13CE66";
-    this.colorWarning = "#F7BA2A";
-    this.colorDanger = "#FF4949";
-  }
-  @observable colorBackground: string;
-  @observable colorPrimary: string;
-  @observable colorPrimaryLight: string;
-  @observable colorPrimaryDark: string;
-  @observable colorSuccess: string;
-  @observable colorWarning: string;
-  @observable colorDanger: string;
+export interface Theme {
+  colorBackground: string;
+  colorPrimary: string;
+  colorPrimaryLight: string;
+  colorPrimaryDark: string;
+  colorSuccess: string;
+  colorWarning: string;
+  colorDanger: string;
 }
+
+export const lightTheme: Theme = {
+  colorBackground: "#FFFFFF",
+  colorPrimary: "#20A0FF",
+  colorPrimaryLight: "#58B7FF",
+  colorPrimaryDark: "#1D8CE0",
+  colorSuccess: "#13CE66",
+  colorWarning: "#F7BA2A",
+  colorDanger: "#FF4949",
+};
+
+export const darkTheme: Theme = {
+  colorBackground: "#555555",
+  colorPrimary: "#222222",
+  colorPrimaryLight: "#444444",
+  colorPrimaryDark: "#000000",
+  colorSuccess: "#13CE66",
+  colorWarning: "#F7BA2A",
+  colorDanger: "#FF4949",
+};
 
 export class WindowDim {
   constructor() {}
@@ -67,6 +78,8 @@ export interface Events {
   onExit: () => void;
   onAbout: () => void;
   onSettings: () => void;
+  onSetLanguage: (code: string) => void;
+  onSetTheme: (t: string) => void;
 }
 
 //full: show all element,
@@ -76,13 +89,16 @@ export type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
   constructor() {
-    this.locale = "en-US";
+    this.langCode = "en-US";
+    this.langConf = "auto";
     this.appLoading = false;
     this.showEditMetaModel = false;
     this.showAboutModel = false;
     this.showSettings = false;
     this.config = new MuseConfig();
-    this.theme = new Theme();
+    this.theme = lightTheme;
+    this.themeConf = "auto";
+    this.themeCode = "light";
     this.opened = false;
     this.display = "full";
     this.headerHover = false;
@@ -97,13 +113,16 @@ export class AppState {
     this.notation = undefined;
   }
   //all
-  @observable locale: string;
+  @observable langCode: string; //en|zh
+  @observable langConf: string; //auto|zh|en
   @observable appLoading: boolean;
   @observable showEditMetaModel: boolean;
   @observable showAboutModel: boolean;
   @observable showSettings: boolean;
   @observable config: MuseConfig;
   @observable theme: Theme;
+  @observable themeConf: string; //auto|light|dark
+  @observable themeCode: string; //light|dark
   @observable windowDim: WindowDim;
   @observable opened: boolean;
   @observable events?: Events;
@@ -167,6 +186,19 @@ export class AppState {
   @action removeFile(path: string) {
     this.recents.filter((it) => it.path !== path);
   }
+  @action changeTheme(t: string) {
+    if (t !== "auto") {
+      this.themeConf = t;
+      this.themeCode = t;
+      this.theme = this.themeCode === "light" ? lightTheme : darkTheme;
+    }
+  }
+  // @action changeLang(l: string) {
+  //   if (l !== "auto") {
+  //     this.langConf = l;
+  //     this.langCode = l;
+  //   }
+  // }
 }
 
 export function useAppState(): AppState {

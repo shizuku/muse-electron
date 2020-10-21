@@ -9,3 +9,4 @@ import { ipcRenderer } from "electron";
 ReactDOM.render(<App />, document.getElementById("root"));
 
 ipcRenderer.send("get-locale");
+ipcRenderer.send("get-dark-light");

@@ -1,15 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
-import {
-  Modal,
-  notification,
-  Spin,
-  Input,
-  Form,
-  ConfigProvider,
-  Button,
-} from "antd";
+import { notification, Spin, ConfigProvider } from "antd";
 import { Locale } from "antd/lib/locale-provider";
 import zhCN from "antd/es/locale/zh_CN";
 import enUS from "antd/es/locale/en_US";
@@ -28,6 +20,7 @@ import {
 } from "../../../shared/utils";
 import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
+import { AboutModal, EditMetaModal, SettingsModal } from "./modal";
 import "./app.css";
 
 const openNotificationWithIcon = (
@@ -113,7 +106,30 @@ const App: FC = () => {
       onAbout: () => {
         state.showAboutModel = true;
       },
-      onSettings: () => {},
+      onSettings: () => {
+        state.showSettings = true;
+      },
+      onSetLanguage: (code: string) => {
+        if (code !== "auto") {
+          state.langConf = code;
+          state.langCode = code;
+          i18n.changeLanguage(code);
+        } else {
+          state.langConf = code;
+          ipcRenderer.send("get-locale");
+        }
+        saveConfig("language", code);
+      },
+      onSetTheme: (t: string) => {
+        if (t !== "auto") {
+          state.themeConf = t;
+          state.themeCode = t;
+        } else {
+          state.themeConf = t;
+          ipcRenderer.send("get-dark-light");
+        }
+        saveConfig("theme", t);
+      },
     };
   });
   useEffect(() => {
@@ -173,9 +189,18 @@ const App: FC = () => {
       }
     });
     ipcRenderer.on("get-locale-reply", (e, code: string) => {
-      console.log(code);
-      i18n.changeLanguage(code);
-      state.locale = code;
+      if (state.langConf === "auto") {
+        console.log(code);
+        i18n.changeLanguage(code);
+
+        state.langCode = code;
+      }
+    });
+    ipcRenderer.on("get-dark-light-reply", (e, t: string) => {
+      if (state.themeConf === "auto") {
+        console.log(t);
+        state.changeTheme(t);
+      }
     });
   });
   useEffect(() => {
@@ -217,6 +242,9 @@ const App: FC = () => {
     state.loadRecents(c.recents);
     state.autoSave = c.autoSave;
     state.display = c.display;
+    state.langConf = c.language;
+    state.themeConf = c.theme;
+    state.changeTheme(c.theme);
   });
   if (state) {
     return (
@@ -229,81 +257,12 @@ const App: FC = () => {
   }
 };
 
-const EditMetaModal: FC = () => {
-  let state = useAppState();
-  const { t } = useTranslation();
-  let [title, setTitle] = useState(state.notation?.info.title || "");
-  let [subTitle, setSubTitle] = useState(state.notation?.info.subtitle || "");
-  let [author, setAuthor] = useState(
-    state.notation?.info.author.reduce((a, b) => a + b + "\n", "") || ""
-  );
-  const handleCancel = () => {
-    state.showEditMetaModel = false;
-  };
-  const handleOk = () => {
-    if (state.notation) {
-      state.notation.info.title = title;
-      state.notation.info.subtitle = subTitle;
-      state.notation.info.author = author.split("\n").filter((it) => it !== "");
-    }
-    state.modified = true;
-    state.showEditMetaModel = false;
-  };
-  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-  const onSubTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubTitle(e.target.value);
-  };
-  const onAuthorChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setAuthor(e.target.value);
-  };
-  return useObserver(() => (
-    <Modal
-      title={t("modal-meta")}
-      visible={state.showEditMetaModel}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
-        <Form.Item label={t("modal-meta-title")}>
-          <Input onChange={onTitleChange} value={title} />
-        </Form.Item>
-        <Form.Item label={t("modal-meta-subtitle")}>
-          <Input onChange={onSubTitleChange} value={subTitle} />
-        </Form.Item>
-        <Form.Item label={t("modal-meta-author")}>
-          <Input.TextArea onChange={onAuthorChange} value={author} rows={4} />
-        </Form.Item>
-      </Form>
-    </Modal>
-  ));
-};
-
-const AboutModal: FC = () => {
-  let state = useAppState();
-  const { t } = useTranslation();
-  const cancel = () => {
-    state.showAboutModel = false;
-  };
-  return useObserver(() => (
-    <Modal
-      title={t("modal-about")}
-      visible={state.showAboutModel}
-      onCancel={cancel}
-      footer={[]}
-    >
-      ABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUT
-    </Modal>
-  ));
-};
-
 const AppHolder: React.FC = () => {
   let state = useAppState();
   let locales: Record<string, Locale> = { "en-US": enUS, "zh-CN": zhCN };
   return useObserver(() => (
     <div id="app">
-      <ConfigProvider locale={locales[state.locale]}>
+      <ConfigProvider locale={locales[state.langCode]}>
         {state.opened === true ? (
           <>
             <Spin spinning={state.appLoading}>
@@ -313,6 +272,7 @@ const AppHolder: React.FC = () => {
               <Footer />
               <EditMetaModal />
               <AboutModal />
+              <SettingsModal />
             </Spin>
           </>
         ) : (

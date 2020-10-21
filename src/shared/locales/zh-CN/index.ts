@@ -7,6 +7,7 @@ import { common } from "./common";
 import { notification } from "./notification";
 
 export const zhCN: Record<string, string> = {
+  label: "简体中文",
   ...common,
   ...welcome,
   ...toolbar,

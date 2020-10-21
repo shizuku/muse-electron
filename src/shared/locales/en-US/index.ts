@@ -7,6 +7,7 @@ import { common } from "./common";
 import { notification } from "./notification";
 
 export const enUS: Record<string, string> = {
+  label: "English",
   ...common,
   ...welcome,
   ...toolbar,

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 import { readFile, writeFile } from "fs";
 
 const noTitle = "No title";
@@ -7,6 +7,12 @@ const newFileContent = `{"title":"${noTitle}","subtitle":"","author":"","rhythmi
 export function createActions(mw: BrowserWindow) {
   ipcMain.on("get-locale", (e) => {
     e.reply("get-locale-reply", app.getLocale());
+  });
+  ipcMain.on("get-dark-light", (e) => {
+    e.reply(
+      "get-dark-light-reply",
+      nativeTheme.shouldUseDarkColors ? "dark" : "light"
+    );
   });
   ipcMain.on("new-file", (event, type) => {
     let p = "";
