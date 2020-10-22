@@ -39,7 +39,6 @@ export const Content: FC = () => {
               state.r = e as HTMLElement;
             }}
             style={{
-              background: state.theme.colorBackgroundLight,
               color: state.theme.colorText,
             }}
           >

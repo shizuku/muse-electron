@@ -41,10 +41,14 @@ export class Page implements Codec, SelectionPage {
     }
   }
   @computed get x() {
-    return this.marginLeft + this.xp * this.config.pageWidth;
+    return (
+      this.marginLeft + this.xp * (this.config.pageWidth + this.config.pageGap)
+    );
   }
   @computed get y() {
-    return this.marginTop + this.yp * this.config.pageHeight;
+    return (
+      this.marginTop + this.yp * (this.config.pageHeight + this.config.pageGap)
+    );
   }
   @computed get marginTop() {
     let mt = 0;
@@ -167,6 +171,13 @@ const MusePage: FC<{ page: Page }> = ({ page }) => {
       width={page.width + page.marginLeft + page.marginRight}
       height={page.height + page.marginTop + page.marginBottom}
     >
+      <rect
+        width={page.width + page.marginLeft + page.marginLeft}
+        height={page.height + page.marginTop + page.marginBottom}
+        strokeWidth={0.1}
+        stroke={"gray"}
+        fill={page.config.backgroundColor}
+      />
       <Border
         w={page.width}
         h={page.height}
@@ -179,7 +190,7 @@ const MusePage: FC<{ page: Page }> = ({ page }) => {
         w={page.width + page.marginLeft + page.marginLeft}
         h={page.height + page.marginTop + page.marginBottom}
         clazz={clazz}
-        show={true}
+        show={false}
       />
       <PageIndex
         index={page.index}

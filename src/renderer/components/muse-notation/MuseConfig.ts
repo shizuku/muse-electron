@@ -4,6 +4,8 @@ export default class MuseConfig {
   @observable x = 1.0;
   @observable noteFontFamily = "serif";
   @observable textFontFamily = "serif";
+  @observable backgroundColor = "white";
+  @observable textColor = "black";
   @observable showBorder = false;
   @observable pagePerLine = 1;
   @observable vertical = true;
@@ -45,7 +47,7 @@ export default class MuseConfig {
     return this.x * 110;
   }
   @computed get pageGap() {
-    return this.x * 10;
+    return this.x * 8;
   }
   @computed get infoTitleFontSize() {
     return this.x * 34;

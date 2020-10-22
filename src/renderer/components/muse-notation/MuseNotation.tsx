@@ -62,10 +62,14 @@ export class Notation implements Codec, SelectionNotation {
     }
   }
   @computed get height() {
-    return this.config.pageHeight * this.ny;
+    return (
+      this.config.pageHeight * this.ny + this.config.pageGap * (this.ny - 1)
+    );
   }
   @computed get width() {
-    return this.config.pageWidth * this.nx;
+    return (
+      this.config.pageWidth * this.nx + this.config.pageGap * (this.nx - 1)
+    );
   }
   constructor(o: INotation, config: MuseConfig) {
     this.config = config;
@@ -254,6 +258,9 @@ const MuseNotation: FC<MuseNotationProps> = ({ notation, rs }) => {
         width={notation.width}
         height={notation.height}
       >
+        {notation.pages.map((it, idx) => (
+          <MusePage key={idx} page={it} />
+        ))}
         <MuseNotationInfo
           info={notation.info}
           config={notation.config}
@@ -268,9 +275,6 @@ const MuseNotation: FC<MuseNotationProps> = ({ notation, rs }) => {
           show={notation.isSelect}
         />
         <OuterBorder w={notation.width} h={notation.height} clazz={clazz} />
-        {notation.pages.map((it, idx) => (
-          <MusePage key={idx} page={it} />
-        ))}
       </g>
     </svg>
   ));
