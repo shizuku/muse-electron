@@ -27,7 +27,7 @@ export const Tab: FC<{ label: string }> = ({ label, children }) => {
               ? a.active !== label
                 ? {
                     background: state.theme.colorPrimaryDark,
-                    color: state.theme.colorBackground,
+                    color: state.theme.colorTextLight,
                   }
                 : {
                     background: state.theme.colorBackground,
@@ -36,7 +36,7 @@ export const Tab: FC<{ label: string }> = ({ label, children }) => {
               : a.active !== label
               ? {
                   background: state.theme.colorPrimary,
-                  color: state.theme.colorBackground,
+                  color: state.theme.colorTextLight,
                 }
               : {
                   background: state.theme.colorBackground,
@@ -84,11 +84,13 @@ export const Toolbar: FC = () => {
       case "full":
         return {
           display: "block",
+          background: state.theme.colorBackground,
         } as CSSProperties;
       case "headfoot":
       case "content":
         return {
           display: "none",
+          background: state.theme.colorBackground,
         } as CSSProperties;
     }
   };

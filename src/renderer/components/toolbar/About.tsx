@@ -15,7 +15,7 @@ export const About: FC = () => {
   const { t } = useTranslation();
   return useObserver(() => (
     <div className="pane-container">
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" style={{ color: state.theme.colorText }}>
         <MenuItem
           icon={<SettingOutlined />}
           size="m"

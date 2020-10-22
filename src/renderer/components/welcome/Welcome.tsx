@@ -18,7 +18,10 @@ export const Welcome: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
   return useObserver(() => (
-    <div className="welcome">
+    <div
+      className="welcome"
+      style={{ background: state.theme.colorBackground }}
+    >
       <div
         className="welcome__sider"
         style={{ background: state.theme.colorPrimary }}
@@ -27,7 +30,7 @@ export const Welcome: FC = () => {
           style={{
             background: state.theme.colorPrimary,
             marginTop: "5rem",
-            color: state.theme.colorBackground,
+            color: state.theme.colorTextLight,
           }}
           mode="vertical"
         >
@@ -53,12 +56,16 @@ export const Welcome: FC = () => {
           </MenuItem>
         </Menu>
       </div>
-      <div className="welcome__content">
+      <div
+        className="welcome__content"
+        style={{ background: state.theme.colorBackground }}
+      >
         <h2>{t("welcome-recent")}</h2>
         <div className="welcome__recent-files">
           <List
             itemLayout="horizontal"
             dataSource={state.recents}
+            style={{ background: state.theme.colorBackground }}
             renderItem={(it) => (
               <List.Item>
                 <Meta
@@ -73,7 +80,7 @@ export const Welcome: FC = () => {
                     </a>
                   }
                   description={`${getFileFolder(it.path)}`}
-                  time={`${new Date(it.time).toLocaleString()}`}
+                  time={`${new Date(it.time).toLocaleString(state.langCode)}`}
                 />
               </List.Item>
             )}

@@ -235,7 +235,11 @@ const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
   ));
 };
 
-const MuseNotation: FC<{ notation: Notation }> = ({ notation }) => {
+export interface MuseNotationProps {
+  notation: Notation;
+  rs?: (rs: HTMLElement[]) => void;
+}
+const MuseNotation: FC<MuseNotationProps> = ({ notation, rs }) => {
   let margin = notation.config.notationMargin;
   let clazz = "muse-notation";
   return useObserver(() => (

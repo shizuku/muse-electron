@@ -68,7 +68,9 @@ export const Footer: FC = () => {
     >
       <div className="footer__group-left">
         <div className="time">
-          {new Date(state.currentFile?.time || 0).toLocaleString()}
+          {new Date(state.currentFile?.time || 0).toLocaleString(
+            state.langCode
+          )}
         </div>
       </div>
       <div className="footer__group-right">

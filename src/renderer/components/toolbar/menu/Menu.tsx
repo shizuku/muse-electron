@@ -36,6 +36,7 @@ export interface MenuItemProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   active?: boolean;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 }
 
 export const MenuItem: FC<MenuItemProps> = ({
@@ -44,6 +45,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   onClick,
   active,
   children,
+  style,
 }) => {
   const iconSize: Record<string, number> = {
     xl: 36,
@@ -67,10 +69,12 @@ export const MenuItem: FC<MenuItemProps> = ({
               background: "#00000055",
               width: iconSize[size || "m"] * 3.2,
               height: iconSize[size || "m"] * 3.2,
+              ...style,
             }
           : {
               width: iconSize[size || "m"] * 3.2,
               height: iconSize[size || "m"] * 3.2,
+              ...style,
             }
       }
     >
@@ -78,6 +82,7 @@ export const MenuItem: FC<MenuItemProps> = ({
         className="menu-item__container"
         style={{
           width: iconSize[size || "m"] * 4,
+          ...style,
         }}
       >
         {icon ? (
@@ -85,6 +90,7 @@ export const MenuItem: FC<MenuItemProps> = ({
             className="menu-item__icon"
             style={{
               fontSize: iconSize[size || "m"],
+              ...style,
             }}
           >
             {icon}
@@ -96,6 +102,7 @@ export const MenuItem: FC<MenuItemProps> = ({
           className="menu-item__content"
           style={{
             fontSize: contentSize[size || "m"],
+            ...style,
           }}
         >
           {children}

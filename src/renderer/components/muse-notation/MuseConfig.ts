@@ -44,6 +44,9 @@ export default class MuseConfig {
   @computed get pageMarginVertical() {
     return this.x * 110;
   }
+  @computed get pageGap() {
+    return this.x * 10;
+  }
   @computed get infoTitleFontSize() {
     return this.x * 34;
   }
@@ -60,6 +63,6 @@ export default class MuseConfig {
     return this.x * 20;
   }
   @computed get notationMargin() {
-    return this.x * 10;
+    return this.x * 1;
   }
 }

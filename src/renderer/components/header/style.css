@@ -5,7 +5,6 @@
   background: none;
   overflow: visible;
   -webkit-user-select: none;
-  box-shadow: 0px 6px 6px 0px rgba(29, 29, 29, 0.2);
 }
 
 .header__drag-region {

@@ -10,9 +10,8 @@
 
 .notaion-outer {
   display: flex;
-
 }
 .notation {
   display: inline-flex;
-  margin: 0 auto;
+  margin: 1rem auto;
 }

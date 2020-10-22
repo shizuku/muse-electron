@@ -13,7 +13,12 @@ export interface FileInfo {
 }
 
 export interface Theme {
+  colorText: string;
+  colorTextLight: string;
+  colorTextDark: string;
   colorBackground: string;
+  colorBackgroundDark: string;
+  colorBackgroundLight: string;
   colorPrimary: string;
   colorPrimaryLight: string;
   colorPrimaryDark: string;
@@ -23,7 +28,12 @@ export interface Theme {
 }
 
 export const lightTheme: Theme = {
-  colorBackground: "#FFFFFF",
+  colorText: "#111111",
+  colorTextLight: "#FFFFFF",
+  colorTextDark: "#000000",
+  colorBackground: "#F7F7F7",
+  colorBackgroundDark: "#F0F0F0",
+  colorBackgroundLight: "#FFFFFF",
   colorPrimary: "#20A0FF",
   colorPrimaryLight: "#58B7FF",
   colorPrimaryDark: "#1D8CE0",
@@ -33,9 +43,14 @@ export const lightTheme: Theme = {
 };
 
 export const darkTheme: Theme = {
-  colorBackground: "#555555",
-  colorPrimary: "#222222",
-  colorPrimaryLight: "#444444",
+  colorText: "#999999",
+  colorTextLight: "#666666",
+  colorTextDark: "#444444",
+  colorBackground: "#222222",
+  colorBackgroundDark: "#111111",
+  colorBackgroundLight: "#333333",
+  colorPrimary: "#111111",
+  colorPrimaryLight: "#222222",
   colorPrimaryDark: "#000000",
   colorSuccess: "#13CE66",
   colorWarning: "#F7BA2A",
@@ -146,6 +161,7 @@ export class AppState {
   }
   isNew: boolean;
   @observable r?: HTMLElement;
+  @observable rs: HTMLElement[] = [];
   @action open(path: string, data: string, isNew: boolean) {
     this.opened = true;
     this.notation = new Notation(JSON.parse(data), this.config);

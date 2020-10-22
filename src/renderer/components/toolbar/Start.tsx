@@ -22,7 +22,7 @@ export const Start: FC = () => {
   const { t } = useTranslation();
   return useObserver(() => (
     <div>
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" style={{ color: state.theme.colorText }}>
         <MenuItem
           icon={<UndoOutlined />}
           size="m"

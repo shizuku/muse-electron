@@ -78,13 +78,11 @@ export const SettingsModal: FC = () => {
   let state = useAppState();
   const { t, i18n } = useTranslation();
   let [lang, setLang] = useState("auto");
-  let [theme, setTheme] = useState("auto");
   const onCancel = () => {
     state.showSettings = false;
   };
   const onOk = () => {
     state.events?.onSetLanguage(lang);
-    state.events?.onSetTheme(theme);
     state.showSettings = false;
   };
   return useObserver(() => (
@@ -95,24 +93,6 @@ export const SettingsModal: FC = () => {
       onCancel={onCancel}
     >
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 0 }}>
-        <Form.Item label={t("modal-settings-theme")}>
-          <Select
-            onChange={(v: string) => {
-              setTheme(v);
-            }}
-            defaultValue={state.themeConf}
-          >
-            <Select.Option value={"auto"}>
-              {t("modal-settings-theme-auto")}
-            </Select.Option>
-            <Select.Option value={"light"}>
-              {t("modal-settings-theme-light")}
-            </Select.Option>
-            <Select.Option value={"dark"}>
-              {t("modal-settings-theme-dark")}
-            </Select.Option>
-          </Select>
-        </Form.Item>
         <Form.Item label={t("modal-settings-language")}>
           <Select
             onChange={(v: string) => {

@@ -73,7 +73,7 @@ export const Header: FC = () => {
         return {
           display: "block",
           background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
+          color: state.theme.colorTextLight,
         } as CSSProperties;
       case "content":
         return {
@@ -83,7 +83,7 @@ export const Header: FC = () => {
           left: 0,
           width: "100vw",
           background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
+          color: state.theme.colorTextLight,
         } as CSSProperties;
     }
   };
@@ -94,7 +94,7 @@ export const Header: FC = () => {
         return {
           display: "block",
           background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
+          color: state.theme.colorTextLight,
         } as CSSProperties;
       case "content":
         return (state.opened
@@ -105,12 +105,12 @@ export const Header: FC = () => {
               left: 0,
               width: "100vw",
               background: state.theme.colorPrimary,
-              color: state.theme.colorBackground,
+              color: state.theme.colorTextLight,
             }
           : {
               display: "block",
               background: state.theme.colorPrimary,
-              color: state.theme.colorBackground,
+              color: state.theme.colorTextLight,
             }) as CSSProperties;
     }
   };

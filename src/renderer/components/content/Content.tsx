@@ -12,13 +12,16 @@ export const Content: FC = () => {
       case "headfoot":
         return {
           height: state.windowDim.contentH,
+          background: state.theme.colorBackgroundDark,
         } as CSSProperties;
       case "content":
         return {
           height: state.windowDim.wh,
+          background: state.theme.colorBackgroundDark,
         } as CSSProperties;
     }
   };
+  const rs = (rss: HTMLElement[]) => {};
   return useObserver(() => (
     <div className="content" style={style()}>
       <div
@@ -35,9 +38,13 @@ export const Content: FC = () => {
               state.windowDim.notationW = e?.scrollWidth || 0;
               state.r = e as HTMLElement;
             }}
+            style={{
+              background: state.theme.colorBackgroundLight,
+              color: state.theme.colorText,
+            }}
           >
             {state.notation ? (
-              <MuseNotation notation={state.notation} />
+              <MuseNotation notation={state.notation} rs={rs} />
             ) : (
               <></>
             )}
