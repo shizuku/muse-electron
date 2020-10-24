@@ -1,5 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 import { readFile, writeFile } from "fs";
+import { generateScreenshot, getImageArrayBuffer } from "../shared/utils";
 
 const noTitle = "No title";
 const newFileContent = `{"title":"${noTitle}","subtitle":"","author":"","rhythmic":"","speed":"","C":"C","pages":[{"lines":[{"tracks":[{"bars":[{"notes":[{"n":"0@0|0"}]}]}]}]}]}`;
@@ -83,19 +84,10 @@ export function createActions(mw: BrowserWindow) {
   ipcMain.on("app-close-modified", (event, title, message) => {
     dialog.showMessageBox(mw, { type: "question", message, title });
   });
-  ipcMain.on("export", (e) => {
-    dialog.showSaveDialog({}).then((v) => {
-      if (v.filePath) {
-        e.reply("export-reply", v.filePath);
-      }
-    });
-  });
-  ipcMain.on("export-data", (e, path, data) => {
-    // writeFile(path, data, "base64", () => {
-    //   e.reply("export-data-reply", "success");
-    // });
-    writeFile(path, Buffer.from(data), "binary", () => {
-      e.reply("export-data-reply", "success");
+  ipcMain.on("export-data", (e, path, s, idx) => {
+    console.log("export-data", path);
+    writeFile(path, Buffer.from(s), "binary", () => {
+      e.reply("export-data-reply", "success", idx);
     });
   });
 }

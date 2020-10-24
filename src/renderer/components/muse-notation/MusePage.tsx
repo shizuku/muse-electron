@@ -4,9 +4,10 @@ import MuseLine, { ILine, Line } from "./MuseLine";
 import { Border, OuterBorder } from "./Border";
 import Codec from "./Codec";
 import { computed, observable } from "mobx";
-import { Notation } from "./MuseNotation";
+import { Notation, NotationInfo } from "./MuseNotation";
 import { useObserver } from "mobx-react";
 import { SelectionPage } from "./Selector";
+import { useAppState } from "../app";
 
 export interface IPage {
   lines: ILine[];
@@ -156,53 +157,163 @@ const PageIndex: FC<PageIndexProps> = ({ index, x, y, clazz, config }) => {
   );
 };
 
+interface MuseNotationInfoProps {
+  info: NotationInfo;
+  config: MuseConfig;
+  clazz: string;
+}
+
+const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
+  info,
+  config,
+  clazz,
+}) => {
+  let y = 0;
+  y += config.pageMarginVertical;
+  let titleY = y;
+  y += config.infoTitleFontSize + config.infoGap;
+  let y1 = y;
+  let x = info.author.length;
+  let y2 = y + (config.infoGap + config.infoSubtitleFontSize);
+  let y3 = y2 + (config.infoGap + config.infoFontSize);
+  return useObserver(() => (
+    <g className={clazz + "__info"} width={config.pageWidth}>
+      <text
+        className={clazz + "__info-title"}
+        fontFamily={config.textFontFamily}
+        width={config.pageWidth}
+        textAnchor={"middle"}
+        fontSize={config.infoTitleFontSize}
+        transform={"translate(" + config.pageWidth / 2 + "," + titleY + ")"}
+      >
+        {info.title}
+      </text>
+      <text
+        className={clazz + "__info-subtitle"}
+        fontFamily={config.textFontFamily}
+        width={config.pageWidth}
+        textAnchor={"middle"}
+        fontSize={config.infoSubtitleFontSize}
+        transform={"translate(" + config.pageWidth / 2 + "," + y + ")"}
+      >
+        {info.subtitle}
+      </text>
+      <g className={clazz + "__info-author"}>
+        {info.author.map((it, idx) => {
+          y1 += config.infoFontSize + config.infoGap;
+          if (idx < x - 2) {
+            y += config.infoFontSize + config.infoGap;
+          }
+          return (
+            <text
+              key={idx}
+              fontFamily={config.textFontFamily}
+              width={config.pageWidth}
+              fontSize={config.infoFontSize}
+              textAnchor={"end"}
+              x={0}
+              transform={
+                "translate(" +
+                (config.pageWidth - config.pageMarginHorizontal) +
+                "," +
+                y1 +
+                ")"
+              }
+            >
+              {it}
+            </text>
+          );
+        })}
+      </g>
+      <g className={clazz + "__info-rythmic"} width={config.pageWidth}>
+        <text
+          fontFamily={config.textFontFamily}
+          width={config.pageWidth}
+          fontSize={config.infoFontSize}
+          transform={
+            "translate(" + config.pageMarginHorizontal + "," + y2 + ")"
+          }
+        >
+          {info.speed}
+        </text>
+        <text
+          fontFamily={config.textFontFamily}
+          width={config.pageWidth}
+          fontSize={config.infoFontSize}
+          transform={
+            "translate(" + config.pageMarginHorizontal + "," + y3 + ")"
+          }
+        >
+          {`1=${info.C} ${info.rhythmic}`}
+        </text>
+      </g>
+    </g>
+  ));
+};
+
 const MusePage: FC<{ page: Page }> = ({ page }) => {
   let clazz = "muse-page";
+  let state = useAppState();
   return useObserver(() => (
-    <g
-      className={clazz}
-      transform={
-        "translate(" +
-        (page.x - page.marginLeft) +
-        "," +
-        (page.y - page.marginTop) +
-        ")"
-      }
-      width={page.width + page.marginLeft + page.marginRight}
-      height={page.height + page.marginTop + page.marginBottom}
+    <div
+      ref={(e) => {
+        state.rs[page.index] = e as HTMLElement;
+      }}
     >
-      <rect
-        width={page.width + page.marginLeft + page.marginLeft}
+      <svg
+        className={clazz}
+        //  transform={
+        //   "translate(" +
+        //   (page.x - page.marginLeft) +
+        //   "," +
+        //   (page.y - page.marginTop) +
+        //   ")"
+        // }
+        width={page.width + page.marginLeft + page.marginRight}
         height={page.height + page.marginTop + page.marginBottom}
-        strokeWidth={0.1}
-        stroke={"gray"}
-        fill={page.config.backgroundColor}
-      />
-      <Border
-        w={page.width}
-        h={page.height}
-        x={page.x}
-        y={page.marginTop}
-        clazz={clazz}
-        show={page.isSelect || page.config.showBorder}
-      />
-      <OuterBorder
-        w={page.width + page.marginLeft + page.marginLeft}
-        h={page.height + page.marginTop + page.marginBottom}
-        clazz={clazz}
-        show={false}
-      />
-      <PageIndex
-        index={page.index}
-        x={page.marginLeft + page.width / 2}
-        y={page.marginTop + page.height + page.marginBottom / 2}
-        clazz={clazz}
-        config={page.config}
-      />
-      {page.lines.map((it, idx) => (
-        <MuseLine key={idx} line={it} />
-      ))}
-    </g>
+      >
+        <rect
+          width={page.width + page.marginLeft + page.marginLeft}
+          height={page.height + page.marginTop + page.marginBottom}
+          strokeWidth={0.1}
+          stroke={"gray"}
+          fill={page.config.backgroundColor}
+        />
+        <Border
+          w={page.width}
+          h={page.height}
+          x={page.x}
+          y={page.marginTop}
+          clazz={clazz}
+          show={page.isSelect || page.config.showBorder}
+        />
+        <OuterBorder
+          w={page.width + page.marginLeft + page.marginLeft}
+          h={page.height + page.marginTop + page.marginBottom}
+          clazz={clazz}
+          show={false}
+        />
+        <PageIndex
+          index={page.index}
+          x={page.marginLeft + page.width / 2}
+          y={page.marginTop + page.height + page.marginBottom / 2}
+          clazz={clazz}
+          config={page.config}
+        />
+        {page.lines.map((it, idx) => (
+          <MuseLine key={idx} line={it} />
+        ))}
+        {page.index === 0 ? (
+          <MuseNotationInfo
+            info={page.notation.info}
+            config={page.notation.config}
+            clazz={clazz}
+          />
+        ) : (
+          <></>
+        )}
+      </svg>
+    </div>
   ));
 };
 

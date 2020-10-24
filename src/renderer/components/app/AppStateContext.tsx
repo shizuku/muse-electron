@@ -110,6 +110,9 @@ export class AppState {
     this.showEditMetaModel = false;
     this.showAboutModel = false;
     this.showSettings = false;
+    this.showExport = false;
+    this.exportConfirm = false;
+    this.exportNum = 0;
     this.config = new MuseConfig();
     this.theme = lightTheme;
     this.themeConf = "auto";
@@ -134,6 +137,9 @@ export class AppState {
   @observable showEditMetaModel: boolean;
   @observable showAboutModel: boolean;
   @observable showSettings: boolean;
+  @observable showExport: boolean;
+  @observable exportConfirm: boolean;
+  @observable exportNum: number;
   @observable config: MuseConfig;
   @observable theme: Theme;
   @observable themeConf: string; //auto|light|dark
@@ -176,6 +182,7 @@ export class AppState {
     this.config.vertical = this.currentFile?.vertical || true;
     this.config.pagePerLine = this.currentFile?.line || 1;
     this.config.x = this.currentFile?.size || 1;
+    this.rs = [];
   }
   @action close() {
     this.notation = undefined;

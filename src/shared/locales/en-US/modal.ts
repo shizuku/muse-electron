@@ -11,4 +11,8 @@ export const modal: Record<string, string> = {
   "modal-settings-theme-dark": "Dark",
   "modal-settings-language": "Language",
   "modal-settings-language-auto": "Auto",
+  "modal-export": "Export",
+  "modal-export-path": "Path",
+  "modal-export-name": "Name",
+  "modal-export-extension": "Extension",
 };

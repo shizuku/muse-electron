@@ -243,9 +243,17 @@ export interface MuseNotationProps {
   notation: Notation;
   rs?: (rs: HTMLElement[]) => void;
 }
+
 const MuseNotation: FC<MuseNotationProps> = ({ notation, rs }) => {
   let margin = notation.config.notationMargin;
   let clazz = "muse-notation";
+  return useObserver(() => (
+    <div>
+      {notation.pages.map((it, idx) => (
+        <MusePage key={idx} page={it} />
+      ))}
+    </div>
+  ));
   return useObserver(() => (
     <svg
       className="muse"

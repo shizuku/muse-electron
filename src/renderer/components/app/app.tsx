@@ -17,10 +17,14 @@ import {
   generateScreenshot,
   getImageData,
   getImageArrayBuffer,
+  getFileName,
+  getFileFolder,
+  getExtension,
+  getFileNameWithoutExtension,
 } from "../../../shared/utils";
 import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
-import { AboutModal, EditMetaModal, SettingsModal } from "./modal";
+import { AboutModal, EditMetaModal, ExportModal, SettingsModal } from "./modal";
 import "./app.css";
 
 const openNotificationWithIcon = (
@@ -74,7 +78,8 @@ const App: FC = () => {
         saveFileConfig();
       },
       onExport: () => {
-        ipcRenderer.send("export");
+        state.showExport = true;
+        //ipcRenderer.send("export");
       },
       onClose: () => state.close(),
       onUndo: () => {},
@@ -164,30 +169,6 @@ const App: FC = () => {
     ipcRenderer.on("max-status", (e, status: boolean) => {
       state.maxStatus = status;
     });
-    ipcRenderer.on("export-reply", (e, path) => {
-      if (state.r) {
-        generateScreenshot(state.r).then((c) => {
-          // getImageData(c).then((s) => {
-          //   ipcRenderer.send("export-data", path, s);
-          // });
-          getImageArrayBuffer(c).then((s) => {
-            ipcRenderer.send("export-data", path, s);
-            state.appLoading = true;
-          });
-        });
-      }
-    });
-    ipcRenderer.on("export-data-reply", (e, code) => {
-      if (code === "success") {
-        state.appLoading = false;
-        openNotificationWithIcon(
-          "success",
-          t("notifiction-export-success"),
-          "",
-          "bottomRight"
-        );
-      }
-    });
     ipcRenderer.on("get-locale-reply", (e, code: string) => {
       if (state.langConf === "auto") {
         console.log(code);
@@ -202,6 +183,15 @@ const App: FC = () => {
         state.changeTheme(t);
       }
     });
+    return function () {
+      ipcRenderer.removeAllListeners("open-file-reply");
+      ipcRenderer.removeAllListeners("new-file-reply");
+      ipcRenderer.removeAllListeners("save-reply");
+      ipcRenderer.removeAllListeners("full-screen-status");
+      ipcRenderer.removeAllListeners("max-status");
+      ipcRenderer.removeAllListeners("get-locale-reply");
+      ipcRenderer.removeAllListeners("get-dark-light-reply");
+    };
   });
   useEffect(() => {
     hotkeys("ctrl+shift+i,cmd+alt+i", { keyup: true, keydown: false }, () => {
@@ -273,6 +263,7 @@ const AppHolder: React.FC = () => {
               <EditMetaModal />
               <AboutModal />
               <SettingsModal />
+              <ExportModal />
             </Spin>
           </>
         ) : (

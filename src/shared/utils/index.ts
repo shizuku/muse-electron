@@ -1,4 +1,9 @@
-export { getFileFolder, getFileName } from "./file-name";
+export {
+  getFileFolder,
+  getFileName,
+  getExtension,
+  getFileNameWithoutExtension,
+} from "./file-name";
 export {
   generateScreenshot,
   getImageData,

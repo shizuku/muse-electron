@@ -1,9 +1,18 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
+import { ipcRenderer } from "electron";
 import { Form, Input, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "./AppStateContext";
 import { getAvaliableLangauge } from "../../../shared/locales";
+import {
+  generateScreenshot,
+  getExtension,
+  getFileFolder,
+  getFileName,
+  getFileNameWithoutExtension,
+  getImageArrayBuffer,
+} from "../../../shared/utils";
 
 export const EditMetaModal: FC = () => {
   let state = useAppState();
@@ -110,6 +119,74 @@ export const SettingsModal: FC = () => {
             ))}
           </Select>
         </Form.Item>
+      </Form>
+    </Modal>
+  ));
+};
+
+export const ExportModal: FC = () => {
+  let state = useAppState();
+  const { t } = useTranslation();
+  const [path, setPath] = useState(
+    getFileFolder(state.currentFile?.path || "")
+  );
+  const [name, setName] = useState(
+    getFileNameWithoutExtension(getFileName(state.currentFile?.path || ""))
+  );
+  const [ext, setExt] = useState("png");
+  useEffect(() => {
+    ipcRenderer.on("export-data-reply", (e, code) => {
+      if (code === "success") {
+        console.log("success", state.exportNum);
+        if (state.exportNum <= 1) {
+          state.exportConfirm = false;
+          state.showExport = false;
+        } else {
+          state.exportNum = state.exportNum - 1;
+        }
+      }
+    });
+    return function () {
+      ipcRenderer.removeAllListeners("export-data-reply");
+    };
+  });
+  const cancel = () => {
+    state.showAboutModel = false;
+  };
+  const ok = () => {
+    state.exportConfirm = true;
+    state.exportNum = state.rs.length;
+    state.rs.forEach((el, idx) => {
+      let n = `${path}${name}-${idx + 1}.${ext}`;
+      console.log("export:", n);
+      setTimeout(() => {
+        generateScreenshot(el).then((c) => {
+          getImageArrayBuffer(c).then((s) => {
+            ipcRenderer.send("export-data", n, s, idx);
+          });
+        });
+      }, 500);
+    });
+  };
+  return useObserver(() => (
+    <Modal
+      title={t("modal-export")}
+      visible={state.showExport}
+      onCancel={cancel}
+      onOk={ok}
+      confirmLoading={state.exportConfirm}
+    >
+      <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
+        <Form.Item label={t("modal-export-path")}>
+          <Input onChange={(v) => setPath(v.target.value)} value={path} />
+        </Form.Item>
+        <Form.Item label={t("modal-export-name")}>
+          <Input onChange={(v) => setName(v.target.value)} value={name} />
+        </Form.Item>
+        <Form.Item label={t("modal-export-extension")}>
+          <Input onChange={(v) => setExt(v.target.value)} value={ext} />
+        </Form.Item>
+        {`${path}${name}-${1}.${ext}`}
       </Form>
     </Modal>
   ));
