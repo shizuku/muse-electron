@@ -27,6 +27,7 @@ export const Start: FC = () => {
           icon={<UndoOutlined />}
           size="m"
           onClick={state.events?.onUndo}
+          disable={state.undoDisable}
         >
           {t("toolbar-start-undo")}
         </MenuItem>
@@ -34,6 +35,7 @@ export const Start: FC = () => {
           icon={<RedoOutlined />}
           size="m"
           onClick={state.events?.onRedo}
+          disable={state.redoDisable}
         >
           {t("toolbar-start-redo")}
         </MenuItem>

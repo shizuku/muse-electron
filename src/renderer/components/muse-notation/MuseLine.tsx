@@ -6,7 +6,7 @@ import Codec from "./Codec";
 import { computed, observable } from "mobx";
 import { useObserver } from "mobx-react";
 import { Page } from "./MusePage";
-import { SelectionLine } from "./Selector";
+import Selector, { SelectionLine } from "./Selector";
 
 export interface ILine {
   tracks: ITrack[];
@@ -75,7 +75,11 @@ export class Line implements Codec, SelectionLine {
   decode(o: ILine): void {
     if (o.tracks !== undefined) {
       o.tracks.forEach((it: ITrack, idx) => {
-        this.tracks.push(new Track(it, idx, this, this.config));
+        if (this.tracks.length <= idx) {
+          this.tracks.push(new Track(it, idx, this, this.config));
+        } else {
+          this.tracks[idx].decode(it);
+        }
       });
     }
   }
@@ -93,7 +97,7 @@ const LineHead: FC<{ height: number; clazz: string }> = ({ height, clazz }) => {
   ));
 };
 
-const MuseLine: FC<{ line: Line }> = ({ line }) => {
+const MuseLine: FC<{ line: Line; sl: Selector }> = ({ line, sl }) => {
   let clazz = "muse-line";
   return useObserver(() => (
     <g
@@ -112,7 +116,7 @@ const MuseLine: FC<{ line: Line }> = ({ line }) => {
       />
       <LineHead height={line.height} clazz={clazz} />
       {line.tracks.map((it, idx) => (
-        <MuseTrack key={idx} track={it} />
+        <MuseTrack key={idx} track={it} sl={sl} />
       ))}
     </g>
   ));

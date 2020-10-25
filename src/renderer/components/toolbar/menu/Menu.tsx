@@ -35,6 +35,7 @@ export interface MenuItemProps {
   size?: "xl" | "l" | "m" | "s";
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   active?: boolean;
+  disable?: boolean;
   children?: React.ReactNode;
   style?: React.CSSProperties;
 }
@@ -44,6 +45,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   size,
   onClick,
   active,
+  disable,
   children,
   style,
 }) => {
@@ -62,11 +64,20 @@ export const MenuItem: FC<MenuItemProps> = ({
   return (
     <div
       className="menu-item"
-      onClick={onClick}
+      onClick={(ev) => {
+        if (!disable && onClick) onClick(ev);
+      }}
       style={
         active === true
           ? {
               background: "#00000055",
+              width: iconSize[size || "m"] * 3.2,
+              height: iconSize[size || "m"] * 3.2,
+              ...style,
+            }
+          : disable === true
+          ? {
+              color: "#00000022",
               width: iconSize[size || "m"] * 3.2,
               height: iconSize[size || "m"] * 3.2,
               ...style,

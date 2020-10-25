@@ -17,3 +17,11 @@ export function mapToArray<T, E>(m: Map<T, E>): { k: T; v: E }[] {
   });
   return r;
 }
+
+export function range(end: number): number[] {
+  let r: number[] = [];
+  for (let i = 0; i < end; ++i) {
+    r.push(i);
+  }
+  return r;
+}

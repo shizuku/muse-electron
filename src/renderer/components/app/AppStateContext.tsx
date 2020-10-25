@@ -155,6 +155,14 @@ export class AppState {
   //unopened
   @observable recents: FileInfo[];
   //opened
+  @observable undoStack: string[] = [];
+  @observable redoStack: string[] = [];
+  @computed get undoDisable(): boolean {
+    return this.undoStack.length === 0;
+  }
+  @computed get redoDisable(): boolean {
+    return this.redoStack.length === 0;
+  }
   @observable modified: boolean;
   @computed get fileName() {
     return getFileName(this.currentFile?.path || "");
@@ -165,11 +173,16 @@ export class AppState {
   @computed get data(): string {
     return JSON.stringify(this.notation?.code());
   }
-  isNew: boolean;
+  set data(d: string) {
+    this.notation?.decode(JSON.parse(d));
+    //this.notation = new Notation(JSON.parse(d), this.config);
+  }
+  @observable isNew: boolean;
   @observable r?: HTMLElement;
   @observable rs: HTMLElement[] = [];
   @action open(path: string, data: string, isNew: boolean) {
     this.opened = true;
+    this.modified = false;
     this.notation = new Notation(JSON.parse(data), this.config);
     this.isNew = isNew;
     this.currentFile = this.addRecentFile({

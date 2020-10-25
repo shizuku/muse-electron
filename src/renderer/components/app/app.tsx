@@ -13,21 +13,13 @@ import { Content } from "../content";
 import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
-import {
-  generateScreenshot,
-  getImageData,
-  getImageArrayBuffer,
-  getFileName,
-  getFileFolder,
-  getExtension,
-  getFileNameWithoutExtension,
-} from "../../../shared/utils";
 import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
 import { AboutModal, EditMetaModal, ExportModal, SettingsModal } from "./modal";
 import "./app.css";
+import { Notation } from "../muse-notation";
 
-const openNotificationWithIcon = (
+export const openNotificationWithIcon = (
   type: IconType,
   message: string,
   description: string,
@@ -82,8 +74,25 @@ const App: FC = () => {
         //ipcRenderer.send("export");
       },
       onClose: () => state.close(),
-      onUndo: () => {},
-      onRedo: () => {},
+      onUndo: () => {
+        console.log("undo");
+        let x = state.data;
+        if (x) state.redoStack.push(JSON.stringify(state.notation?.code()));
+        let p = state.undoStack.pop();
+        if (p) {
+          //state.notation = new Notation(JSON.parse(p), state.config);
+          state.data = p;
+        }
+      },
+      onRedo: () => {
+        console.log("redo");
+        let p = state.redoStack.pop();
+        if (p) {
+          state.data = p;
+          //state.notation = new Notation(JSON.parse(p), state.config);
+          state.undoStack.push(p);
+        }
+      },
       onEditMetaData: () => {
         state.showEditMetaModel = true;
       },

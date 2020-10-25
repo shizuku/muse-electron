@@ -4,7 +4,7 @@ export function generateScreenshot(
   element: HTMLElement
 ): Promise<HTMLCanvasElement> {
   return new Promise<HTMLCanvasElement>((resolve) => {
-    resolve(html2canvas(element, { scale: 2 }));
+    resolve(html2canvas(element, { scale: 1 }));
   });
 }
 

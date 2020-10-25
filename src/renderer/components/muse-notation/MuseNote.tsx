@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { OuterBorder } from "./Border";
 import MuseConfig from "./MuseConfig";
 import Codec from "./Codec";
@@ -194,7 +194,11 @@ export class Note implements Codec, SelectionNote {
       }
       let ng = ns.split("|");
       ng.forEach((it, idx) => {
-        this.subNotes.push(new SubNote(it, this, idx, this.config));
+        if (this.subNotes.length <= idx) {
+          this.subNotes.push(new SubNote(it, this, idx, this.config));
+        } else {
+          this.subNotes[idx].decode(it);
+        }
       });
       let tg = ts.split("|");
       if (tg.length === 3) {
@@ -230,7 +234,7 @@ export class Note implements Codec, SelectionNote {
   }
 }
 
-const MuseNote: FC<{ note: Note }> = ({ note }) => {
+const MuseNote: FC<{ note: Note; sl: Selector }> = ({ note, sl }) => {
   let clazz = "muse-note";
   return useObserver(() => (
     <g
@@ -238,9 +242,6 @@ const MuseNote: FC<{ note: Note }> = ({ note }) => {
       transform={"translate(" + note.x + "," + 0 + ")"}
       width={note.width}
       height={note.height}
-      onClick={() => {
-        Selector.instance.selectNote(note);
-      }}
     >
       <OuterBorder
         w={note.width}
@@ -250,7 +251,7 @@ const MuseNote: FC<{ note: Note }> = ({ note }) => {
         color={"blue"}
       />
       {note.subNotes.map((it, idx) => (
-        <MuseSubNote key={idx} subNote={it} />
+        <MuseSubNote key={idx} subNote={it} sl={sl} />
       ))}
       <g className={clazz + "__tail-point"}>
         {note.tailPointsX.map((it, idx) => (

@@ -21,7 +21,6 @@ export const Content: FC = () => {
         } as CSSProperties;
     }
   };
-  const rs = (rss: HTMLElement[]) => {};
   return useObserver(() => (
     <div className="content" style={style()}>
       <div
@@ -43,7 +42,15 @@ export const Content: FC = () => {
             }}
           >
             {state.notation ? (
-              <MuseNotation notation={state.notation} rs={rs} />
+              <MuseNotation
+                notation={state.notation}
+                onModify={() => {
+                  console.log("modify");
+                  state.modified = true;
+                  state.undoStack.push(JSON.stringify(state.notation?.code()));
+                  state.redoStack.length = 0;
+                }}
+              />
             ) : (
               <></>
             )}

@@ -12,7 +12,9 @@ import {
   getFileName,
   getFileNameWithoutExtension,
   getImageArrayBuffer,
+  range,
 } from "../../../shared/utils";
+import { openNotificationWithIcon } from "./app";
 
 export const EditMetaModal: FC = () => {
   let state = useAppState();
@@ -141,6 +143,12 @@ export const ExportModal: FC = () => {
         if (state.exportNum <= 1) {
           state.exportConfirm = false;
           state.showExport = false;
+          openNotificationWithIcon(
+            "success",
+            t("notifiction-export-success"),
+            "",
+            "bottomRight"
+          );
         } else {
           state.exportNum = state.exportNum - 1;
         }
@@ -151,7 +159,7 @@ export const ExportModal: FC = () => {
     };
   });
   const cancel = () => {
-    state.showAboutModel = false;
+    state.showExport = false;
   };
   const ok = () => {
     state.exportConfirm = true;
@@ -184,9 +192,15 @@ export const ExportModal: FC = () => {
           <Input onChange={(v) => setName(v.target.value)} value={name} />
         </Form.Item>
         <Form.Item label={t("modal-export-extension")}>
-          <Input onChange={(v) => setExt(v.target.value)} value={ext} />
+          <Input
+            onChange={(v) => setExt(v.target.value)}
+            value={ext}
+            disabled
+          />
         </Form.Item>
-        {`${path}${name}-${1}.${ext}`}
+        {range(state.rs.length).map((i) => (
+          <div key={i}>{`${path}${name}-${i + 1}.${ext}`}</div>
+        ))}
       </Form>
     </Modal>
   ));

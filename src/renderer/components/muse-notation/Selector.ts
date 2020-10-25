@@ -60,6 +60,7 @@ export interface SelectionNotation {
 }
 
 class Selector {
+  modify: () => void;
   subnote: SelectionSubNote | null = null;
   note: SelectionNote | null = null;
   bar: SelectionBar | null = null;
@@ -67,8 +68,8 @@ class Selector {
   line: SelectionLine | null = null;
   page: SelectionPage | null = null;
   notation: SelectionNotation | null = null;
-  static instance = new Selector();
-  private constructor() {
+  constructor(md: () => void) {
+    this.modify = md;
     document.addEventListener("keydown", (ev) => {
       if (!this.keySubNote(ev)) {
         if (!this.keyNote(ev)) {
@@ -135,6 +136,7 @@ class Selector {
           this.note?.setSelect(true);
           return true;
         case "Backspace":
+          this.modify();
           if (this.note) {
             let idx = this.subnote.getThis().index;
             this.note.removeSubNote(this.subnote.getThis().index);
@@ -156,12 +158,14 @@ class Selector {
         case " ":
           return true;
         case "z":
+          this.modify();
           if (this.note) {
             this.note?.addSubNote(0);
             this.selectSubNote(this.note?.getThis().subNotes[0]);
           }
           return true;
         case "x":
+          this.modify();
           if (this.note) {
             let idx = this.subnote.getThis().index;
             this.note?.addSubNote(idx);
@@ -169,6 +173,7 @@ class Selector {
           }
           return true;
         case "c":
+          this.modify();
           if (this.note) {
             let idx = this.subnote.getThis().index;
             this.note?.addSubNote(idx + 1);
@@ -176,6 +181,7 @@ class Selector {
           }
           return true;
         case "v":
+          this.modify();
           if (this.note) {
             this.note?.addSubNote(this.note.getThis().subNotes.length);
             this.selectSubNote(
@@ -186,6 +192,7 @@ class Selector {
           }
           return true;
         case "ArrowUp":
+          this.modify();
           if (this.note) {
             let l = this.note.getThis().subNotes.length;
             if (l > this.subnote.getThis().index + 1) {
@@ -223,24 +230,31 @@ class Selector {
         case "8":
         case "9":
         case "-":
+          this.modify();
           this.subnote.setNum(ev.key);
           return true;
         case "r":
+          this.modify();
           this.subnote.reducePoint(1);
           return true;
         case "f":
+          this.modify();
           this.subnote.reducePoint(-1);
           return true;
         case "q":
+          this.modify();
           this.subnote.reduceLine(-1);
           return true;
         case "a":
+          this.modify();
           this.subnote.reduceLine(1);
           return true;
         case "s":
+          this.modify();
           this.subnote.reduceTailPoint(-1);
           return true;
         case "d":
+          this.modify();
           this.subnote.reduceTailPoint(1);
           return true;
         default:

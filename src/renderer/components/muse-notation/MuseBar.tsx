@@ -7,7 +7,7 @@ import { computed, observable } from "mobx";
 import { useObserver } from "mobx-react";
 import Fraction from "./Fraction";
 import { Track } from "./MuseTrack";
-import { SelectionBar } from "./Selector";
+import Selector, { SelectionBar } from "./Selector";
 
 interface Baseline {
   y: number;
@@ -130,7 +130,11 @@ export class Bar implements Codec, SelectionBar {
   decode(o: IBar): void {
     if (o.notes !== undefined) {
       o.notes.forEach((it: INote, idx) => {
-        this.notes.push(new Note(it, this, idx));
+        if (this.notes.length <= idx) {
+          this.notes.push(new Note(it, this, idx));
+        } else {
+          this.notes[idx].decode(it);
+        }
       });
     }
   }
@@ -176,7 +180,7 @@ const BaseLine: FC<{ bar: Bar; clazz: string }> = ({ bar, clazz }) => {
   ));
 };
 
-const MuseBar: FC<{ bar: Bar }> = ({ bar }) => {
+const MuseBar: FC<{ bar: Bar; sl: Selector }> = ({ bar, sl }) => {
   let clazz = "muse-bar";
   return useObserver(() => (
     <g
@@ -195,7 +199,7 @@ const MuseBar: FC<{ bar: Bar }> = ({ bar }) => {
       />
       <BarLine w={bar.width} h={bar.height} clazz={clazz} />
       {bar.notes.map((it, idx) => (
-        <MuseNote key={idx} note={it} />
+        <MuseNote key={idx} note={it} sl={sl} />
       ))}
       <BaseLine bar={bar} clazz={clazz} />
     </g>

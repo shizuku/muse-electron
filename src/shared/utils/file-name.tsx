@@ -26,3 +26,23 @@ export function getExtension(name: string): string {
   if (p === -1) return "";
   else return name.substring(p + 2);
 }
+
+export interface PathInfo {
+  absolutePath: string;
+  folder: string;
+  name: string;
+  nameWithoutExtension: string;
+  extension: string;
+}
+
+export function parseFilePath(absolutePath: string): PathInfo {
+  let d = is.windows() ? "\\" : "/";
+  let folder = "";
+  let name = "";
+  let nameWithoutExtension = "";
+  let extension = "";
+  let p = 0;
+  while (p != -1) {}
+
+  return { absolutePath, folder, name, nameWithoutExtension, extension };
+}

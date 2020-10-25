@@ -6,7 +6,7 @@ import Codec from "./Codec";
 import { computed, observable } from "mobx";
 import { Notation, NotationInfo } from "./MuseNotation";
 import { useObserver } from "mobx-react";
-import { SelectionPage } from "./Selector";
+import Selector, { SelectionPage } from "./Selector";
 import { useAppState } from "../app";
 
 export interface IPage {
@@ -42,14 +42,10 @@ export class Page implements Codec, SelectionPage {
     }
   }
   @computed get x() {
-    return (
-      this.marginLeft + this.xp * (this.config.pageWidth + this.config.pageGap)
-    );
+    return this.marginLeft + this.xp * this.config.pageWidth;
   }
   @computed get y() {
-    return (
-      this.marginTop + this.yp * (this.config.pageHeight + this.config.pageGap)
-    );
+    return this.marginTop + this.yp * this.config.pageHeight;
   }
   @computed get marginTop() {
     let mt = 0;
@@ -122,7 +118,11 @@ export class Page implements Codec, SelectionPage {
   decode(o: IPage): void {
     if (o.lines !== undefined) {
       o.lines.forEach((it: ILine, idx) => {
-        this.lines.push(new Line(it, idx, this, this.config));
+        if (this.lines.length <= idx) {
+          this.lines.push(new Line(it, idx, this, this.config));
+        } else {
+          this.lines[idx].decode(it);
+        }
       });
     }
   }
@@ -251,31 +251,30 @@ const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
   ));
 };
 
-const MusePage: FC<{ page: Page }> = ({ page }) => {
+const MusePage: FC<{ page: Page; sl: Selector }> = ({ page, sl }) => {
   let clazz = "muse-page";
   let state = useAppState();
   return useObserver(() => (
     <div
+      className={clazz}
       ref={(e) => {
         state.rs[page.index] = e as HTMLElement;
       }}
+      style={{
+        width: page.width + page.marginLeft + page.marginRight,
+        height: page.height + page.marginTop + page.marginBottom,
+        margin: page.config.pageGap,
+      }}
     >
       <svg
-        className={clazz}
-        //  transform={
-        //   "translate(" +
-        //   (page.x - page.marginLeft) +
-        //   "," +
-        //   (page.y - page.marginTop) +
-        //   ")"
-        // }
+        className={clazz + "__svg"}
         width={page.width + page.marginLeft + page.marginRight}
         height={page.height + page.marginTop + page.marginBottom}
       >
         <rect
-          width={page.width + page.marginLeft + page.marginLeft}
+          width={page.width + page.marginLeft + page.marginRight}
           height={page.height + page.marginTop + page.marginBottom}
-          strokeWidth={0.1}
+          strokeWidth={0}
           stroke={"gray"}
           fill={page.config.backgroundColor}
         />
@@ -287,12 +286,6 @@ const MusePage: FC<{ page: Page }> = ({ page }) => {
           clazz={clazz}
           show={page.isSelect || page.config.showBorder}
         />
-        <OuterBorder
-          w={page.width + page.marginLeft + page.marginLeft}
-          h={page.height + page.marginTop + page.marginBottom}
-          clazz={clazz}
-          show={false}
-        />
         <PageIndex
           index={page.index}
           x={page.marginLeft + page.width / 2}
@@ -301,7 +294,7 @@ const MusePage: FC<{ page: Page }> = ({ page }) => {
           config={page.config}
         />
         {page.lines.map((it, idx) => (
-          <MuseLine key={idx} line={it} />
+          <MuseLine key={idx} line={it} sl={sl} />
         ))}
         {page.index === 0 ? (
           <MuseNotationInfo
