@@ -43,7 +43,6 @@ export const Content: FC = () => {
             {state.notation ? (
               <MuseNotation
                 notation={state.notation}
-                onModify={state.events?.onModify}
               />
             ) : (
               <></>

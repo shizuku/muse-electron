@@ -97,7 +97,7 @@ const LineHead: FC<{ height: number; clazz: string }> = ({ height, clazz }) => {
   ));
 };
 
-const MuseLine: FC<{ line: Line; sl: Selector }> = ({ line, sl }) => {
+const MuseLine: FC<{ line: Line; sl?: Selector }> = ({ line, sl }) => {
   let clazz = "muse-line";
   return useObserver(() => (
     <g

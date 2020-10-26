@@ -50,30 +50,41 @@ const App: FC = () => {
         state.display = s;
         saveConfig("display", state.display);
       },
+      onNew: () => {
+        if (!state.opened) {
+          ipcRenderer.send("new-file");
+        }
+      },
+      onOpen: () => {
+        if (!state.opened) {
+          ipcRenderer.send("open-file");
+        }
+      },
       onSave: (cb?: (result: string) => void) => {
-        if (state.isNew) {
-          state.events?.onSaveAs();
-        } else {
-          ipcRenderer.send("save", state.currentFile?.path, state.data);
-          ipcRenderer.once("save-reply", (event, result) => {
-            if (result === "success") {
-              console.log("save success");
-              state.modified = false;
-              saveFileConfig();
-            } else {
-              openNotificationWithIcon(
-                "warning",
-                t("notifiction-save-fail"),
-                "",
-                "bottomRight"
-              );
-            }
-            if (cb) cb(result);
-          });
+        if (state.modified) {
+          if (state.isNew) {
+            state.events?.onSaveAs();
+          } else {
+            ipcRenderer.once("save-reply", (event, result) => {
+              if (result === "success") {
+                console.log("save success");
+                state.modified = false;
+                saveFileConfig();
+              } else {
+                openNotificationWithIcon(
+                  "warning",
+                  t("notifiction-save-fail"),
+                  "",
+                  "bottomRight"
+                );
+              }
+              if (cb) cb(result);
+            });
+            ipcRenderer.send("save", state.currentFile?.path, state.data);
+          }
         }
       },
       onSaveAs: (cb?: (result: string) => void) => {
-        ipcRenderer.send("save-as", state.currentFile?.path, state.data);
         ipcRenderer.once("save-as-reply", (ev, result) => {
           if (result === "success") {
             console.log("save as success");
@@ -81,6 +92,7 @@ const App: FC = () => {
           }
           if (cb) cb(result);
         });
+        ipcRenderer.send("save-as", state.currentFile?.path, state.data);
       },
       onAutoSave: () => {
         state.autoSave = !state.autoSave;
@@ -109,22 +121,26 @@ const App: FC = () => {
         }
       },
       onUndo: () => {
-        console.log("undo");
-        let x = state.data;
-        if (x) state.redoStack.push(JSON.stringify(state.notation?.code()));
-        let p = state.undoStack.pop();
-        if (p) {
-          //state.notation = new Notation(JSON.parse(p), state.config);
-          state.data = p;
+        if (!state.undoDisable) {
+          console.log("undo");
+          let x = state.data;
+          if (x) state.redoStack.push(JSON.stringify(state.notation?.code()));
+          let p = state.undoStack.pop();
+          if (p) {
+            //state.notation = new Notation(JSON.parse(p), state.config);
+            state.data = p;
+          }
         }
       },
       onRedo: () => {
-        console.log("redo");
-        let p = state.redoStack.pop();
-        if (p) {
-          state.data = p;
-          //state.notation = new Notation(JSON.parse(p), state.config);
-          state.undoStack.push(p);
+        if (!state.redoDisable) {
+          console.log("redo");
+          let p = state.redoStack.pop();
+          if (p) {
+            state.data = p;
+            //state.notation = new Notation(JSON.parse(p), state.config);
+            state.undoStack.push(p);
+          }
         }
       },
       onEditMetaData: () => {
@@ -249,9 +265,42 @@ const App: FC = () => {
     hotkeys("f11", { keyup: true, keydown: false }, () => {
       ipcRenderer.send("app-toggle-full-screen");
     });
-    hotkeys("ctrl+s", { keyup: true, keydown: false }, () => {
-      state.events?.onSave();
-    });
+    hotkeys("ctrl+o", { keyup: true, keydown: false }, () =>
+      state.events?.onOpen()
+    );
+    hotkeys("ctrl+n", { keyup: true, keydown: false }, () =>
+      state.events?.onNew()
+    );
+    hotkeys("ctrl+s", { keyup: true, keydown: false }, () =>
+      state.events?.onSave()
+    );
+    hotkeys("ctrl+shift+s", { keyup: true, keydown: false }, () =>
+      state.events?.onSaveAs()
+    );
+    hotkeys("ctrl+d", { keyup: true, keydown: false }, () =>
+      state.events?.onEditMetaData()
+    );
+    hotkeys("ctrl+e", { keyup: true, keydown: false }, () =>
+      state.events?.onExport()
+    );
+    hotkeys("ctrl+z", { keyup: true, keydown: false }, () =>
+      state.events?.onUndo()
+    );
+    hotkeys("ctrl+y", { keyup: true, keydown: false }, () =>
+      state.events?.onRedo()
+    );
+    hotkeys("ctrl+x", { keyup: true, keydown: false }, () =>
+      state.events?.onClose()
+    );
+    hotkeys("ctrl+q", { keyup: true, keydown: false }, () =>
+      state.events?.onExit()
+    );
+    hotkeys("ctrl+shift+h", { keyup: true, keydown: false }, () =>
+      state.events?.onSetHorizontal()
+    );
+    hotkeys("ctrl+shift+v", { keyup: true, keydown: false }, () =>
+      state.events?.onSetVertical()
+    );
   });
   useEffect(() => {
     state.windowDim.wh = document.body.clientHeight;

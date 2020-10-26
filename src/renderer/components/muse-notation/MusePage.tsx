@@ -251,7 +251,7 @@ const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
   ));
 };
 
-const MusePage: FC<{ page: Page; sl: Selector }> = ({ page, sl }) => {
+const MusePage: FC<{ page: Page; sl?: Selector }> = ({ page, sl }) => {
   let clazz = "muse-page";
   let state = useAppState();
   return useObserver(() => (

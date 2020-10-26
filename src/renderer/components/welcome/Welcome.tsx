@@ -38,9 +38,7 @@ export const Welcome: FC = () => {
             key="0"
             size="l"
             icon={<FileAddOutlined />}
-            onClick={() => {
-              ipcRenderer.send("new-file");
-            }}
+            onClick={() => state.events?.onNew()}
           >
             {t("welcome-new-file")}
           </MenuItem>
@@ -48,9 +46,7 @@ export const Welcome: FC = () => {
             key="1"
             size="l"
             icon={<FolderOpenOutlined />}
-            onClick={() => {
-              ipcRenderer.send("open-file");
-            }}
+            onClick={() => state.events?.onOpen()}
           >
             {t("welcome-open")}
           </MenuItem>

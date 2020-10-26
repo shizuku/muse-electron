@@ -234,7 +234,7 @@ export class Note implements Codec, SelectionNote {
   }
 }
 
-const MuseNote: FC<{ note: Note; sl: Selector }> = ({ note, sl }) => {
+const MuseNote: FC<{ note: Note; sl?: Selector }> = ({ note, sl }) => {
   let clazz = "muse-note";
   return useObserver(() => (
     <g

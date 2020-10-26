@@ -131,7 +131,7 @@ function castX(x: string) {
   return m[x] || "";
 }
 
-const MuseSubNote: FC<{ subNote: SubNote; sl: Selector }> = ({
+const MuseSubNote: FC<{ subNote: SubNote; sl?: Selector }> = ({
   subNote,
   sl,
 }) => {
@@ -142,7 +142,7 @@ const MuseSubNote: FC<{ subNote: SubNote; sl: Selector }> = ({
       width={subNote.width}
       height={subNote.height}
       onClick={() => {
-        sl.selectSubNote(subNote);
+        sl?.selectSubNote(subNote);
       }}
     >
       <text

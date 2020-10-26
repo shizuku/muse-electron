@@ -180,7 +180,7 @@ const BaseLine: FC<{ bar: Bar; clazz: string }> = ({ bar, clazz }) => {
   ));
 };
 
-const MuseBar: FC<{ bar: Bar; sl: Selector }> = ({ bar, sl }) => {
+const MuseBar: FC<{ bar: Bar; sl?: Selector }> = ({ bar, sl }) => {
   let clazz = "muse-bar";
   return useObserver(() => (
     <g

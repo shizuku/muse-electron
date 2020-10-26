@@ -52,7 +52,9 @@ export const FuncButtom: FC<FuncButtonProps> = ({
       onClick={onClick}
       style={
         disable === true
-          ? { color: "#00000022" }
+          ? hover
+            ? { color: "#FFFFFF44", background: "#00000022" }
+            : { color: "#FFFFFF44" }
           : active === true
           ? { background: "#00000055" }
           : hover

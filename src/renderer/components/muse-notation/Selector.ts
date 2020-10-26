@@ -71,19 +71,21 @@ class Selector {
   constructor(md: () => void) {
     this.modify = md;
     document.addEventListener("keydown", (ev) => {
-      if (!this.keySubNote(ev)) {
-        if (!this.keyNote(ev)) {
-          if (!this.keyBar(ev)) {
-            if (!this.keyTrack(ev)) {
-              if (!this.keyLine(ev)) {
-                if (!this.keyPage(ev)) {
-                  if (this.keyNotation(ev)) ev.returnValue = false;
+      if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
+        if (!this.keySubNote(ev)) {
+          if (!this.keyNote(ev)) {
+            if (!this.keyBar(ev)) {
+              if (!this.keyTrack(ev)) {
+                if (!this.keyLine(ev)) {
+                  if (!this.keyPage(ev)) {
+                    if (this.keyNotation(ev)) ev.returnValue = false;
+                  } else ev.returnValue = false;
                 } else ev.returnValue = false;
               } else ev.returnValue = false;
             } else ev.returnValue = false;
           } else ev.returnValue = false;
         } else ev.returnValue = false;
-      } else ev.returnValue = false;
+      }
     });
   }
   selectSubNote(s: SelectionSubNote) {

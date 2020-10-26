@@ -107,7 +107,7 @@ export class Track implements Codec, SelectionTrack {
   }
 }
 
-const MuseTrack: FC<{ track: Track; sl: Selector }> = ({ track, sl }) => {
+const MuseTrack: FC<{ track: Track; sl?: Selector }> = ({ track, sl }) => {
   let clazz = "muse-track";
   return useObserver(() => (
     <g

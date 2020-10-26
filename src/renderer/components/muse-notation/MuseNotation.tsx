@@ -6,6 +6,7 @@ import Codec from "./Codec";
 import { computed, observable } from "mobx";
 import { useObserver } from "mobx-react";
 import Selector, { SelectionNotation } from "./Selector";
+import { useAppState } from "../app";
 
 export class NotationInfo {
   @observable title: string = "";
@@ -241,18 +242,15 @@ const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
 
 export interface MuseNotationProps {
   notation: Notation;
-  onModify?: () => void;
 }
 
-const MuseNotation: FC<MuseNotationProps> = ({ notation, onModify }) => {
+const MuseNotation: FC<MuseNotationProps> = ({ notation }) => {
   let clazz = "muse-notation";
-  let sl = new Selector(() => {
-    if (onModify) onModify();
-  });
+  let state = useAppState();
   return useObserver(() => (
     <div className={clazz}>
       {notation.pages.map((it, idx) => (
-        <MusePage key={idx} page={it} sl={sl} />
+        <MusePage key={idx} page={it} sl={state.sl} />
       ))}
     </div>
   ));

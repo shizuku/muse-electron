@@ -169,7 +169,7 @@ export const Header: FC = () => {
         )}
       </div>
       <div className="header__window-title">
-        {state.fileName === ""
+        {!state.opened
           ? `Muse`
           : `${state.fileName}${state.modified ? "*" : ""} - Muse`}
       </div>

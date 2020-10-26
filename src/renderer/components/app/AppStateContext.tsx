@@ -3,6 +3,7 @@ import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
 import { getFileName } from "../../../shared/utils";
 import { MuseConfig, Notation } from "../muse-notation";
+import Selector from "../muse-notation/Selector";
 
 export interface FileInfo {
   path: string;
@@ -77,6 +78,8 @@ export class WindowDim {
 
 export interface Events {
   onSetDisplay: (s: DisplayStyle) => void;
+  onNew: () => void;
+  onOpen: () => void;
   onSave: (cb?: (result: string) => void) => void;
   onSaveAs: (cb?: (result: string) => void) => void;
   onAutoSave: () => void;
@@ -151,10 +154,12 @@ export class AppState {
     return this.redoStack.length === 0;
   }
   @computed get fileName() {
-    return getFileName(this.currentFile?.path || "");
+    if (this.isNew) return "No title";
+    else return getFileName(this.currentFile?.path || "");
   }
   @observable autoSave: boolean = false;
   @observable currentFile?: FileInfo;
+  @observable sl?: Selector = undefined;
   @observable notation?: Notation;
   @computed get data(): string {
     return JSON.stringify(this.notation?.code());
@@ -169,6 +174,7 @@ export class AppState {
     this.opened = true;
     this.modified = false;
     this.notation = new Notation(JSON.parse(data), this.config);
+    this.sl = new Selector(() => this.events?.onModify());
     this.isNew = isNew;
     this.currentFile = this.addRecentFile(
       {
@@ -191,6 +197,7 @@ export class AppState {
     this.opened = false;
     this.modified = false;
     this.notation = undefined;
+    this.sl = undefined;
     this.isNew = false;
     this.currentFile = undefined;
     this.rs = [];
@@ -204,6 +211,7 @@ export class AppState {
     f: FileInfo,
     updateTime: boolean
   ): FileInfo | undefined {
+    if (f.path === "") return f;
     for (let i = 0; i < this.recents.length; ++i) {
       if (this.recents[i].path === f.path) {
         if (updateTime) this.recents[i].time = f.time;
