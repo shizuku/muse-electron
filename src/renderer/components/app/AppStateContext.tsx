@@ -124,6 +124,7 @@ export class AppState {
   @observable windowDim: WindowDim = new WindowDim();
   //state
   @observable opened: boolean = false;
+  @observable modified: boolean = false;
   @observable events?: Events;
   @observable display: DisplayStyle = "full";
   @observable headerHover: boolean = false;
@@ -149,7 +150,6 @@ export class AppState {
   @computed get redoDisable(): boolean {
     return this.redoStack.length === 0;
   }
-  @observable modified: boolean = false;
   @computed get fileName() {
     return getFileName(this.currentFile?.path || "");
   }
@@ -180,19 +180,22 @@ export class AppState {
       },
       false
     );
+    this.rs = [];
+    this.undoStack = [];
+    this.redoStack = [];
     this.config.vertical = this.currentFile?.vertical || true;
     this.config.pagePerLine = this.currentFile?.line || 1;
     this.config.x = this.currentFile?.size || 1;
   }
   @action close() {
     this.opened = false;
+    this.modified = false;
     this.notation = undefined;
+    this.isNew = false;
     this.currentFile = undefined;
     this.rs = [];
     this.undoStack = [];
     this.redoStack = [];
-    this.modified = false;
-    
   }
   @action loadRecents(recents: FileInfo[]) {
     this.recents = recents;
