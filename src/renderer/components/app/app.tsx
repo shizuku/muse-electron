@@ -41,7 +41,7 @@ const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
   const { t, i18n } = useTranslation();
   const saveFileConfig = () => {
-    state.addRecentFile(state.currentFile);
+    if (state.currentFile) state.addRecentFile(state.currentFile, true);
     saveConfig("recent-files", state.recents);
   };
   useEffect(() => {
@@ -59,6 +59,7 @@ const App: FC = () => {
             if (result === "success") {
               console.log("save success");
               state.modified = false;
+              saveFileConfig();
             } else {
               openNotificationWithIcon(
                 "warning",
@@ -76,6 +77,7 @@ const App: FC = () => {
         ipcRenderer.once("save-as-reply", (ev, result) => {
           if (result === "success") {
             console.log("save as success");
+            saveFileConfig();
           }
           if (cb) cb(result);
         });
@@ -172,6 +174,17 @@ const App: FC = () => {
           ipcRenderer.send("get-dark-light");
         }
         saveConfig("theme", t);
+      },
+      onModify: () => {
+        console.log("modify");
+        state.modified = true;
+        if (state.currentFile) state.currentFile.time = Date.now();
+        state.undoStack.push(JSON.stringify(state.notation?.code()));
+        state.redoStack.length = 0;
+      },
+      onClearRecent: () => {
+        state.recents = [];
+        saveFileConfig();
       },
     };
     return function () {

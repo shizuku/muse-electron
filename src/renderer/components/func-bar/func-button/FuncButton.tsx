@@ -8,6 +8,7 @@ export interface FuncButtonProps {
   onMouseLeave?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
   active?: boolean;
+  disable?: boolean;
   children?: React.ReactNode;
 }
 
@@ -18,6 +19,7 @@ export const FuncButtom: FC<FuncButtonProps> = ({
   onMouseLeave,
   onFocus,
   active,
+  disable,
 }) => {
   let [hover, setHover] = useState(false);
   let [press, setPress] = useState(false);
@@ -49,7 +51,9 @@ export const FuncButtom: FC<FuncButtonProps> = ({
       onMouseUp={omu}
       onClick={onClick}
       style={
-        active || false
+        disable === true
+          ? { color: "#00000022" }
+          : active === true
           ? { background: "#00000055" }
           : hover
           ? press

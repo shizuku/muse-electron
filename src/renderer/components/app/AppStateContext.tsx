@@ -58,7 +58,6 @@ export const darkTheme: Theme = {
 };
 
 export class WindowDim {
-  constructor() {}
   @observable wh: number = 0;
   @observable ww: number = 0;
   @observable x: number = 0;
@@ -95,6 +94,8 @@ export interface Events {
   onSettings: () => void;
   onSetLanguage: (code: string) => void;
   onSetTheme: (t: string) => void;
+  onModify: () => void;
+  onClearRecent: () => void;
 }
 
 //full: show all element,
@@ -103,7 +104,6 @@ export interface Events {
 export type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
-  //all
   //modals
   @observable appLoading: boolean = false;
   @observable showEditMetaModel: boolean = false;
@@ -132,6 +132,14 @@ export class AppState {
   @observable maxStatus: boolean = false;
   //unopened
   @observable recents: FileInfo[] = [];
+  @observable sortRectentBy: "time-etl" | "time-lte" = "time-lte";
+  @computed get sortedRecents(): FileInfo[] {
+    const cbs = {
+      "time-etl": (a: FileInfo, b: FileInfo) => a.time - b.time,
+      "time-lte": (a: FileInfo, b: FileInfo) => b.time - a.time,
+    };
+    return this.recents.sort(cbs[this.sortRectentBy]);
+  }
   //opened
   @observable undoStack: string[] = [];
   @observable redoStack: string[] = [];
@@ -162,41 +170,45 @@ export class AppState {
     this.modified = false;
     this.notation = new Notation(JSON.parse(data), this.config);
     this.isNew = isNew;
-    this.currentFile = this.addRecentFile({
-      path,
-      time: Date.now(),
-      line: 1,
-      size: 1,
-      vertical: true,
-    });
+    this.currentFile = this.addRecentFile(
+      {
+        path,
+        time: Date.now(),
+        line: 1,
+        size: 1,
+        vertical: true,
+      },
+      false
+    );
     this.config.vertical = this.currentFile?.vertical || true;
     this.config.pagePerLine = this.currentFile?.line || 1;
     this.config.x = this.currentFile?.size || 1;
   }
   @action close() {
-    this.notation = undefined;
     this.opened = false;
+    this.notation = undefined;
     this.currentFile = undefined;
     this.rs = [];
     this.undoStack = [];
     this.redoStack = [];
+    this.modified = false;
+    
   }
   @action loadRecents(recents: FileInfo[]) {
     this.recents = recents;
   }
-  @action addRecentFile(f?: FileInfo): FileInfo | undefined {
-    if (f) {
-      for (let i = 0; i < this.recents.length; ++i) {
-        if (this.recents[i].path === f.path) {
-          this.recents[i].time = f.time;
-          this.recents.slice().sort((a, b) => b.time - a.time);
-          return this.recents[i];
-        }
+  @action addRecentFile(
+    f: FileInfo,
+    updateTime: boolean
+  ): FileInfo | undefined {
+    for (let i = 0; i < this.recents.length; ++i) {
+      if (this.recents[i].path === f.path) {
+        if (updateTime) this.recents[i].time = f.time;
+        return this.recents[i];
       }
-      this.recents.push(f);
-      this.recents.slice().sort((a, b) => b.time - a.time);
-      return f;
-    } else return undefined;
+    }
+    this.recents.push(f);
+    return f;
   }
   @action removeFile(path: string) {
     this.recents.filter((it) => it.path !== path);

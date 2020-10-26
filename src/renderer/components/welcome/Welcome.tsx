@@ -61,10 +61,15 @@ export const Welcome: FC = () => {
         style={{ background: state.theme.colorBackground }}
       >
         <h2>{t("welcome-recent")}</h2>
+        <div className="welcom__clear">
+          <a onClick={() => state.events?.onClearRecent()}>
+            {t("welcome-recent-clear")}
+          </a>
+        </div>
         <div className="welcome__recent-files">
           <List
             itemLayout="horizontal"
-            dataSource={state.recents}
+            dataSource={state.sortedRecents}
             style={{ background: state.theme.colorBackground }}
             renderItem={(it) => (
               <List.Item>

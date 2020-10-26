@@ -23,14 +23,15 @@ export const File: FC = () => {
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={()=>state.events?.onSave()}
+          onClick={() => state.events?.onSave()}
+          disable={!state.modified}
         >
           {t("toolbar-file-save")}
         </MenuItem>
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={()=>state.events?.onSaveAs()}
+          onClick={() => state.events?.onSaveAs()}
         >
           {t("toolbar-file-save-as")}
         </MenuItem>

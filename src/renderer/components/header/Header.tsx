@@ -132,7 +132,10 @@ export const Header: FC = () => {
               title={t("toolbar-file-save")}
               mouseEnterDelay={1}
             >
-              <FuncButtom onClick={() => state.events?.onSave()}>
+              <FuncButtom
+                onClick={() => state.events?.onSave()}
+                disable={!state.modified}
+              >
                 <SaveOutlined />
               </FuncButtom>
             </Tooltip>
@@ -141,7 +144,10 @@ export const Header: FC = () => {
               title={t("toolbar-start-undo")}
               mouseEnterDelay={1}
             >
-              <FuncButtom>
+              <FuncButtom
+                onClick={() => state.events?.onUndo()}
+                disable={state.undoDisable}
+              >
                 <UndoOutlined />
               </FuncButtom>
             </Tooltip>
@@ -150,7 +156,10 @@ export const Header: FC = () => {
               title={t("toolbar-start-redo")}
               mouseEnterDelay={1}
             >
-              <FuncButtom>
+              <FuncButtom
+                onClick={() => state.events?.onRedo()}
+                disable={state.redoDisable}
+              >
                 <RedoOutlined />
               </FuncButtom>
             </Tooltip>

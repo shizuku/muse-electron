@@ -24,3 +24,11 @@
 .welcome__recent-files {
   display: block;
 }
+
+.welcom__clear {
+  text-align: right;
+}
+
+.welcom__clear a {
+  display: inline;
+}
