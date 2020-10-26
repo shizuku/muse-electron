@@ -81,9 +81,6 @@ export function createActions(mw: BrowserWindow) {
     mw.setFullScreen(!mw.fullScreen);
     mw.webContents.send("full-screen-status", mw.fullScreen);
   });
-  ipcMain.on("app-close-modified", (event, title, message) => {
-    dialog.showMessageBox(mw, { type: "question", message, title });
-  });
   ipcMain.on("export-data", (e, path, s, idx) => {
     console.log("export-data", path);
     writeFile(path, Buffer.from(s), "binary", () => {

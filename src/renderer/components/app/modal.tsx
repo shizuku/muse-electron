@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
-import { Form, Input, Modal, Select } from "antd";
+import { Button, Form, Input, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "./AppStateContext";
@@ -15,6 +15,7 @@ import {
   range,
 } from "../../../shared/utils";
 import { openNotificationWithIcon } from "./app";
+import { modal } from "../../../shared/locales/zh-CN/modal";
 
 export const EditMetaModal: FC = () => {
   let state = useAppState();
@@ -202,6 +203,52 @@ export const ExportModal: FC = () => {
           <div key={i}>{`${path}${name}-${i + 1}.${ext}`}</div>
         ))}
       </Form>
+    </Modal>
+  ));
+};
+
+export const SureClose: FC = () => {
+  let state = useAppState();
+  const { t } = useTranslation();
+  const cancel = () => {
+    state.showSureClose = false;
+  };
+  const yes = () => {
+    console.log("modal sure close yes");
+    state.events?.onSave((r) => {
+      console.log("modal sure close cb", r);
+      if (r === "success") {
+        state.showSureClose = false;
+        if (state.toExit) {
+          ipcRenderer.send("app-close");
+        } else {
+          state.close();
+        }
+      }
+    });
+  };
+  const no = () => {
+    state.showSureClose = false;
+    state.close();
+  };
+  return useObserver(() => (
+    <Modal
+      title={t("modal-sure-close")}
+      visible={state.showSureClose}
+      onCancel={cancel}
+      footer={[
+        <Button type="primary" onClick={yes} key="yes">
+          {t("button-yes")}
+        </Button>,
+        <Button onClick={no} key="no">
+          {t("button-no")}
+        </Button>,
+        <Button onClick={cancel} key="cancel">
+          {t("button-cancel")}
+        </Button>,
+      ]}
+    >
+      <p>{t("modal-sure-close-message")}</p>
     </Modal>
   ));
 };

@@ -132,7 +132,7 @@ export const Header: FC = () => {
               title={t("toolbar-file-save")}
               mouseEnterDelay={1}
             >
-              <FuncButtom onClick={state.events?.onSave}>
+              <FuncButtom onClick={() => state.events?.onSave()}>
                 <SaveOutlined />
               </FuncButtom>
             </Tooltip>
@@ -159,7 +159,6 @@ export const Header: FC = () => {
           <></>
         )}
       </div>
-
       <div className="header__window-title">
         {state.fileName === ""
           ? `Muse`
@@ -206,9 +205,7 @@ export const Header: FC = () => {
         </div>
         <div
           className="window-icon hover-red"
-          onClick={() => {
-            ipcRenderer.send("app-close");
-          }}
+          onClick={() => state.events?.onExit()}
         >
           <CloseOutlined />
         </div>

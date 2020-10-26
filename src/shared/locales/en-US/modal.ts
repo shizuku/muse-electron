@@ -15,4 +15,6 @@ export const modal: Record<string, string> = {
   "modal-export-path": "Path",
   "modal-export-name": "Name",
   "modal-export-extension": "Extension",
+  "modal-sure-close": "If Save",
+  "modal-sure-close-message": "Do you want to save the modify?",
 };

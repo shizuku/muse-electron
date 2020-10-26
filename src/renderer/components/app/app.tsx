@@ -15,9 +15,14 @@ import { Header } from "../header";
 import { Footer } from "../footer";
 import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
 import { loadConfigs, saveConfig } from "./store";
-import { AboutModal, EditMetaModal, ExportModal, SettingsModal } from "./modal";
+import {
+  AboutModal,
+  EditMetaModal,
+  ExportModal,
+  SettingsModal,
+  SureClose,
+} from "./modal";
 import "./app.css";
-import { Notation } from "../muse-notation";
 
 export const openNotificationWithIcon = (
   type: IconType,
@@ -45,15 +50,35 @@ const App: FC = () => {
         state.display = s;
         saveConfig("display", state.display);
       },
-      onSave: () => {
+      onSave: (cb?: (result: string) => void) => {
         if (state.isNew) {
-          ipcRenderer.send("save-as", state.currentFile?.path, state.data);
+          state.events?.onSaveAs();
         } else {
           ipcRenderer.send("save", state.currentFile?.path, state.data);
+          ipcRenderer.once("save-reply", (event, result) => {
+            if (result === "success") {
+              console.log("save success");
+              state.modified = false;
+            } else {
+              openNotificationWithIcon(
+                "warning",
+                t("notifiction-save-fail"),
+                "",
+                "bottomRight"
+              );
+            }
+            if (cb) cb(result);
+          });
         }
       },
-      onSaveAs: () => {
+      onSaveAs: (cb?: (result: string) => void) => {
         ipcRenderer.send("save-as", state.currentFile?.path, state.data);
+        ipcRenderer.once("save-as-reply", (ev, result) => {
+          if (result === "success") {
+            console.log("save as success");
+          }
+          if (cb) cb(result);
+        });
       },
       onAutoSave: () => {
         state.autoSave = !state.autoSave;
@@ -73,7 +98,14 @@ const App: FC = () => {
         state.showExport = true;
         //ipcRenderer.send("export");
       },
-      onClose: () => state.close(),
+      onClose: () => {
+        if (state.modified) {
+          state.toExit = false;
+          state.showSureClose = true;
+        } else {
+          state.close();
+        }
+      },
       onUndo: () => {
         console.log("undo");
         let x = state.data;
@@ -108,11 +140,8 @@ const App: FC = () => {
       },
       onExit: () => {
         if (state.modified) {
-          ipcRenderer.send(
-            "app-close-modified",
-            "Not Save",
-            "There are some modify not saved, do you want to save it before exit?"
-          );
+          state.toExit = true;
+          state.showSureClose = true;
         } else {
           ipcRenderer.send("app-close");
         }
@@ -145,6 +174,16 @@ const App: FC = () => {
         saveConfig("theme", t);
       },
     };
+    return function () {
+      ipcRenderer.removeAllListeners("open-file-reply");
+      ipcRenderer.removeAllListeners("new-file-reply");
+      ipcRenderer.removeAllListeners("save-reply");
+      ipcRenderer.removeAllListeners("save-as-reply");
+      ipcRenderer.removeAllListeners("full-screen-status");
+      ipcRenderer.removeAllListeners("max-status");
+      ipcRenderer.removeAllListeners("get-locale-reply");
+      ipcRenderer.removeAllListeners("get-dark-light-reply");
+    };
   });
   useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
@@ -159,19 +198,6 @@ const App: FC = () => {
         state.open(filePath, data, true);
       }
     );
-    ipcRenderer.on("save-reply", (event, result) => {
-      if (result === "success") {
-        console.log("save success");
-        state.modified = false;
-      } else {
-        openNotificationWithIcon(
-          "warning",
-          t("notifiction-save-fail"),
-          "",
-          "bottomRight"
-        );
-      }
-    });
     ipcRenderer.on("full-screen-status", (e, status: boolean) => {
       state.fullScreenStatus = status;
     });
@@ -196,6 +222,7 @@ const App: FC = () => {
       ipcRenderer.removeAllListeners("open-file-reply");
       ipcRenderer.removeAllListeners("new-file-reply");
       ipcRenderer.removeAllListeners("save-reply");
+      ipcRenderer.removeAllListeners("save-as-reply");
       ipcRenderer.removeAllListeners("full-screen-status");
       ipcRenderer.removeAllListeners("max-status");
       ipcRenderer.removeAllListeners("get-locale-reply");
@@ -273,6 +300,7 @@ const AppHolder: React.FC = () => {
               <AboutModal />
               <SettingsModal />
               <ExportModal />
+              <SureClose />
             </Spin>
           </>
         ) : (

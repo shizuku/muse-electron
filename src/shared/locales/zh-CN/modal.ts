@@ -15,4 +15,6 @@ export const modal: Record<string, string> = {
   "modal-export-path": "路径",
   "modal-export-name": "文件名",
   "modal-export-extension": "格式",
+  "modal-sure-close": "是否保存",
+  "modal-sure-close-message": "是否保存对文件的更改？",
 };

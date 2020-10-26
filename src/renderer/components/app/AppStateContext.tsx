@@ -78,8 +78,8 @@ export class WindowDim {
 
 export interface Events {
   onSetDisplay: (s: DisplayStyle) => void;
-  onSave: () => void;
-  onSaveAs: () => void;
+  onSave: (cb?: (result: string) => void) => void;
+  onSaveAs: (cb?: (result: string) => void) => void;
   onAutoSave: () => void;
   onSetSizer: (x: number) => void;
   onSetLiner: (l: number) => void;
@@ -103,57 +103,35 @@ export interface Events {
 export type DisplayStyle = "full" | "headfoot" | "content";
 
 export class AppState {
-  constructor() {
-    this.langCode = "en-US";
-    this.langConf = "auto";
-    this.appLoading = false;
-    this.showEditMetaModel = false;
-    this.showAboutModel = false;
-    this.showSettings = false;
-    this.showExport = false;
-    this.exportConfirm = false;
-    this.exportNum = 0;
-    this.config = new MuseConfig();
-    this.theme = lightTheme;
-    this.themeConf = "auto";
-    this.themeCode = "light";
-    this.opened = false;
-    this.display = "full";
-    this.headerHover = false;
-    this.footerHover = false;
-    this.fullScreenStatus = false;
-    this.maxStatus = false;
-    this.windowDim = new WindowDim();
-    this.recents = [];
-    this.isNew = false;
-    this.modified = false;
-    this.autoSave = false;
-    this.notation = undefined;
-  }
   //all
-  @observable langCode: string; //en|zh
-  @observable langConf: string; //auto|zh|en
-  @observable appLoading: boolean;
-  @observable showEditMetaModel: boolean;
-  @observable showAboutModel: boolean;
-  @observable showSettings: boolean;
-  @observable showExport: boolean;
-  @observable exportConfirm: boolean;
-  @observable exportNum: number;
-  @observable config: MuseConfig;
-  @observable theme: Theme;
-  @observable themeConf: string; //auto|light|dark
-  @observable themeCode: string; //light|dark
-  @observable windowDim: WindowDim;
-  @observable opened: boolean;
+  //modals
+  @observable appLoading: boolean = false;
+  @observable showEditMetaModel: boolean = false;
+  @observable showAboutModel: boolean = false;
+  @observable showSettings: boolean = false;
+  @observable showExport: boolean = false;
+  @observable exportConfirm: boolean = false;
+  @observable exportNum: number = 0;
+  @observable showSureClose: boolean = false;
+  @observable toExit: boolean = false;
+  //config
+  @observable config: MuseConfig = new MuseConfig();
+  @observable langCode: string = "en-US"; //en|zh
+  @observable langConf: string = "auto"; //auto|zh|en
+  @observable theme: Theme = lightTheme;
+  @observable themeConf: string = "auto"; //auto|light|dark
+  @observable themeCode: string = "light"; //light|dark
+  @observable windowDim: WindowDim = new WindowDim();
+  //state
+  @observable opened: boolean = false;
   @observable events?: Events;
-  @observable display: DisplayStyle;
-  @observable headerHover: boolean;
-  @observable footerHover: boolean;
-  @observable fullScreenStatus: boolean;
-  @observable maxStatus: boolean;
+  @observable display: DisplayStyle = "full";
+  @observable headerHover: boolean = false;
+  @observable footerHover: boolean = false;
+  @observable fullScreenStatus: boolean = false;
+  @observable maxStatus: boolean = false;
   //unopened
-  @observable recents: FileInfo[];
+  @observable recents: FileInfo[] = [];
   //opened
   @observable undoStack: string[] = [];
   @observable redoStack: string[] = [];
@@ -163,11 +141,11 @@ export class AppState {
   @computed get redoDisable(): boolean {
     return this.redoStack.length === 0;
   }
-  @observable modified: boolean;
+  @observable modified: boolean = false;
   @computed get fileName() {
     return getFileName(this.currentFile?.path || "");
   }
-  @observable autoSave: boolean;
+  @observable autoSave: boolean = false;
   @observable currentFile?: FileInfo;
   @observable notation?: Notation;
   @computed get data(): string {
@@ -177,8 +155,7 @@ export class AppState {
     this.notation?.decode(JSON.parse(d));
     //this.notation = new Notation(JSON.parse(d), this.config);
   }
-  @observable isNew: boolean;
-  @observable r?: HTMLElement;
+  @observable isNew: boolean = false;
   @observable rs: HTMLElement[] = [];
   @action open(path: string, data: string, isNew: boolean) {
     this.opened = true;
@@ -195,12 +172,14 @@ export class AppState {
     this.config.vertical = this.currentFile?.vertical || true;
     this.config.pagePerLine = this.currentFile?.line || 1;
     this.config.x = this.currentFile?.size || 1;
-    this.rs = [];
   }
   @action close() {
     this.notation = undefined;
     this.opened = false;
     this.currentFile = undefined;
+    this.rs = [];
+    this.undoStack = [];
+    this.redoStack = [];
   }
   @action loadRecents(recents: FileInfo[]) {
     this.recents = recents;
@@ -229,12 +208,6 @@ export class AppState {
       this.theme = this.themeCode === "light" ? lightTheme : darkTheme;
     }
   }
-  // @action changeLang(l: string) {
-  //   if (l !== "auto") {
-  //     this.langConf = l;
-  //     this.langCode = l;
-  //   }
-  // }
 }
 
 export function useAppState(): AppState {

@@ -35,7 +35,6 @@ export const Content: FC = () => {
             ref={(e) => {
               state.windowDim.notationH = e?.scrollHeight || 0;
               state.windowDim.notationW = e?.scrollWidth || 0;
-              state.r = e as HTMLElement;
             }}
             style={{
               color: state.theme.colorText,
