@@ -193,12 +193,9 @@ export class Note implements Codec, SelectionNote {
         ts = n.substr(pos + 1);
       }
       let ng = ns.split("|");
+      this.subNotes.length = 0;
       ng.forEach((it, idx) => {
-        if (this.subNotes.length <= idx) {
-          this.subNotes.push(new SubNote(it, this, idx, this.config));
-        } else {
-          this.subNotes[idx].decode(it);
-        }
+        this.subNotes.push(new SubNote(it, this, idx, this.config));
       });
       let tg = ts.split("|");
       if (tg.length === 3) {
@@ -234,7 +231,11 @@ export class Note implements Codec, SelectionNote {
   }
 }
 
-const MuseNote: FC<{ note: Note; sl?: Selector }> = ({ note, sl }) => {
+const MuseNote: FC<{ note: Note; c: number[]; sl?: Selector }> = ({
+  note,
+  c,
+  sl,
+}) => {
   let clazz = "muse-note";
   return useObserver(() => (
     <g
@@ -251,7 +252,7 @@ const MuseNote: FC<{ note: Note; sl?: Selector }> = ({ note, sl }) => {
         color={"blue"}
       />
       {note.subNotes.map((it, idx) => (
-        <MuseSubNote key={idx} subNote={it} sl={sl} />
+        <MuseSubNote key={idx} subNote={it} c={[...c, idx]} sl={sl} />
       ))}
       <g className={clazz + "__tail-point"}>
         {note.tailPointsX.map((it, idx) => (

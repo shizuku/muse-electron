@@ -107,7 +107,11 @@ export class Track implements Codec, SelectionTrack {
   }
 }
 
-const MuseTrack: FC<{ track: Track; sl?: Selector }> = ({ track, sl }) => {
+const MuseTrack: FC<{ track: Track; c: number[]; sl?: Selector }> = ({
+  track,
+  c,
+  sl,
+}) => {
   let clazz = "muse-track";
   return useObserver(() => (
     <g
@@ -125,7 +129,7 @@ const MuseTrack: FC<{ track: Track; sl?: Selector }> = ({ track, sl }) => {
         show={track.isSelect || track.config.showBorder}
       />
       {track.bars.map((it, idx) => (
-        <MuseBar key={idx} bar={it} sl={sl} />
+        <MuseBar key={idx} bar={it} c={[...c, idx]} sl={sl} />
       ))}
     </g>
   ));

@@ -97,7 +97,11 @@ const LineHead: FC<{ height: number; clazz: string }> = ({ height, clazz }) => {
   ));
 };
 
-const MuseLine: FC<{ line: Line; sl?: Selector }> = ({ line, sl }) => {
+const MuseLine: FC<{ line: Line; c: number[]; sl?: Selector }> = ({
+  line,
+  c,
+  sl,
+}) => {
   let clazz = "muse-line";
   return useObserver(() => (
     <g
@@ -116,7 +120,7 @@ const MuseLine: FC<{ line: Line; sl?: Selector }> = ({ line, sl }) => {
       />
       <LineHead height={line.height} clazz={clazz} />
       {line.tracks.map((it, idx) => (
-        <MuseTrack key={idx} track={it} sl={sl} />
+        <MuseTrack key={idx} track={it} c={[...c, idx]} sl={sl} />
       ))}
     </g>
   ));

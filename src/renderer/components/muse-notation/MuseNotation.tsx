@@ -249,7 +249,7 @@ const MuseNotation: FC<MuseNotationProps> = ({ notation }) => {
   return useObserver(() => (
     <div className={clazz}>
       {notation.pages.map((it, idx) => (
-        <MusePage key={idx} page={it} sl={state.sl} />
+        <MusePage key={idx} page={it} c={[idx]} sl={state.sl} />
       ))}
     </div>
   ));

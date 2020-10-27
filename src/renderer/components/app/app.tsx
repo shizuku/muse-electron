@@ -124,11 +124,15 @@ const App: FC = () => {
         if (!state.undoDisable) {
           console.log("undo");
           let x = state.data;
-          if (x) state.redoStack.push(JSON.stringify(state.notation?.code()));
+          if (x && state.sl && state.sl.c)
+            state.redoStack.push({
+              s: JSON.stringify(state.notation?.code()),
+              c: state.sl.c,
+            });
           let p = state.undoStack.pop();
           if (p) {
-            //state.notation = new Notation(JSON.parse(p), state.config);
-            state.data = p;
+            state.data = p.s;
+            state.sl?.select(p.c);
           }
         }
       },
@@ -137,8 +141,8 @@ const App: FC = () => {
           console.log("redo");
           let p = state.redoStack.pop();
           if (p) {
-            state.data = p;
-            //state.notation = new Notation(JSON.parse(p), state.config);
+            state.data = p.s;
+            state.sl?.select(p.c);
             state.undoStack.push(p);
           }
         }
@@ -195,7 +199,11 @@ const App: FC = () => {
         console.log("modify");
         state.modified = true;
         if (state.currentFile) state.currentFile.time = Date.now();
-        state.undoStack.push(JSON.stringify(state.notation?.code()));
+        if (state.sl && state.sl.c)
+          state.undoStack.push({
+            s: JSON.stringify(state.notation?.code()),
+            c: state.sl.c,
+          });
         state.redoStack.length = 0;
       },
       onClearRecent: () => {

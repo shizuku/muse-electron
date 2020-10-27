@@ -251,7 +251,11 @@ const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
   ));
 };
 
-const MusePage: FC<{ page: Page; sl?: Selector }> = ({ page, sl }) => {
+const MusePage: FC<{ page: Page; c: number[]; sl?: Selector }> = ({
+  page,
+  c,
+  sl,
+}) => {
   let clazz = "muse-page";
   let state = useAppState();
   return useObserver(() => (
@@ -294,7 +298,7 @@ const MusePage: FC<{ page: Page; sl?: Selector }> = ({ page, sl }) => {
           config={page.config}
         />
         {page.lines.map((it, idx) => (
-          <MuseLine key={idx} line={it} sl={sl} />
+          <MuseLine key={idx} line={it} c={[...c, idx]} sl={sl} />
         ))}
         {page.index === 0 ? (
           <MuseNotationInfo

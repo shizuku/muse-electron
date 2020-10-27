@@ -180,7 +180,11 @@ const BaseLine: FC<{ bar: Bar; clazz: string }> = ({ bar, clazz }) => {
   ));
 };
 
-const MuseBar: FC<{ bar: Bar; sl?: Selector }> = ({ bar, sl }) => {
+const MuseBar: FC<{ bar: Bar; c: number[]; sl?: Selector }> = ({
+  bar,
+  c,
+  sl,
+}) => {
   let clazz = "muse-bar";
   return useObserver(() => (
     <g
@@ -199,7 +203,7 @@ const MuseBar: FC<{ bar: Bar; sl?: Selector }> = ({ bar, sl }) => {
       />
       <BarLine w={bar.width} h={bar.height} clazz={clazz} />
       {bar.notes.map((it, idx) => (
-        <MuseNote key={idx} note={it} sl={sl} />
+        <MuseNote key={idx} note={it} c={[...c, idx]} sl={sl} />
       ))}
       <BaseLine bar={bar} clazz={clazz} />
     </g>

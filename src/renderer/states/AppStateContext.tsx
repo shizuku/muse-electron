@@ -106,6 +106,11 @@ export interface Events {
 //content: only show content
 export type DisplayStyle = "full" | "headfoot" | "content";
 
+export interface Op {
+  s: string;
+  c: number[];
+}
+
 export class AppState {
   //modals
   @observable appLoading: boolean = false;
@@ -145,8 +150,8 @@ export class AppState {
     return this.recents.sort(cbs[this.sortRectentBy]);
   }
   //opened
-  @observable undoStack: string[] = [];
-  @observable redoStack: string[] = [];
+  @observable undoStack: Op[] = [];
+  @observable redoStack: Op[] = [];
   @computed get undoDisable(): boolean {
     return this.undoStack.length === 0;
   }
@@ -174,7 +179,7 @@ export class AppState {
     this.opened = true;
     this.modified = false;
     this.notation = new Notation(JSON.parse(data), this.config);
-    this.sl = new Selector(() => this.events?.onModify());
+    this.sl = new Selector(this.notation, () => this.events?.onModify());
     this.isNew = isNew;
     this.currentFile = this.addRecentFile(
       {

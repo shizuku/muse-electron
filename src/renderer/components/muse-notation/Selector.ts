@@ -68,7 +68,10 @@ class Selector {
   line: SelectionLine | null = null;
   page: SelectionPage | null = null;
   notation: SelectionNotation | null = null;
-  constructor(md: () => void) {
+  c: number[] = [];
+  base: Notation;
+  constructor(base: Notation, md: () => void) {
+    this.base = base;
     this.modify = md;
     document.addEventListener("keydown", (ev) => {
       if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
@@ -87,6 +90,38 @@ class Selector {
         } else ev.returnValue = false;
       }
     });
+  }
+  select(c: number[]) {
+    this.c = c;
+    if (c.length === 0) {
+      this.selectNotation(this.base);
+    } else if (c.length === 1) {
+      this.selectPage(this.base.pages[c[0]]);
+    } else if (c.length === 2) {
+      this.selectLine(this.base.pages[c[0]].lines[c[1]]);
+    } else if (c.length === 3) {
+      this.selectTrack(this.base.pages[c[0]].lines[c[1]].tracks[c[2]]);
+    } else if (c.length === 4) {
+      this.selectBar(this.base.pages[c[0]].lines[c[1]].tracks[c[2]].bars[c[3]]);
+    } else if (c.length === 5) {
+      this.selectNote(
+        this.base.pages[c[0]].lines[c[1]].tracks[c[2]].bars[c[3]].notes[c[4]]
+      );
+    } else if (c.length === 6) {
+      this.selectSubNote(
+        this.base.pages[c[0]].lines[c[1]].tracks[c[2]].bars[c[3]].notes[c[4]]
+          .subNotes[c[5]]
+      );
+    } else this.clearSelect();
+  }
+  clearSelect() {
+    this.subnote?.setSelect(false);
+    this.note?.setSelect(false);
+    this.bar?.setSelect(false);
+    this.track?.setSelect(false);
+    this.line?.setSelect(false);
+    this.page?.setSelect(false);
+    this.notation?.setSelect(false);
   }
   selectSubNote(s: SelectionSubNote) {
     this.subnote?.setSelect(false);
