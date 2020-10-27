@@ -1,12 +1,11 @@
 import React, { FC } from "react";
 import MuseConfig from "./MuseConfig";
 import MusePage, { IPage, Page } from "./MusePage";
-import { Border, OuterBorder } from "./Border";
 import Codec from "./Codec";
 import { computed, observable } from "mobx";
 import { useObserver } from "mobx-react";
 import Selector, { SelectionNotation } from "./Selector";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 
 export class NotationInfo {
   @observable title: string = "";

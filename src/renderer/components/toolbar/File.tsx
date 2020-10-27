@@ -7,7 +7,7 @@ import {
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 
 export const FileTab: FC = () => {
   const { t } = useTranslation();

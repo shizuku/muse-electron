@@ -13,7 +13,7 @@ import { Content } from "../content";
 import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
-import { AppState, DisplayStyle, useAppState } from "./AppStateContext";
+import { AppState, DisplayStyle, useAppState } from "../../states";
 import { loadConfigs, saveConfig } from "./store";
 import {
   AboutModal,

@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC } from "react";
 import { MuseNotation } from "../muse-notation";
 import { useObserver } from "mobx-react";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import "./style.css";
 
 export const Content: FC = () => {
@@ -41,9 +41,7 @@ export const Content: FC = () => {
             }}
           >
             {state.notation ? (
-              <MuseNotation
-                notation={state.notation}
-              />
+              <MuseNotation notation={state.notation} />
             ) : (
               <></>
             )}

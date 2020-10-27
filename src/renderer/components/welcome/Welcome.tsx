@@ -9,7 +9,7 @@ import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import { getFileFolder, getFileName } from "../../../shared/utils";
 import "./style.css";
 import { Meta } from "./meta";

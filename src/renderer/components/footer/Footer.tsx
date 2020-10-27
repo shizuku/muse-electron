@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import { Sizer } from "./sizer";
 import { Liner } from "./liner";
 import { FuncBar } from "../func-bar";

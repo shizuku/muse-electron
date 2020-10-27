@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { InputNumber, Popover } from "antd";
-import { useAppState } from "../../app";
+import { useAppState } from "../../../states";
 import "./style.css";
 
 const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {

@@ -1,9 +1,9 @@
 import { action, computed, observable } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
-import { getFileName } from "../../../shared/utils";
-import { MuseConfig, Notation } from "../muse-notation";
-import Selector from "../muse-notation/Selector";
+import { getFileName } from "../../shared/utils";
+import { MuseConfig, Notation } from "../components/muse-notation";
+import Selector from "../components/muse-notation/Selector";
 
 export interface FileInfo {
   path: string;

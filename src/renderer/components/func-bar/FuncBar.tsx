@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import "./style.css";
 
 export const FuncBar: FC = ({ children }) => {

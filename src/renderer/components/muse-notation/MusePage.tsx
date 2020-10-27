@@ -7,7 +7,7 @@ import { computed, observable } from "mobx";
 import { Notation, NotationInfo } from "./MuseNotation";
 import { useObserver } from "mobx-react";
 import Selector, { SelectionPage } from "./Selector";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 
 export interface IPage {
   lines: ILine[];

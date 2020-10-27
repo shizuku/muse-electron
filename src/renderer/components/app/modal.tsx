@@ -3,7 +3,7 @@ import { ipcRenderer } from "electron";
 import { Button, Form, Input, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useAppState } from "./AppStateContext";
+import { useAppState } from "../../states/AppStateContext";
 import { getAvaliableLangauge } from "../../../shared/locales";
 import {
   generateScreenshot,

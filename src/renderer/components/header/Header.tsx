@@ -16,7 +16,7 @@ import { ipcRenderer } from "electron";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { FuncBar } from "../func-bar";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
 import { FuncButtom } from "../func-bar/func-button";
 import "./style.css";

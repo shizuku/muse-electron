@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import { Menu, MenuItem } from "./menu";
 
 export const EditTab: FC = () => {

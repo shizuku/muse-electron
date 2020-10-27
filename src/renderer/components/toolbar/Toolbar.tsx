@@ -5,7 +5,7 @@ import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
 import { About, AboutTab } from "./About";
-import { useAppState } from "../app";
+import { useAppState } from "../../states";
 import { useObserver } from "mobx-react";
 import "./style.css";
 
