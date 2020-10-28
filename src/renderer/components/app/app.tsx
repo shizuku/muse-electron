@@ -19,8 +19,8 @@ import {
   AboutModal,
   EditMetaModal,
   ExportModal,
-  SettingsModal,
-  SureClose,
+  PreferenceModal,
+  SureCloseModal,
 } from "../modal";
 import "./app.css";
 
@@ -363,9 +363,9 @@ const AppHolder: React.FC = () => {
               <Footer />
               <EditMetaModal />
               <AboutModal />
-              <SettingsModal />
+              <PreferenceModal />
               <ExportModal />
-              <SureClose />
+              <SureCloseModal />
             </Spin>
           </>
         ) : (
