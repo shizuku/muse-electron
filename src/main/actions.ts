@@ -51,12 +51,12 @@ export function createActions(mw: BrowserWindow) {
   ipcMain.on("save-as", (event, path, data) => {
     dialog.showSaveDialog({}).then((v) => {
       if (v.canceled) {
-        event.reply("save-as-reply", "canceled");
+        event.reply("save-as-reply", "canceled", path);
         return;
       }
       if (v.filePath) {
         writeFile(v.filePath, data, () => {
-          event.reply("save-as-reply", "success");
+          event.reply("save-as-reply", "success", v.filePath);
           return;
         });
       }

@@ -129,12 +129,9 @@ export class Bar implements Codec, SelectionBar {
   }
   decode(o: IBar): void {
     if (o.notes !== undefined) {
+      this.notes.length = 0;
       o.notes.forEach((it: INote, idx) => {
-        if (this.notes.length <= idx) {
-          this.notes.push(new Note(it, this, idx));
-        } else {
-          this.notes[idx].decode(it);
-        }
+        this.notes.push(new Note(it, this, idx));
       });
     }
   }

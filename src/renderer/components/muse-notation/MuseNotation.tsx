@@ -96,12 +96,9 @@ export class Notation implements Codec, SelectionNotation {
   }
   decode(o: INotation): void {
     if (o.pages !== undefined) {
+      this.pages.length = 0;
       o.pages.forEach((it: IPage, idx) => {
-        if (this.pages.length <= idx) {
-          this.pages.push(new Page(it, idx, this, this.config));
-        } else {
-          this.pages[idx].decode(it);
-        }
+        this.pages.push(new Page(it, idx, this, this.config));
       });
     }
     if (o.title !== undefined) {

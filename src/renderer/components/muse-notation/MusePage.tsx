@@ -117,12 +117,9 @@ export class Page implements Codec, SelectionPage {
   }
   decode(o: IPage): void {
     if (o.lines !== undefined) {
+      this.lines.length = 0;
       o.lines.forEach((it: ILine, idx) => {
-        if (this.lines.length <= idx) {
-          this.lines.push(new Line(it, idx, this, this.config));
-        } else {
-          this.lines[idx].decode(it);
-        }
+        this.lines.push(new Line(it, idx, this, this.config));
       });
     }
   }

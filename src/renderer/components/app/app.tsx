@@ -63,7 +63,7 @@ const App: FC = () => {
       onSave: (cb?: (result: string) => void) => {
         if (state.modified) {
           if (state.isNew) {
-            state.events?.onSaveAs();
+            state.events?.onSaveAs(cb);
           } else {
             ipcRenderer.once("save-reply", (event, result) => {
               if (result === "success") {
@@ -85,9 +85,14 @@ const App: FC = () => {
         }
       },
       onSaveAs: (cb?: (result: string) => void) => {
-        ipcRenderer.once("save-as-reply", (ev, result) => {
+        ipcRenderer.once("save-as-reply", (ev, result, newPath: string) => {
           if (result === "success") {
             console.log("save as success");
+            state.modified = false;
+            if (state.isNew) {
+              if (state.currentFile) state.currentFile.path = newPath;
+              state.isNew = false;
+            }
             saveFileConfig();
           }
           if (cb) cb(result);
@@ -205,6 +210,9 @@ const App: FC = () => {
             c: state.sl.c,
           });
         state.redoStack.length = 0;
+        if (state.autoSave && !state.isNew) {
+          state.events?.onSave();
+        }
       },
       onClearRecent: () => {
         state.recents = [];

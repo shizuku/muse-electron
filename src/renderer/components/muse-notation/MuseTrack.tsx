@@ -92,12 +92,9 @@ export class Track implements Codec, SelectionTrack {
   }
   decode(o: ITrack): void {
     if (o.bars !== undefined) {
+      this.bars.length = 0;
       o.bars.forEach((it: any, idx) => {
-        if (this.bars.length <= idx) {
-          this.bars.push(new Bar(it, idx, this, this.config));
-        } else {
-          this.bars[idx].decode(it);
-        }
+        this.bars.push(new Bar(it, idx, this, this.config));
       });
     }
   }

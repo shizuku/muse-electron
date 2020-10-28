@@ -316,15 +316,18 @@ class Selector {
           this.bar?.setSelect(true);
           return true;
         case " ":
+          this.modify();
           this.note.addSubNote(this.note.getThis().subNotes.length);
           return true;
         case "z":
+          this.modify();
           if (this.bar) {
             this.bar?.addNote(0);
             this.selectNote(this.bar?.getThis().notes[0]);
           }
           return true;
         case "x":
+          this.modify();
           if (this.bar) {
             let idx = this.note.getThis().index;
             this.bar?.addNote(idx);
@@ -332,6 +335,7 @@ class Selector {
           }
           return true;
         case "c":
+          this.modify();
           if (this.bar) {
             let idx = this.note.getThis().index;
             this.bar?.addNote(idx + 1);
@@ -339,6 +343,7 @@ class Selector {
           }
           return true;
         case "v":
+          this.modify();
           if (this.bar) {
             this.bar?.addNote(this.bar.getThis().notes.length);
             this.selectNote(
@@ -347,6 +352,7 @@ class Selector {
           }
           return true;
         case "Backspace":
+          this.modify();
           if (this.bar) {
             let idx = this.note.getThis().index;
             this.bar.removeNote(idx);
@@ -420,15 +426,19 @@ class Selector {
         case "ArrowDown":
           return true;
         case "q":
+          this.modify();
           this.note.reduceLine(-1);
           return true;
         case "a":
+          this.modify();
           this.note.reduceLine(1);
           return true;
         case "s":
+          this.modify();
           this.note.reduceTailPoint(-1);
           return true;
         case "d":
+          this.modify();
           this.note.reduceTailPoint(1);
           return true;
         default:
@@ -453,15 +463,18 @@ class Selector {
           this.track?.setSelect(true);
           return true;
         case " ":
+          this.modify();
           this.bar.addNote(this.bar.getThis().notes.length);
           return true;
         case "z":
+          this.modify();
           if (this.track) {
             this.track.addBar(0);
             this.selectBar(this.track.getThis().bars[0]);
           }
           return true;
         case "x":
+          this.modify();
           if (this.track) {
             let idx = this.bar.getThis().index;
             this.track.addBar(idx);
@@ -469,6 +482,7 @@ class Selector {
           }
           return true;
         case "c":
+          this.modify();
           if (this.track) {
             let idx = this.bar.getThis().index;
             this.track.addBar(idx + 1);
@@ -476,6 +490,7 @@ class Selector {
           }
           return true;
         case "v":
+          this.modify();
           if (this.track) {
             this.track.addBar(this.track.getThis().bars.length);
             this.selectBar(
@@ -484,6 +499,7 @@ class Selector {
           }
           return true;
         case "Backspace":
+          this.modify();
           if (this.track) {
             let idx = this.bar.getThis().index;
             this.track.removeBar(idx);
@@ -670,16 +686,19 @@ class Selector {
           this.line?.setSelect(true);
           return true;
         case " ":
+          this.modify();
           this.track.addBar(this.track.getThis().bars.length);
           ev.returnValue = false;
           return true;
         case "z":
+          this.modify();
           if (this.line) {
             this.line.addTrack(0);
             this.selectTrack(this.line.getThis().tracks[0]);
           }
           return true;
         case "x":
+          this.modify();
           if (this.line) {
             let idx = this.track.getThis().index;
             this.line.addTrack(idx);
@@ -687,6 +706,7 @@ class Selector {
           }
           return true;
         case "c":
+          this.modify();
           if (this.line) {
             let idx = this.track.getThis().index;
             this.line.addTrack(idx + 1);
@@ -694,6 +714,7 @@ class Selector {
           }
           return true;
         case "v":
+          this.modify();
           if (this.line) {
             this.line.addTrack(this.line.getThis().tracks.length);
             this.selectTrack(
@@ -702,6 +723,7 @@ class Selector {
           }
           return true;
         case "Backspace":
+          this.modify();
           if (this.line) {
             let idx = this.track.getThis().index;
             this.line.removeTrack(this.track.getThis().index);
@@ -821,15 +843,18 @@ class Selector {
           this.page?.setSelect(true);
           return true;
         case " ":
+          this.modify();
           this.line.addTrack(this.line.getThis().tracks.length);
           return true;
         case "z":
+          this.modify();
           if (this.page) {
             this.page.addLine(0);
             this.selectLine(this.page.getThis().lines[0]);
           }
           return true;
         case "x":
+          this.modify();
           if (this.page) {
             let idx = this.line.getThis().index;
             this.page.addLine(idx);
@@ -837,6 +862,7 @@ class Selector {
           }
           return true;
         case "c":
+          this.modify();
           if (this.page) {
             let idx = this.line.getThis().index;
             this.page.addLine(idx + 1);
@@ -844,6 +870,7 @@ class Selector {
           }
           return true;
         case "v":
+          this.modify();
           if (this.page) {
             this.page.addLine(this.page.getThis().lines.length);
             this.selectLine(
@@ -852,6 +879,7 @@ class Selector {
           }
           return true;
         case "Backspace":
+          this.modify();
           if (this.page) {
             let idx = this.line.getThis().index;
             this.page.removeLine(this.line.getThis().index);
@@ -940,15 +968,18 @@ class Selector {
           this.notation?.setSelect(true);
           return true;
         case " ":
+          this.modify();
           this.page.addLine(this.page.getThis().lines.length);
           return true;
         case "z":
+          this.modify();
           if (this.notation) {
             this.notation.addPage(0);
             this.selectPage(this.notation.getThis().pages[0]);
           }
           return true;
         case "x":
+          this.modify();
           if (this.notation) {
             let idx = this.page.getThis().index;
             this.notation.addPage(idx);
@@ -956,6 +987,7 @@ class Selector {
           }
           return true;
         case "c":
+          this.modify();
           if (this.notation) {
             let idx = this.page.getThis().index;
             this.notation.addPage(idx + 1);
@@ -963,6 +995,7 @@ class Selector {
           }
           return true;
         case "v":
+          this.modify();
           if (this.notation) {
             this.notation.addPage(this.notation.getThis().pages.length);
             this.selectPage(
@@ -973,6 +1006,7 @@ class Selector {
           }
           return true;
         case "Backspace":
+          this.modify();
           if (this.notation) {
             let idx = this.page.getThis().index;
             this.notation?.reomvePage(this.page.getThis().index);
@@ -1033,6 +1067,7 @@ class Selector {
           this.notation.setSelect(false);
           return true;
         case " ":
+          this.modify();
           this.notation.addPage(this.notation.getThis().pages.length);
           ev.returnValue = false;
           return true;

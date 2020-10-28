@@ -74,12 +74,9 @@ export class Line implements Codec, SelectionLine {
   }
   decode(o: ILine): void {
     if (o.tracks !== undefined) {
+      this.tracks.length = 0;
       o.tracks.forEach((it: ITrack, idx) => {
-        if (this.tracks.length <= idx) {
-          this.tracks.push(new Track(it, idx, this, this.config));
-        } else {
-          this.tracks[idx].decode(it);
-        }
+        this.tracks.push(new Track(it, idx, this, this.config));
       });
     }
   }
