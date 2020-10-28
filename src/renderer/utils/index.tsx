@@ -1,5 +1,8 @@
+import React, { FC } from "react";
 import { notification } from "antd";
 import { IconType, NotificationPlacement } from "antd/lib/notification";
+import { ipcRenderer } from "electron";
+import "./style.css";
 
 export const openNotificationWithIcon = (
   type: IconType,
@@ -12,4 +15,17 @@ export const openNotificationWithIcon = (
     description,
     placement,
   });
+};
+
+export const ExternalLink: FC<{
+  url: string;
+}> = ({ url, children }) => {
+  return (
+    <span
+      className="external-link"
+      onClick={() => ipcRenderer.send("open-external", url)}
+    >
+      {children}
+    </span>
+  );
 };

@@ -8,6 +8,10 @@ export default {
   },
   about: {
     about: "About",
+    license: "License",
+    issues: "Issues",
+    releases: "Releases",
+    content: "ABOUTABOUTABOUTABOUTABOUTABOUT",
   },
   preference: {
     preference: "Preference",

@@ -1,4 +1,11 @@
-import { app, BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  nativeTheme,
+  shell,
+} from "electron";
 import { readFile, writeFile } from "fs";
 
 const noTitle = "No title";
@@ -85,5 +92,8 @@ export function createActions(mw: BrowserWindow) {
     writeFile(path, Buffer.from(s), "binary", () => {
       e.reply("export-data-reply", "success", idx);
     });
+  });
+  ipcMain.on("open-external", (ev, url) => {
+    shell.openExternal(url);
   });
 }

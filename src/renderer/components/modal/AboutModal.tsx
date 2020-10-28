@@ -3,6 +3,11 @@ import { Modal } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
+import { ExternalLink } from "../../utils";
+import { version } from "../../../shared/const";
+import "./about.css";
+
+//TODO: finish about
 
 export const AboutModal: FC = () => {
   let state = useAppState();
@@ -17,7 +22,32 @@ export const AboutModal: FC = () => {
       onCancel={cancel}
       footer={[]}
     >
-      ABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUT
+      <div className="about">
+        <ExternalLink url="https://github.com/shizuku/muse-electron">
+          <div className="about__title">{t("app-name") + " v" + version}</div>
+        </ExternalLink>
+        <div className="about__content">
+          <p>{t("modal.about.content")}</p>
+        </div>
+        <div className="about__bottom">
+          <div className="about__bottom__left">
+            <ExternalLink url="https://github.com/shizuku/muse-electron">
+              <div className="about__item">{"©2020 " + t("app-name")}</div>
+            </ExternalLink>
+          </div>
+          <div className="about__bottom__right">
+            <ExternalLink url="https://github.com/shizuku/muse-electron/blob/master/LICENSE">
+              <div className="about__item">{t("modal.about.license")}</div>
+            </ExternalLink>
+            <ExternalLink url="https://github.com/shizuku/muse-electron/issues">
+              <div className="about__item">{t("modal.about.issues")}</div>
+            </ExternalLink>
+            <ExternalLink url="https://github.com/shizuku/muse-electron/releases">
+              <div className="about__item">{t("modal.about.releases")}</div>
+            </ExternalLink>
+          </div>
+        </div>
+      </div>
     </Modal>
   ));
 };

@@ -6,8 +6,12 @@ export default {
     author: "作者",
     mark: "调号",
   },
-  about: { 
-    about: "关于" 
+  about: {
+    about: "关于",
+    license: "开源许可",
+    issues: "错误报告",
+    releases: "更新日志",
+    content: "ABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUTABOUT",
   },
   preference: {
     preference: "设置",

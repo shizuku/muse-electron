@@ -1,0 +1,34 @@
+.about__title {
+  font-size: 1.2rem;
+  margin: 0.5rem;
+}
+
+.about__content {
+  margin: 0.5rem;
+}
+
+.about__bottom {
+  display: block;
+  height: 1rem;
+  color: gray;
+}
+
+.about__bottom__left {
+  display: inline-flex;
+  position: relative;
+  float: left;
+  left: 0;
+  height: 100%;
+}
+
+.about__bottom__right {
+  display: inline-flex;
+  position: relative;
+  float: right;
+  right: 0;
+  height: 100%;
+}
+
+.about__item {
+  margin: 0 0.5rem;
+}

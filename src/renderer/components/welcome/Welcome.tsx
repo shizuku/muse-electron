@@ -57,7 +57,7 @@ export const Welcome: FC = () => {
         <div
           className="welcome__sider__bottom"
           style={{
-            marginBottom: "5rem",
+            marginBottom: "3rem",
           }}
         >
           <Menu mode="vertical">
