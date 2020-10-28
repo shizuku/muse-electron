@@ -19,7 +19,7 @@ export const Start: FC = () => {
         <MenuItem
           icon={<UndoOutlined />}
           size="m"
-          onClick={state.events?.onUndo}
+          onClick={() => state.onUndo()}
           disable={state.undoDisable}
         >
           {t("toolbar.start.undo")}
@@ -27,7 +27,7 @@ export const Start: FC = () => {
         <MenuItem
           icon={<RedoOutlined />}
           size="m"
-          onClick={state.events?.onRedo}
+          onClick={() => state.onRedo()}
           disable={state.redoDisable}
         >
           {t("toolbar.start.redo")}
@@ -35,7 +35,7 @@ export const Start: FC = () => {
         <MenuItem
           icon={<ProfileOutlined />}
           size="m"
-          onClick={state.events?.onEditMetaData}
+          onClick={() => state.onEditMetaData()}
         >
           {t("toolbar.start.meta-data")}
         </MenuItem>

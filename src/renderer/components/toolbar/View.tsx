@@ -9,7 +9,8 @@ export const ViewTab: FC = () => {
   const { t } = useTranslation();
   return <span>{t("toolbar.view.view")}</span>;
 };
-
+//TODO: change icons
+//TODO:  two page
 export const View: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
@@ -19,18 +20,18 @@ export const View: FC = () => {
         <MenuItem
           icon={<LayoutVerticalOutlined />}
           size="m"
-          onClick={state.events?.onSetVertical}
+          onClick={() => state.onSetOnePage()}
           active={state.config.vertical === true}
         >
-          {t("toolbar.view.vertical")}
+          {t("toolbar.view.one-page")}
         </MenuItem>
         <MenuItem
           icon={<LayoutHorizontalOutlined />}
           size="m"
-          onClick={state.events?.onSetHorizontal}
+          onClick={() => state.onSetTwoPage()}
           active={state.config.vertical === false}
         >
-          {t("toolbar.view.horizontal")}
+          {t("toolbar.view.two-page")}
         </MenuItem>
       </Menu>
     </div>

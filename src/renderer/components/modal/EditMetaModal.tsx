@@ -17,12 +17,12 @@ export const EditMetaModal: FC = () => {
     state.showEditMetaModel = false;
   };
   const handleOk = () => {
+    state.beforeModify();
     if (state.notation) {
       state.notation.info.title = title;
       state.notation.info.subtitle = subTitle;
       state.notation.info.author = author.split("\n").filter((it) => it !== "");
     }
-    state.modified = true;
     state.showEditMetaModel = false;
   };
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

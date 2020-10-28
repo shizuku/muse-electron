@@ -3,7 +3,6 @@ import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
 import { Sizer } from "./sizer";
-import { Liner } from "./liner";
 import { FuncBar } from "../func-bar";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { FuncButtom } from "../func-bar/func-button";
@@ -78,11 +77,11 @@ export const Footer: FC = () => {
           <FuncBar>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar.view.vertical")}
+              title={t("toolbar.view.one-page")}
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={state.events?.onSetVertical}
+                onClick={state.onSetOnePage}
                 active={state.config.vertical === true}
               >
                 <LayoutVerticalOutlined />
@@ -90,11 +89,11 @@ export const Footer: FC = () => {
             </Tooltip>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar.view.horizontal")}
+              title={t("toolbar.view.two-page")}
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={state.events?.onSetHorizontal}
+                onClick={state.onSetTwoPage}
                 active={state.config.vertical === false}
               >
                 <LayoutHorizontalOutlined />

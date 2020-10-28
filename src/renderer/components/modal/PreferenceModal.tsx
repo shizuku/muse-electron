@@ -13,7 +13,7 @@ export const PreferenceModal: FC = () => {
     state.showSettings = false;
   };
   const onOk = () => {
-    state.events?.onSetLanguage(lang);
+    state.onSetLanguage(lang);
     state.showSettings = false;
   };
   return useObserver(() => (

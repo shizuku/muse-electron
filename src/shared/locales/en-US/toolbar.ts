@@ -15,8 +15,8 @@ export default {
   },
   view: {
     view: "View",
-    horizontal: "Horizontal",
-    vertical: "Vertical",
+    "one-page": "One page",
+    "two-page": "Two page",
   },
   about: {
     about: "About",

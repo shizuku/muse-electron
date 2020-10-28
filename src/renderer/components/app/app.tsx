@@ -32,192 +32,6 @@ const App: FC = () => {
     saveConfig("recent-files", state.recents);
   };
   useEffect(() => {
-    state.events = {
-      onSetDisplay: (s: DisplayStyle) => {
-        state.display = s;
-        saveConfig("display", state.display);
-      },
-      onNew: () => {
-        if (!state.opened) {
-          ipcRenderer.send("new-file");
-        }
-      },
-      onOpen: () => {
-        if (!state.opened) {
-          ipcRenderer.send("open-file");
-        }
-      },
-      onSave: (cb?: (result: string) => void) => {
-        if (state.modified) {
-          if (state.isNew) {
-            state.events?.onSaveAs(cb);
-          } else {
-            ipcRenderer.once("save-reply", (event, result) => {
-              if (result === "success") {
-                console.log("save success");
-                state.modified = false;
-                saveFileConfig();
-              } else {
-                openNotificationWithIcon(
-                  "warning",
-                  t("notification.save-fail"),
-                  "",
-                  "bottomRight"
-                );
-              }
-              if (cb) cb(result);
-            });
-            ipcRenderer.send("save", state.currentFile?.path, state.data);
-          }
-        }
-      },
-      onSaveAs: (cb?: (result: string) => void) => {
-        ipcRenderer.once("save-as-reply", (ev, result, newPath: string) => {
-          if (result === "success") {
-            console.log("save as success");
-            state.modified = false;
-            if (state.isNew) {
-              if (state.currentFile) state.currentFile.path = newPath;
-              state.isNew = false;
-            }
-            saveFileConfig();
-          }
-          if (cb) cb(result);
-        });
-        ipcRenderer.send("save-as", state.currentFile?.path, state.data);
-      },
-      onAutoSave: () => {
-        state.autoSave = !state.autoSave;
-        saveConfig("auto-save", state.autoSave);
-      },
-      onSetSizer: (x: number) => {
-        state.config.x = x;
-        if (state.currentFile) state.currentFile.size = x;
-        saveFileConfig();
-      },
-      onSetLiner: (x: number) => {
-        state.config.pagePerLine = x;
-        if (state.currentFile) state.currentFile.line = x;
-        saveFileConfig();
-      },
-      onExport: () => {
-        state.showExport = true;
-        //ipcRenderer.send("export");
-      },
-      onClose: () => {
-        if (state.modified) {
-          state.toExit = false;
-          state.showSureClose = true;
-        } else {
-          state.close();
-        }
-      },
-      onUndo: () => {
-        if (!state.undoDisable) {
-          console.log("undo");
-          let x = state.data;
-          if (x && state.sl && state.sl.c)
-            state.redoStack.push({
-              s: JSON.stringify(state.notation?.code()),
-              c: state.sl.c,
-            });
-          let p = state.undoStack.pop();
-          if (p) {
-            state.data = p.s;
-            state.sl?.select(p.c);
-          }
-        }
-      },
-      onRedo: () => {
-        if (!state.redoDisable) {
-          console.log("redo");
-          let p = state.redoStack.pop();
-          if (p) {
-            state.data = p.s;
-            state.sl?.select(p.c);
-            state.undoStack.push(p);
-          }
-        }
-      },
-      onEditMetaData: () => {
-        state.showEditMetaModel = true;
-      },
-      onSetHorizontal: () => {
-        state.config.vertical = false;
-        if (state.currentFile) state.currentFile.vertical = false;
-        saveFileConfig();
-      },
-      onSetVertical: () => {
-        state.config.vertical = true;
-        if (state.currentFile) state.currentFile.vertical = true;
-        saveFileConfig();
-      },
-      onExit: () => {
-        if (state.modified) {
-          state.toExit = true;
-          state.showSureClose = true;
-        } else {
-          ipcRenderer.send("app-close");
-        }
-      },
-      onAbout: () => {
-        state.showAboutModel = true;
-      },
-      onSettings: () => {
-        state.showSettings = true;
-      },
-      onSetLanguage: (code: string) => {
-        if (code !== "auto") {
-          state.langConf = code;
-          state.langCode = code;
-          i18n.changeLanguage(code);
-        } else {
-          state.langConf = code;
-          ipcRenderer.send("get-locale");
-        }
-        saveConfig("language", code);
-      },
-      onSetTheme: (t: string) => {
-        if (t !== "auto") {
-          state.themeConf = t;
-          state.themeCode = t;
-        } else {
-          state.themeConf = t;
-          ipcRenderer.send("get-dark-light");
-        }
-        saveConfig("theme", t);
-      },
-      onModify: () => {
-        console.log("modify");
-        state.modified = true;
-        if (state.currentFile) state.currentFile.time = Date.now();
-        if (state.sl && state.sl.c)
-          state.undoStack.push({
-            s: JSON.stringify(state.notation?.code()),
-            c: state.sl.c,
-          });
-        state.redoStack.length = 0;
-        if (state.autoSave && !state.isNew) {
-          state.events?.onSave();
-        }
-      },
-      onClearRecent: () => {
-        state.recents = [];
-        saveFileConfig();
-      },
-    };
-    return function () {
-      ipcRenderer.removeAllListeners("open-file-reply");
-      ipcRenderer.removeAllListeners("new-file-reply");
-      ipcRenderer.removeAllListeners("save-reply");
-      ipcRenderer.removeAllListeners("save-as-reply");
-      ipcRenderer.removeAllListeners("full-screen-status");
-      ipcRenderer.removeAllListeners("max-status");
-      ipcRenderer.removeAllListeners("get-locale-reply");
-      ipcRenderer.removeAllListeners("get-dark-light-reply");
-    };
-  });
-  useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
       if (data !== "") {
         state.open(path, data, false);
@@ -269,40 +83,40 @@ const App: FC = () => {
       ipcRenderer.send("app-toggle-full-screen");
     });
     hotkeys("ctrl+o", { keyup: true, keydown: false }, () =>
-      state.events?.onOpen()
+      state.onOpen()
     );
     hotkeys("ctrl+n", { keyup: true, keydown: false }, () =>
-      state.events?.onNew()
+      state.onNew()
     );
     hotkeys("ctrl+s", { keyup: true, keydown: false }, () =>
-      state.events?.onSave()
+      state.onSave()
     );
     hotkeys("ctrl+shift+s", { keyup: true, keydown: false }, () =>
-      state.events?.onSaveAs()
+      state.onSaveAs()
     );
     hotkeys("ctrl+d", { keyup: true, keydown: false }, () =>
-      state.events?.onEditMetaData()
+      state.onEditMetaData()
     );
     hotkeys("ctrl+e", { keyup: true, keydown: false }, () =>
-      state.events?.onExport()
+      state.onExport()
     );
     hotkeys("ctrl+z", { keyup: true, keydown: false }, () =>
-      state.events?.onUndo()
+      state.onUndo()
     );
     hotkeys("ctrl+y", { keyup: true, keydown: false }, () =>
-      state.events?.onRedo()
+      state.onRedo()
     );
     hotkeys("ctrl+x", { keyup: true, keydown: false }, () =>
-      state.events?.onClose()
+      state.onClose()
     );
     hotkeys("ctrl+q", { keyup: true, keydown: false }, () =>
-      state.events?.onExit()
+      state.onExit()
     );
     hotkeys("ctrl+shift+h", { keyup: true, keydown: false }, () =>
-      state.events?.onSetHorizontal()
+      state.onSetTwoPage()
     );
     hotkeys("ctrl+shift+v", { keyup: true, keydown: false }, () =>
-      state.events?.onSetVertical()
+      state.onSetOnePage()
     );
   });
   useEffect(() => {
@@ -354,28 +168,26 @@ const AppHolder: React.FC = () => {
   return useObserver(() => (
     <div id="app">
       <ConfigProvider locale={locales[state.langCode]}>
-        {state.opened === true ? (
-          <>
-            <Spin spinning={state.appLoading}>
+        <Spin spinning={state.appLoading}>
+          {state.opened === true ? (
+            <>
               <Header />
               <Toolbar />
               <Content />
               <Footer />
-              <EditMetaModal />
-              <AboutModal />
-              <PreferenceModal />
-              <ExportModal />
-              <SureCloseModal />
-            </Spin>
-          </>
-        ) : (
-          <>
-            <Spin spinning={state.appLoading}>
+            </>
+          ) : (
+            <>
               <Header />
               <Welcome />
-            </Spin>
-          </>
-        )}
+            </>
+          )}
+          <EditMetaModal />
+          <AboutModal />
+          <PreferenceModal />
+          <ExportModal />
+          <SureCloseModal />
+        </Spin>
       </ConfigProvider>
     </div>
   ));

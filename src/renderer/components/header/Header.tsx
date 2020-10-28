@@ -28,7 +28,7 @@ const DisplayPopup: FC = () => {
     <div className="display-popup">
       <div
         className="display-popup__item"
-        onClick={() => state.events?.onSetDisplay("full")}
+        onClick={() => state.onSetDisplay("full")}
         style={
           state.display === "full"
             ? { background: state.theme.colorPrimaryLight }
@@ -39,7 +39,7 @@ const DisplayPopup: FC = () => {
       </div>
       <div
         className="display-popup__item"
-        onClick={() => state.events?.onSetDisplay("headfoot")}
+        onClick={() => state.onSetDisplay("headfoot")}
         style={
           state.display === "headfoot"
             ? { background: state.theme.colorPrimaryLight }
@@ -50,7 +50,7 @@ const DisplayPopup: FC = () => {
       </div>
       <div
         className="display-popup__item"
-        onClick={() => state.events?.onSetDisplay("content")}
+        onClick={() => state.onSetDisplay("content")}
         style={
           state.display === "content"
             ? { background: state.theme.colorPrimaryLight }
@@ -133,7 +133,7 @@ export const Header: FC = () => {
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={() => state.events?.onSave()}
+                onClick={() => state.onSave()}
                 disable={!state.modified}
               >
                 <SaveOutlined />
@@ -145,7 +145,7 @@ export const Header: FC = () => {
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={() => state.events?.onUndo()}
+                onClick={() => state.onUndo()}
                 disable={state.undoDisable}
               >
                 <UndoOutlined />
@@ -157,7 +157,7 @@ export const Header: FC = () => {
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={() => state.events?.onRedo()}
+                onClick={() => state.onRedo()}
                 disable={state.redoDisable}
               >
                 <RedoOutlined />
@@ -214,7 +214,7 @@ export const Header: FC = () => {
         </div>
         <div
           className="window-icon hover-red"
-          onClick={() => state.events?.onExit()}
+          onClick={() => state.onExit()}
         >
           <CloseOutlined />
         </div>

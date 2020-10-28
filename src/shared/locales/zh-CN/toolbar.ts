@@ -15,8 +15,8 @@ export default {
   },
   view: {
     view: "视图",
-    horizontal: "横向排布",
-    vertical: "竖向排布",
+    "one-page": "单页",
+    "two-page": "双页",
   },
   about: {
     about: "关于",

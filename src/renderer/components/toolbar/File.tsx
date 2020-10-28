@@ -23,7 +23,7 @@ export const File: FC = () => {
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={() => state.events?.onSave()}
+          onClick={() => state.onSave()}
           disable={!state.modified}
         >
           {t("toolbar.file.save")}
@@ -31,14 +31,14 @@ export const File: FC = () => {
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={() => state.events?.onSaveAs()}
+          onClick={() => state.onSaveAs()}
         >
           {t("toolbar.file.save-as")}
         </MenuItem>
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
-          onClick={state.events?.onAutoSave}
+          onClick={() => state.onAutoSave()}
           active={state.autoSave}
         >
           {t("toolbar.file.auto-save")}
@@ -46,14 +46,14 @@ export const File: FC = () => {
         <MenuItem
           icon={<ExportOutlined />}
           size="m"
-          onClick={state.events?.onExport}
+          onClick={() => state.onExport()}
         >
           {t("toolbar.file.export")}
         </MenuItem>
         <MenuItem
           icon={<CloseCircleOutlined />}
           size="m"
-          onClick={state.events?.onClose}
+          onClick={() => state.onClose()}
         >
           {t("toolbar.file.close")}
         </MenuItem>

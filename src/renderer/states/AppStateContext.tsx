@@ -1,3 +1,4 @@
+import { ipcRenderer } from "electron";
 import { action, computed, observable } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
@@ -76,31 +77,6 @@ export class WindowDim {
   @observable notationW: number = 0;
 }
 
-export interface Events {
-  onSetDisplay: (s: DisplayStyle) => void;
-  onNew: () => void;
-  onOpen: () => void;
-  onSave: (cb?: (result: string) => void) => void;
-  onSaveAs: (cb?: (result: string) => void) => void;
-  onAutoSave: () => void;
-  onSetSizer: (x: number) => void;
-  onSetLiner: (l: number) => void;
-  onExport: () => void;
-  onClose: () => void;
-  onUndo: () => void;
-  onRedo: () => void;
-  onEditMetaData: () => void;
-  onSetVertical: () => void;
-  onSetHorizontal: () => void;
-  onExit: () => void;
-  onAbout: () => void;
-  onSettings: () => void;
-  onSetLanguage: (code: string) => void;
-  onSetTheme: (t: string) => void;
-  onModify: () => void;
-  onClearRecent: () => void;
-}
-
 //full: show all element,
 //headfoot: only show header, footer and content
 //content: only show content
@@ -133,7 +109,6 @@ export class AppState {
   //state
   @observable opened: boolean = false;
   @observable modified: boolean = false;
-  @observable events?: Events;
   @observable display: DisplayStyle = "full";
   @observable headerHover: boolean = false;
   @observable footerHover: boolean = false;
@@ -179,7 +154,7 @@ export class AppState {
     this.opened = true;
     this.modified = false;
     this.notation = new Notation(JSON.parse(data), this.config);
-    this.sl = new Selector(this.notation, () => this.events?.onModify());
+    this.sl = new Selector(this.notation, () => this.beforeModify());
     this.isNew = isNew;
     this.currentFile = this.addRecentFile(
       {
@@ -235,6 +210,168 @@ export class AppState {
       this.themeCode = t;
       this.theme = this.themeCode === "light" ? lightTheme : darkTheme;
     }
+  }
+
+  @action onSetDisplay(s: DisplayStyle) {
+    this.display = s;
+    //saveConfig("display", this.display);
+  }
+  @action onNew() {
+    if (!this.opened) {
+      ipcRenderer.send("new-file");
+    }
+  }
+  @action onOpen() {
+    if (!this.opened) {
+      ipcRenderer.send("open-file");
+    }
+  }
+  @action onSave(cb?: (result: string) => void) {
+    if (this.modified) {
+      if (this.isNew) {
+        this.onSaveAs(cb);
+      } else {
+        ipcRenderer.once("save-reply", (ev, result) => {
+          if (result === "success") {
+            console.log("save success");
+            this.modified = false;
+          }
+          if (cb) cb(result);
+        });
+        ipcRenderer.send("save", this.currentFile?.path, this.data);
+      }
+    }
+  }
+  @action onSaveAs(cb?: (result: string) => void) {
+    ipcRenderer.once("save-as-reply", (ev, result, newPath: string) => {
+      if (result === "success") {
+        console.log("save as success");
+        this.modified = false;
+        if (this.isNew) {
+          if (this.currentFile) this.currentFile.path = newPath;
+          this.isNew = false;
+        }
+      }
+      if (cb) cb(result);
+    });
+    ipcRenderer.send("save-as", this.currentFile?.path, this.data);
+  }
+  @action onAutoSave() {
+    this.autoSave = !this.autoSave;
+  }
+  @action onSetSizer(x: number) {
+    this.config.x = x;
+    if (this.currentFile) this.currentFile.size = x;
+    //saveFileConfig();
+  }
+  @action onSetLiner(x: number) {
+    this.config.pagePerLine = x;
+    if (this.currentFile) this.currentFile.line = x;
+    //saveFileConfig();
+  }
+  @action onExport() {
+    this.showExport = true;
+  }
+  @action onClose() {
+    if (this.modified) {
+      this.toExit = false;
+      this.showSureClose = true;
+    } else {
+      this.close();
+    }
+  }
+  @action onUndo() {
+    if (!this.undoDisable) {
+      console.log("undo");
+      let x = this.data;
+      if (x && this.sl && this.sl.c)
+        this.redoStack.push({
+          s: JSON.stringify(this.notation?.code()),
+          c: this.sl.c,
+        });
+      let p = this.undoStack.pop();
+      if (p) {
+        this.data = p.s;
+        this.sl?.select(p.c);
+      }
+    }
+  }
+  @action onRedo() {
+    if (!this.redoDisable) {
+      console.log("redo");
+      let p = this.redoStack.pop();
+      if (p) {
+        this.data = p.s;
+        this.sl?.select(p.c);
+        this.undoStack.push(p);
+      }
+    }
+  }
+  @action onEditMetaData() {
+    this.showEditMetaModel = true;
+  }
+  @action onSetTwoPage() {
+    this.config.vertical = false;
+    if (this.currentFile) this.currentFile.vertical = false;
+    //saveFileConfig();
+  }
+  @action onSetOnePage() {
+    this.config.vertical = true;
+    if (this.currentFile) this.currentFile.vertical = true;
+    // saveFileConfig();
+  }
+  @action onExit() {
+    if (this.modified) {
+      this.toExit = true;
+      this.showSureClose = true;
+    } else {
+      ipcRenderer.send("app-close");
+    }
+  }
+  @action onAbout() {
+    this.showAboutModel = true;
+  }
+  @action onSettings() {
+    this.showSettings = true;
+  }
+  @action onSetLanguage(code: string) {
+    if (code !== "auto") {
+      this.langConf = code;
+      this.langCode = code;
+      //i18n.changeLanguage(code);
+    } else {
+      this.langConf = code;
+      ipcRenderer.send("get-locale");
+    }
+    //saveConfig("language", code);
+  }
+  @action onSetTheme(t: string) {
+    if (t !== "auto") {
+      this.themeConf = t;
+      this.themeCode = t;
+    } else {
+      this.themeConf = t;
+      ipcRenderer.send("get-dark-light");
+    }
+    //saveConfig("theme", t);
+  }
+  @action beforeModify() {
+    console.log("before modify");
+    if (this.currentFile) this.currentFile.time = Date.now();
+    if (this.sl && this.sl.c)
+      this.undoStack.push({
+        s: JSON.stringify(this.notation?.code()),
+        c: this.sl.c,
+      });
+    this.redoStack.length = 0;
+    this.modified = true;
+    if (this.autoSave && !this.isNew) {
+      this.onSave();
+    }
+  }
+  @action onClearRecent() {
+    this.recents = [];
+    //saveFileConfig();
   }
 }
 

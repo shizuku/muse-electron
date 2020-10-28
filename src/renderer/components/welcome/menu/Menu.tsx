@@ -24,7 +24,7 @@ export const Menu: FC<MenuProps> = ({ style, children, mode }) => {
       break;
   }
   return (
-    <div className="menu" style={{ display, ...style }}>
+    <div className="welcome__menu" style={{ display, ...style }}>
       {children}
     </div>
   );
@@ -59,30 +59,34 @@ export const MenuItem: FC<MenuItemProps> = ({
   };
   return (
     <div
-      className="menu-item"
+      className="welcome__menu-item"
       onClick={onClick}
       style={
         active === true
+          ? icon
+            ? {
+                background: "#00000055",
+                width: iconSize[size || "m"] * 4,
+                padding: "1rem 0",
+              }
+            : { background: "#00000055", width: iconSize[size || "m"] * 4 }
+          : icon
           ? {
-              background: "#00000055",
               width: iconSize[size || "m"] * 4,
-              height: iconSize[size || "m"] * 4,
+              padding: "1rem 0",
             }
-          : {
-              width: iconSize[size || "m"] * 4,
-              height: iconSize[size || "m"] * 4,
-            }
+          : { width: iconSize[size || "m"] * 4 }
       }
     >
       <div
-        className="menu-item__container"
+        className="welcome__menu-item__container"
         style={{
           width: iconSize[size || "m"] * 4,
         }}
       >
         {icon ? (
           <div
-            className="menu-item__icon"
+            className="welcome__menu-item__icon"
             style={{
               fontSize: iconSize[size || "m"],
             }}
@@ -93,7 +97,7 @@ export const MenuItem: FC<MenuItemProps> = ({
           <></>
         )}
         <div
-          className="menu-item__content"
+          className="welcome__menu-item__content"
           style={{
             fontSize: contentSize[size || "m"],
           }}

@@ -13,7 +13,7 @@ export const SureCloseModal: FC = () => {
   };
   const yes = () => {
     console.log("modal sure close yes");
-    state.events?.onSave((r) => {
+    state.onSave((r) => {
       console.log("modal sure close cb", r);
       if (r === "success") {
         state.showSureClose = false;

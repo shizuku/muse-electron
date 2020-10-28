@@ -19,14 +19,14 @@ export const About: FC = () => {
         <MenuItem
           icon={<SettingOutlined />}
           size="m"
-          onClick={state.events?.onSettings}
+          onClick={() => state.onSettings()}
         >
           {t("toolbar.about.preference")}
         </MenuItem>
         <MenuItem
           icon={<InfoOutlined />}
           size="m"
-          onClick={state.events?.onAbout}
+          onClick={() => state.onAbout()}
         >
           {t("toolbar.about.about")}
         </MenuItem>

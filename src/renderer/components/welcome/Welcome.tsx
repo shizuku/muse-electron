@@ -24,33 +24,51 @@ export const Welcome: FC = () => {
     >
       <div
         className="welcome__sider"
-        style={{ background: state.theme.colorPrimary }}
+        style={{
+          background: state.theme.colorPrimary,
+          color: state.theme.colorTextLight,
+        }}
       >
-        <Menu
+        <div
+          className="welcome__sider__top"
           style={{
-            background: state.theme.colorPrimary,
             marginTop: "5rem",
-            color: state.theme.colorTextLight,
           }}
-          mode="vertical"
         >
-          <MenuItem
-            key="0"
-            size="l"
-            icon={<FileAddOutlined />}
-            onClick={() => state.events?.onNew()}
-          >
-            {t("welcome.new-file")}
-          </MenuItem>
-          <MenuItem
-            key="1"
-            size="l"
-            icon={<FolderOpenOutlined />}
-            onClick={() => state.events?.onOpen()}
-          >
-            {t("welcome.open")}
-          </MenuItem>
-        </Menu>
+          <Menu mode="vertical">
+            <MenuItem
+              key="0"
+              size="l"
+              icon={<FileAddOutlined />}
+              onClick={() => state.onNew()}
+            >
+              {t("welcome.new-file")}
+            </MenuItem>
+            <MenuItem
+              key="1"
+              size="l"
+              icon={<FolderOpenOutlined />}
+              onClick={() => state.onOpen()}
+            >
+              {t("welcome.open")}
+            </MenuItem>
+          </Menu>
+        </div>
+        <div
+          className="welcome__sider__bottom"
+          style={{
+            marginBottom: "5rem",
+          }}
+        >
+          <Menu mode="vertical">
+            <MenuItem key="0" size="l" onClick={() => state.onSettings()}>
+              {t("toolbar.about.preference")}
+            </MenuItem>
+            <MenuItem key="1" size="l" onClick={() => state.onAbout()}>
+              {t("toolbar.about.about")}
+            </MenuItem>
+          </Menu>
+        </div>
       </div>
       <div
         className="welcome__content"
@@ -58,7 +76,7 @@ export const Welcome: FC = () => {
       >
         <h2>{t("welcome.recent")}</h2>
         <div className="welcom__clear">
-          <a onClick={() => state.events?.onClearRecent()}>
+          <a onClick={() => state.onClearRecent()}>
             {t("welcome.recent-clear")}
           </a>
         </div>

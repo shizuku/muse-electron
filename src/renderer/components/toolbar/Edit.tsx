@@ -19,21 +19,21 @@ export const Edit: FC = () => {
         <MenuItem
           icon={<UndoOutlined />}
           size="m"
-          onClick={state.events?.onUndo}
+          onClick={() => state.onUndo()}
         >
           {t("toolbar.edit.undo")}
         </MenuItem>
         <MenuItem
           icon={<RedoOutlined />}
           size="m"
-          onClick={state.events?.onRedo}
+          onClick={() => state.onRedo()}
         >
           {t("toolbar.edit.redo")}
         </MenuItem>
         <MenuItem
           icon={<ProfileOutlined />}
           size="m"
-          onClick={state.events?.onEditMetaData}
+          onClick={() => state.onEditMetaData()}
         >
           {t("toolbar.edit.meta-data")}
         </MenuItem>

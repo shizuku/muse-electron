@@ -9,6 +9,20 @@
   display: block;
 }
 
+.welcome__sider__top {
+  display: inline-block;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+.welcome__sider__bottom {
+  display: flex;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
 .welcome__content {
   flex: 1;
   display: block;
