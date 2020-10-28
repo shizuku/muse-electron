@@ -1,13 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
-import { notification, Spin, ConfigProvider } from "antd";
+import { Spin, ConfigProvider } from "antd";
 import { Locale } from "antd/lib/locale-provider";
 import zhCN from "antd/es/locale/zh_CN";
 import enUS from "antd/es/locale/en_US";
 import { useObserver, Provider } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { IconType, NotificationPlacement } from "antd/lib/notification";
 import { Welcome } from "../welcome";
 import { Content } from "../content";
 import { Toolbar } from "../toolbar";
@@ -15,27 +14,15 @@ import { Header } from "../header";
 import { Footer } from "../footer";
 import { AppState, DisplayStyle, useAppState } from "../../states";
 import { loadConfigs, saveConfig } from "./store";
+import { openNotificationWithIcon } from "../../utils";
 import {
   AboutModal,
   EditMetaModal,
   ExportModal,
   SettingsModal,
   SureClose,
-} from "./modal";
+} from "../modal";
 import "./app.css";
-
-export const openNotificationWithIcon = (
-  type: IconType,
-  message: string,
-  description: string,
-  placement: NotificationPlacement
-) => {
-  notification[type]({
-    message,
-    description,
-    placement,
-  });
-};
 
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());

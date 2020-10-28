@@ -1,6 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme } from "electron";
 import { readFile, writeFile } from "fs";
-import { generateScreenshot, getImageArrayBuffer } from "../shared/utils";
 
 const noTitle = "No title";
 const newFileContent = `{"title":"${noTitle}","subtitle":"","author":"","rhythmic":"","speed":"","C":"C","pages":[{"lines":[{"tracks":[{"bars":[{"notes":[{"n":"0@0|0"}]}]}]}]}]}`;

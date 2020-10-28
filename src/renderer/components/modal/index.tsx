@@ -14,8 +14,7 @@ import {
   getImageArrayBuffer,
   range,
 } from "../../../shared/utils";
-import { openNotificationWithIcon } from "./app";
-import { modal } from "../../../shared/locales/zh-CN/modal";
+import { openNotificationWithIcon } from "../../utils";
 
 export const EditMetaModal: FC = () => {
   let state = useAppState();
