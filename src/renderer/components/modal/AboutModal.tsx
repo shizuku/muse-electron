@@ -12,7 +12,7 @@ export const AboutModal: FC = () => {
   };
   return useObserver(() => (
     <Modal
-      title={t("modal-about")}
+      title={t("modal.about.about")}
       visible={state.showAboutModel}
       onCancel={cancel}
       footer={[]}

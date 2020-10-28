@@ -78,7 +78,7 @@ export const Footer: FC = () => {
           <FuncBar>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar-view-vertical")}
+              title={t("toolbar.view.vertical")}
               mouseEnterDelay={1}
             >
               <FuncButtom
@@ -90,7 +90,7 @@ export const Footer: FC = () => {
             </Tooltip>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar-view-horizontal")}
+              title={t("toolbar.view.horizontal")}
               mouseEnterDelay={1}
             >
               <FuncButtom
@@ -101,9 +101,6 @@ export const Footer: FC = () => {
               </FuncButtom>
             </Tooltip>
           </FuncBar>
-        </div>
-        <div className="footer__item">
-          <Liner />
         </div>
         <div className="footer__item">
           <Sizer />

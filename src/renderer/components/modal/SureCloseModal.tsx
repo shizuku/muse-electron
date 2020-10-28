@@ -31,22 +31,22 @@ export const SureCloseModal: FC = () => {
   };
   return useObserver(() => (
     <Modal
-      title={t("modal-sure-close")}
+      title={t("modal.save-close.save-close")}
       visible={state.showSureClose}
       onCancel={cancel}
       footer={[
         <Button onClick={cancel} key="cancel">
-          {t("button-cancel")}
+          {t("common.button-cancel")}
         </Button>,
         <Button onClick={no} key="no">
-          {t("button-no")}
+          {t("common.button-no")}
         </Button>,
         <Button type="primary" onClick={yes} key="yes">
-          {t("button-yes")}
+          {t("common.button-yes")}
         </Button>,
       ]}
     >
-      <p>{t("modal-sure-close-message")}</p>
+      <p>{t("modal.save-close.message")}</p>
     </Modal>
   ));
 };

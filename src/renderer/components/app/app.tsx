@@ -60,7 +60,7 @@ const App: FC = () => {
               } else {
                 openNotificationWithIcon(
                   "warning",
-                  t("notifiction-save-fail"),
+                  t("notification.save-fail"),
                   "",
                   "bottomRight"
                 );

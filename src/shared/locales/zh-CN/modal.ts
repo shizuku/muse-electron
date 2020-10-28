@@ -1,20 +1,31 @@
-export const modal: Record<string, string> = {
-  "modal-meta": "编辑元信息",
-  "modal-meta-title": "标题",
-  "modal-meta-subtitle": "副标题",
-  "modal-meta-author": "作者",
-  "modal-about": "关于",
-  "modal-settings": "设置",
-  "modal-settings-theme": "主题",
-  "modal-settings-theme-auto": "自动",
-  "modal-settings-theme-light": "浅色",
-  "modal-settings-theme-dark": "深色",
-  "modal-settings-language": "语言",
-  "modal-settings-language-auto": "自动",
-  "modal-export": "导出",
-  "modal-export-path": "路径",
-  "modal-export-name": "文件名",
-  "modal-export-extension": "格式",
-  "modal-sure-close": "是否保存",
-  "modal-sure-close-message": "是否保存对文件的更改？",
+export default {
+  meta: {
+    meta: "编辑元信息",
+    title: "标题",
+    subtitle: "副标题",
+    author: "作者",
+    mark: "调号",
+  },
+  about: { 
+    about: "关于" 
+  },
+  preference: {
+    preference: "设置",
+    theme: "主题",
+    "theme-auto": "自动",
+    "theme-light": "浅色",
+    "theme-dark": "深色",
+    language: "语言",
+    "language-auto": "自动",
+  },
+  export: {
+    export: "导出",
+    path: "路径",
+    name: "文件名",
+    extension: "格式",
+  },
+  "save-close": {
+    "save-close": "是否保存",
+    message: "是否保存对文件的更改？",
+  },
 };

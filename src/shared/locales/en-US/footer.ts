@@ -1,8 +1,9 @@
-export const footer: Record<string, string> = {
-  "footer-sizer": "Zoom",
-  "footer-sizer-fit-width": "Fit width",
-  "footer-sizer-fit-height": "Fit height",
-  "footer-sizer-fit-screen": "Fit screen",
-  "footer-sizer-fit-content": "Fit content",
-  "footer-liner": "Page line",
+export default {
+  sizer: {
+    sizer: "Zoom",
+    "fit-width": "Fit width",
+    "fit-height": "Fit height",
+    "fit-screen": "Fit screen",
+    "fit-content": "Fit content",
+  },
 };

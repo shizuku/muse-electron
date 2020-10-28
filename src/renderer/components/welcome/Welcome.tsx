@@ -40,7 +40,7 @@ export const Welcome: FC = () => {
             icon={<FileAddOutlined />}
             onClick={() => state.events?.onNew()}
           >
-            {t("welcome-new-file")}
+            {t("welcome.new-file")}
           </MenuItem>
           <MenuItem
             key="1"
@@ -48,7 +48,7 @@ export const Welcome: FC = () => {
             icon={<FolderOpenOutlined />}
             onClick={() => state.events?.onOpen()}
           >
-            {t("welcome-open")}
+            {t("welcome.open")}
           </MenuItem>
         </Menu>
       </div>
@@ -56,10 +56,10 @@ export const Welcome: FC = () => {
         className="welcome__content"
         style={{ background: state.theme.colorBackground }}
       >
-        <h2>{t("welcome-recent")}</h2>
+        <h2>{t("welcome.recent")}</h2>
         <div className="welcom__clear">
           <a onClick={() => state.events?.onClearRecent()}>
-            {t("welcome-recent-clear")}
+            {t("welcome.recent-clear")}
           </a>
         </div>
         <div className="welcome__recent-files">

@@ -11,7 +11,7 @@ import { useAppState } from "../../states";
 
 export const FileTab: FC = () => {
   const { t } = useTranslation();
-  return <span>{t("toolbar-file")}</span>;
+  return <span>{t("toolbar.file.file")}</span>;
 };
 
 export const File: FC = () => {
@@ -26,14 +26,14 @@ export const File: FC = () => {
           onClick={() => state.events?.onSave()}
           disable={!state.modified}
         >
-          {t("toolbar-file-save")}
+          {t("toolbar.file.save")}
         </MenuItem>
         <MenuItem
           icon={<SaveOutlined />}
           size="m"
           onClick={() => state.events?.onSaveAs()}
         >
-          {t("toolbar-file-save-as")}
+          {t("toolbar.file.save-as")}
         </MenuItem>
         <MenuItem
           icon={<SaveOutlined />}
@@ -41,21 +41,21 @@ export const File: FC = () => {
           onClick={state.events?.onAutoSave}
           active={state.autoSave}
         >
-          {t("toolbar-file-auto-save")}
+          {t("toolbar.file.auto-save")}
         </MenuItem>
         <MenuItem
           icon={<ExportOutlined />}
           size="m"
           onClick={state.events?.onExport}
         >
-          {t("toolbar-file-export")}
+          {t("toolbar.file.export")}
         </MenuItem>
         <MenuItem
           icon={<CloseCircleOutlined />}
           size="m"
           onClick={state.events?.onClose}
         >
-          {t("toolbar-file-close")}
+          {t("toolbar.file.close")}
         </MenuItem>
       </Menu>
     </div>

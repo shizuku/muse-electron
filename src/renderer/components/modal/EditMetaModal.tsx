@@ -1,5 +1,5 @@
 import React, { useState, FC } from "react";
-import { Form, Input, Modal } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
@@ -12,6 +12,7 @@ export const EditMetaModal: FC = () => {
   let [author, setAuthor] = useState(
     state.notation?.info.author.reduce((a, b) => a + b + "\n", "") || ""
   );
+  let [mark, setMark] = useState("C");
   const handleCancel = () => {
     state.showEditMetaModel = false;
   };
@@ -35,20 +36,32 @@ export const EditMetaModal: FC = () => {
   };
   return useObserver(() => (
     <Modal
-      title={t("modal-meta")}
+      title={t("modal.meta.meta")}
       visible={state.showEditMetaModel}
       onOk={handleOk}
       onCancel={handleCancel}
     >
       <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
-        <Form.Item label={t("modal-meta-title")}>
+        <Form.Item label={t("modal.meta.title")}>
           <Input onChange={onTitleChange} value={title} />
         </Form.Item>
-        <Form.Item label={t("modal-meta-subtitle")}>
+        <Form.Item label={t("modal.meta.subtitle")}>
           <Input onChange={onSubTitleChange} value={subTitle} />
         </Form.Item>
-        <Form.Item label={t("modal-meta-author")}>
+        <Form.Item label={t("modal.meta.author")}>
           <Input.TextArea onChange={onAuthorChange} value={author} rows={4} />
+        </Form.Item>
+        <Form.Item label={t("modal.meta.mark")}>
+          <Select
+            onChange={(v: string) => {
+              setMark(v);
+            }}
+            defaultValue="C"
+          >
+            <Select.Option key="C" value="C">
+              {"C"}
+            </Select.Option>
+          </Select>
         </Form.Item>
       </Form>
     </Modal>

@@ -1,6 +1,8 @@
-export const common: Record<string, string> = {
-  "button-ok": "确定",
-  "button-cancel": "取消",
-  "button-yes": "是",
-  "button-no": "否",
+export default {
+  button: {
+    ok: "确定",
+    cancel: "取消",
+    yes: "是",
+    no: "否",
+  },
 };

@@ -46,10 +46,10 @@ const PopContent: FC = () => {
   console.log(fw, fh);
   return useObserver(() => (
     <div className="pop-content">
-      <PopItem x={fw} s={t("footer-sizer-fit-width")} />
-      <PopItem x={fh} s={t("footer-sizer-fit-height")} />
-      <PopItem x={Math.min(fw, fh)} s={t("footer-sizer-fit-screen")} />
-      <PopItem x={Math.max(fw, fh)} s={t("footer-sizer-fit-content")} />
+      <PopItem x={fw} s={t("footer.sizer.fit-width")} />
+      <PopItem x={fh} s={t("footer.sizer.fit-height")} />
+      <PopItem x={Math.min(fw, fh)} s={t("footer.sizer.fit-screen")} />
+      <PopItem x={Math.max(fw, fh)} s={t("footer.sizer.fit-content")} />
       <PopItem x={3} s="300%" />
       <PopItem x={2.5} s="250%" />
       <PopItem x={1.5} s="150%" />
@@ -80,7 +80,7 @@ export const Sizer: FC = () => {
   };
   return useObserver(() => (
     <div className="sizer">
-      <Popover content={<PopContent />} title={t("footer-sizer")}>
+      <Popover content={<PopContent />} title={t("footer.sizer.sizer")}>
         <InputNumber
           size="small"
           defaultValue={state.config.x * 100}

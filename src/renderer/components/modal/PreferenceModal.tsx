@@ -7,7 +7,7 @@ import { useAppState } from "../../states";
 
 export const PreferenceModal: FC = () => {
   let state = useAppState();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   let [lang, setLang] = useState("auto");
   const onCancel = () => {
     state.showSettings = false;
@@ -18,13 +18,13 @@ export const PreferenceModal: FC = () => {
   };
   return useObserver(() => (
     <Modal
-      title={t("modal-settings")}
+      title={t("modal.preference.preference")}
       visible={state.showSettings}
       onOk={onOk}
       onCancel={onCancel}
     >
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 0 }}>
-        <Form.Item label={t("modal-settings-language")}>
+        <Form.Item label={t("modal.preference.language")}>
           <Select
             onChange={(v: string) => {
               setLang(v);
@@ -32,7 +32,7 @@ export const PreferenceModal: FC = () => {
             defaultValue={state.langConf}
           >
             <Select.Option value={"auto"} key={"auto"}>
-              {t("modal-settings-language-auto")}
+              {t("modal.preference.language-auto")}
             </Select.Option>
             {getAvaliableLangauge().map((it) => (
               <Select.Option value={it.value} key={it.value}>

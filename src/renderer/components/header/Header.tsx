@@ -35,7 +35,7 @@ const DisplayPopup: FC = () => {
             : {}
         }
       >
-        {t("header-display-show-all")}
+        {t("header.display.show-all")}
       </div>
       <div
         className="display-popup__item"
@@ -46,7 +46,7 @@ const DisplayPopup: FC = () => {
             : {}
         }
       >
-        {t("header-display-headfoot")}
+        {t("header.display.headfoot")}
       </div>
       <div
         className="display-popup__item"
@@ -57,7 +57,7 @@ const DisplayPopup: FC = () => {
             : {}
         }
       >
-        {t("header-display-content")}
+        {t("header.display.content")}
       </div>
     </div>
   ));
@@ -129,7 +129,7 @@ export const Header: FC = () => {
           <FuncBar>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar-file-save")}
+              title={t("toolbar.file.save")}
               mouseEnterDelay={1}
             >
               <FuncButtom
@@ -141,7 +141,7 @@ export const Header: FC = () => {
             </Tooltip>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar-start-undo")}
+              title={t("toolbar.start.undo")}
               mouseEnterDelay={1}
             >
               <FuncButtom
@@ -153,7 +153,7 @@ export const Header: FC = () => {
             </Tooltip>
             <Tooltip
               placement="topLeft"
-              title={t("toolbar-start-redo")}
+              title={t("toolbar.start.redo")}
               mouseEnterDelay={1}
             >
               <FuncButtom
@@ -171,12 +171,12 @@ export const Header: FC = () => {
       <div className="header__window-title">
         {!state.opened
           ? `Muse`
-          : `${state.fileName}${state.modified ? "*" : ""} - Muse`}
+          : `${state.fileName}${state.modified ? "*" : ""} - ${t("app-name")}`}
       </div>
       <div className="header__controls">
         <Popover
           placement="topLeft"
-          title={t("header-display")}
+          title={t("header.display.display")}
           content={<DisplayPopup />}
           trigger="click"
         >

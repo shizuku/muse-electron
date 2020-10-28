@@ -7,7 +7,7 @@ import { useAppState } from "../../states";
 
 export const AboutTab: FC = () => {
   const { t } = useTranslation();
-  return <span>{t("toolbar-about")}</span>;
+  return <span>{t("toolbar.about.about")}</span>;
 };
 
 export const About: FC = () => {
@@ -21,14 +21,14 @@ export const About: FC = () => {
           size="m"
           onClick={state.events?.onSettings}
         >
-          {t("toolbar-about-settings")}
+          {t("toolbar.about.preference")}
         </MenuItem>
         <MenuItem
           icon={<InfoOutlined />}
           size="m"
           onClick={state.events?.onAbout}
         >
-          {t("toolbar-about-about")}
+          {t("toolbar.about.about")}
         </MenuItem>
       </Menu>
     </div>

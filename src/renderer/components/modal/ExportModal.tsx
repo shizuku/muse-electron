@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import { Form, Input, Modal } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { ipcRenderer } from "electron";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
+import { openNotificationWithIcon } from "../../utils";
 import {
   generateScreenshot,
   getFileFolder,
@@ -12,7 +13,6 @@ import {
   getImageArrayBuffer,
   range,
 } from "../../../shared/utils";
-import { openNotificationWithIcon } from "../../utils";
 
 export const ExportModal: FC = () => {
   let state = useAppState();
@@ -33,7 +33,7 @@ export const ExportModal: FC = () => {
           state.showExport = false;
           openNotificationWithIcon(
             "success",
-            t("notifiction-export-success"),
+            t("notification.export-success"),
             "",
             "bottomRight"
           );
@@ -66,25 +66,30 @@ export const ExportModal: FC = () => {
   };
   return useObserver(() => (
     <Modal
-      title={t("modal-export")}
+      title={t("modal.export.export")}
       visible={state.showExport}
       onCancel={cancel}
       onOk={ok}
       confirmLoading={state.exportConfirm}
     >
       <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
-        <Form.Item label={t("modal-export-path")}>
+        <Form.Item label={t("modal.export.path")}>
           <Input onChange={(v) => setPath(v.target.value)} value={path} />
         </Form.Item>
-        <Form.Item label={t("modal-export-name")}>
+        <Form.Item label={t("modal.export.name")}>
           <Input onChange={(v) => setName(v.target.value)} value={name} />
         </Form.Item>
-        <Form.Item label={t("modal-export-extension")}>
-          <Input
-            onChange={(v) => setExt(v.target.value)}
-            value={ext}
-            disabled
-          />
+        <Form.Item label={t("modal.export.extension")}>
+          <Select
+            onChange={(v: string) => {
+              setExt(v);
+            }}
+            defaultValue="png"
+          >
+            <Select.Option key="png" value="png">
+              {"png"}
+            </Select.Option>
+          </Select>
         </Form.Item>
         {range(state.rs.length).map((i) => (
           <div key={i}>{`${path}${name}-${i + 1}.${ext}`}</div>

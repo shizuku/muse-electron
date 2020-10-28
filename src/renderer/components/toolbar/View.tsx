@@ -7,7 +7,7 @@ import { useAppState } from "../../states";
 
 export const ViewTab: FC = () => {
   const { t } = useTranslation();
-  return <span>{t("toolbar-view")}</span>;
+  return <span>{t("toolbar.view.view")}</span>;
 };
 
 export const View: FC = () => {
@@ -22,7 +22,7 @@ export const View: FC = () => {
           onClick={state.events?.onSetVertical}
           active={state.config.vertical === true}
         >
-          {t("toolbar-view-vertical")}
+          {t("toolbar.view.vertical")}
         </MenuItem>
         <MenuItem
           icon={<LayoutHorizontalOutlined />}
@@ -30,7 +30,7 @@ export const View: FC = () => {
           onClick={state.events?.onSetHorizontal}
           active={state.config.vertical === false}
         >
-          {t("toolbar-view-horizontal")}
+          {t("toolbar.view.horizontal")}
         </MenuItem>
       </Menu>
     </div>

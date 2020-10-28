@@ -1,6 +1,6 @@
-export const welcome: Record<string, string> = {
-  "welcome-new-file": "新建",
-  "welcome-open": "打开",
-  "welcome-recent": "最近",
-  "welcome-recent-clear": "清除",
+export default {
+  "new-file": "新建",
+  open: "打开",
+  recent: "最近",
+  "recent-clear": "清除",
 };
