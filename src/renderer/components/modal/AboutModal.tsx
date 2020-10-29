@@ -28,6 +28,8 @@ export const AboutModal: FC = () => {
         </ExternalLink>
         <div className="about__content">
           <p>{t("modal.about.content")}</p>
+          <p>{t("modal.about.thanks")}</p>
+          <p>{t("modal.about.special-thanks")}</p>
         </div>
         <div className="about__bottom">
           <div className="about__bottom__left">

@@ -11,7 +11,11 @@ export default {
     license: "License",
     issues: "Issues",
     releases: "Releases",
-    content: "ABOUTABOUTABOUTABOUTABOUTABOUT",
+    content:
+      "This is a open source project and my first front-end project. If you have any issures or suggestions, please report to me.",
+    thanks:
+      "Thanks open source projects: electron electron-forge react typescript mobx ant-design i18next html2canvas",
+    "special-thanks": "Special thanks: 团团子",
   },
   preference: {
     preference: "Preference",
