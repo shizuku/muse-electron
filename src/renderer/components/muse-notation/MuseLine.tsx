@@ -43,6 +43,18 @@ export class Line implements Codec, SelectionLine {
       return r;
     });
   }
+  @computed get barsWidth(): number[] {
+    let r: number[] = [];
+    this.tracks.forEach((it) => {
+      if (r.length <= 0) {
+        r = it.preBarsWidth;
+      } else
+        it.preBarsWidth.forEach(
+          (it, idx) => (r[idx] = r[idx] > it ? r[idx] : it)
+        );
+    });
+    return r;
+  }
   constructor(o: ILine, index: number, page: Page, config: MuseConfig) {
     this.page = page;
     this.index = index;
