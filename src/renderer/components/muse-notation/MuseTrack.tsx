@@ -39,7 +39,9 @@ export class Track implements Codec, SelectionTrack {
     return this.bars.map((it) => it.notesTimeSum);
   }
   @computed get barsWidth(): number[] {
-    return this.line.barsWidth;
+    let s = this.line.barsWidth.reduce((a, b) => a + b, 0);
+    let d = s / this.width;
+    return this.line.barsWidth.map((it) => it / d);
   }
   @computed get preBarsWidth(): number[] {
     let timeSum = this.barsTime.reduce((a, b) => a.plus(b), new Fraction());
