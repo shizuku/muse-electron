@@ -1,7 +1,7 @@
 {
   "name": "muse-electron",
-  "productName": "muse-electron",
-  "version": "1.0.0",
+  "productName": "Muse",
+  "version": "0.1.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -29,7 +29,7 @@
             "win32"
           ],
           "config": {
-            "name": "muse_electron",
+            "name": "Muse",
             "noMsi": "false"
           }
         },
@@ -40,7 +40,7 @@
           ],
           "config": {
             "language": 1033,
-            "manufacturer": "shizuku"
+            "manufacturer": "Muse"
           }
         },
         {

@@ -12,9 +12,8 @@ import { Content } from "../content";
 import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
-import { AppState, DisplayStyle, useAppState } from "../../states";
-import { loadConfigs, saveConfig } from "./store";
-import { openNotificationWithIcon } from "../../utils";
+import { AppState, useAppState } from "../../states";
+import { loadConfigs } from "../../store";
 import {
   AboutModal,
   EditMetaModal,
@@ -27,15 +26,11 @@ import "./app.css";
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
   const { t, i18n } = useTranslation();
-  const saveFileConfig = () => {
-    if (state.currentFile) state.addRecentFile(state.currentFile, true);
-    saveConfig("recent-files", state.recents);
-  };
   useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
       if (data !== "") {
         state.open(path, data, false);
-        saveFileConfig();
+        state.saveFileConfig();
       }
     });
     ipcRenderer.on(
@@ -52,16 +47,18 @@ const App: FC = () => {
     });
     ipcRenderer.on("get-locale-reply", (e, code: string) => {
       if (state.langConf === "auto") {
-        console.log(code);
-        i18n.changeLanguage(code);
-
-        state.langCode = code;
+        console.log("auto locale to:", code);
+        state.changeLang("auto", code);
+      } else {
+        state.changeLang(state.langCode, state.langCode);
       }
     });
-    ipcRenderer.on("get-dark-light-reply", (e, t: string) => {
+    ipcRenderer.on("get-dark-light-reply", (e, code: string) => {
       if (state.themeConf === "auto") {
-        console.log(t);
-        state.changeTheme(t);
+        console.log("auto theme to: ", code);
+        state.changeTheme("auto", code);
+      } else {
+        state.changeTheme(state.themeCode, state.themeCode);
       }
     });
     return function () {
@@ -82,36 +79,20 @@ const App: FC = () => {
     hotkeys("f11", { keyup: true, keydown: false }, () => {
       ipcRenderer.send("app-toggle-full-screen");
     });
-    hotkeys("ctrl+o", { keyup: true, keydown: false }, () =>
-      state.onOpen()
-    );
-    hotkeys("ctrl+n", { keyup: true, keydown: false }, () =>
-      state.onNew()
-    );
-    hotkeys("ctrl+s", { keyup: true, keydown: false }, () =>
-      state.onSave()
-    );
+    hotkeys("ctrl+o", { keyup: true, keydown: false }, () => state.onOpen());
+    hotkeys("ctrl+n", { keyup: true, keydown: false }, () => state.onNew());
+    hotkeys("ctrl+s", { keyup: true, keydown: false }, () => state.onSave());
     hotkeys("ctrl+shift+s", { keyup: true, keydown: false }, () =>
       state.onSaveAs()
     );
     hotkeys("ctrl+d", { keyup: true, keydown: false }, () =>
       state.onEditMetaData()
     );
-    hotkeys("ctrl+e", { keyup: true, keydown: false }, () =>
-      state.onExport()
-    );
-    hotkeys("ctrl+z", { keyup: true, keydown: false }, () =>
-      state.onUndo()
-    );
-    hotkeys("ctrl+y", { keyup: true, keydown: false }, () =>
-      state.onRedo()
-    );
-    hotkeys("ctrl+x", { keyup: true, keydown: false }, () =>
-      state.onClose()
-    );
-    hotkeys("ctrl+q", { keyup: true, keydown: false }, () =>
-      state.onExit()
-    );
+    hotkeys("ctrl+e", { keyup: true, keydown: false }, () => state.onExport());
+    hotkeys("ctrl+z", { keyup: true, keydown: false }, () => state.onUndo());
+    hotkeys("ctrl+y", { keyup: true, keydown: false }, () => state.onRedo());
+    hotkeys("ctrl+x", { keyup: true, keydown: false }, () => state.onClose());
+    hotkeys("ctrl+q", { keyup: true, keydown: false }, () => state.onExit());
     hotkeys("ctrl+shift+h", { keyup: true, keydown: false }, () =>
       state.onSetTwoPage()
     );
@@ -148,8 +129,9 @@ const App: FC = () => {
     state.autoSave = c.autoSave;
     state.display = c.display;
     state.langConf = c.language;
+    if (c.language !== "auto") state.langCode = c.language;
     state.themeConf = c.theme;
-    state.changeTheme(c.theme);
+    if (c.theme !== "auto") state.themeCode = c.theme;
   });
   if (state) {
     return (
@@ -175,6 +157,9 @@ const AppHolder: React.FC = () => {
               <Toolbar />
               <Content />
               <Footer />
+              <EditMetaModal />
+              <ExportModal />
+              <SureCloseModal />
             </>
           ) : (
             <>
@@ -182,11 +167,8 @@ const AppHolder: React.FC = () => {
               <Welcome />
             </>
           )}
-          <EditMetaModal />
           <AboutModal />
           <PreferenceModal />
-          <ExportModal />
-          <SureCloseModal />
         </Spin>
       </ConfigProvider>
     </div>

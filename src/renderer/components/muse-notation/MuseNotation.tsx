@@ -31,41 +31,31 @@ export class Notation implements Codec, SelectionNotation {
   @observable pages: Page[] = [];
   @observable isSelect = false;
   @observable info: NotationInfo = new NotationInfo();
-  @computed get nx() {
-    if (this.config.vertical) {
-      return this.config.pagePerLine > this.pages.length
-        ? this.pages.length
-        : this.config.pagePerLine;
-    } else {
-      let p = parseInt(`${this.pages.length / this.config.pagePerLine}`, 10);
-      let q = this.pages.length % this.config.pagePerLine;
-      if (q === 0) {
-        return p;
-      } else {
-        return p + 1;
-      }
-    }
-  }
-  @computed get ny() {
-    if (this.config.vertical) {
-      let p = parseInt(`${this.pages.length / this.config.pagePerLine}`, 10);
-      let q = this.pages.length % this.config.pagePerLine;
-      if (q === 0) {
-        return p;
-      } else {
-        return p + 1;
+  @computed get group(): number[][] {
+    let r: number[][] = [];
+    let l = this.pages.length;
+    if (this.config.twopage) {
+      for (let i = 0; i < l; i += 2) {
+        let s: number[] = [];
+        for (let j = i; j < l && j <= i + 1; ++j) {
+          s.push(j);
+        }
+        r.push(s);
       }
     } else {
-      return this.config.pagePerLine > this.pages.length
-        ? this.pages.length
-        : this.config.pagePerLine;
+      for (let i = 0; i < l; ++i) {
+        r.push([i]);
+      }
     }
+    return r;
   }
-  @computed get height() {
-    return this.config.pageHeight * this.ny;
+  @computed get groupWidth(): number {
+    if (this.config.twopage)
+      return this.config.pageWidth * 2 + this.config.pageGap * 2;
+    else return this.config.pageWidth + this.config.pageGap * 2;
   }
-  @computed get width() {
-    return this.config.pageWidth * this.nx;
+  @computed get groupHeight(): number {
+    return this.config.pageHeight + this.config.pageGap * 2;
   }
   constructor(o: INotation, config: MuseConfig) {
     this.config = config;
@@ -142,100 +132,6 @@ export class Notation implements Codec, SelectionNotation {
   }
 }
 
-interface MuseNotationInfoProps {
-  info: NotationInfo;
-  config: MuseConfig;
-  clazz: string;
-}
-
-const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
-  info,
-  config,
-  clazz,
-}) => {
-  let y = 0;
-  y += config.pageMarginVertical;
-  let titleY = y;
-  y += config.infoTitleFontSize + config.infoGap;
-  let y1 = y;
-  let x = info.author.length;
-  let y2 = y + (config.infoGap + config.infoSubtitleFontSize);
-  let y3 = y2 + (config.infoGap + config.infoFontSize);
-  return useObserver(() => (
-    <g className={clazz + "__info"} width={config.pageWidth}>
-      <text
-        className={clazz + "__info-title"}
-        fontFamily={config.textFontFamily}
-        width={config.pageWidth}
-        textAnchor={"middle"}
-        fontSize={config.infoTitleFontSize}
-        transform={"translate(" + config.pageWidth / 2 + "," + titleY + ")"}
-      >
-        {info.title}
-      </text>
-      <text
-        className={clazz + "__info-subtitle"}
-        fontFamily={config.textFontFamily}
-        width={config.pageWidth}
-        textAnchor={"middle"}
-        fontSize={config.infoSubtitleFontSize}
-        transform={"translate(" + config.pageWidth / 2 + "," + y + ")"}
-      >
-        {info.subtitle}
-      </text>
-      <g className={clazz + "__info-author"}>
-        {info.author.map((it, idx) => {
-          y1 += config.infoFontSize + config.infoGap;
-          if (idx < x - 2) {
-            y += config.infoFontSize + config.infoGap;
-          }
-          return (
-            <text
-              key={idx}
-              fontFamily={config.textFontFamily}
-              width={config.pageWidth}
-              fontSize={config.infoFontSize}
-              textAnchor={"end"}
-              x={0}
-              transform={
-                "translate(" +
-                (config.pageWidth - config.pageMarginHorizontal) +
-                "," +
-                y1 +
-                ")"
-              }
-            >
-              {it}
-            </text>
-          );
-        })}
-      </g>
-      <g className={clazz + "__info-rythmic"} width={config.pageWidth}>
-        <text
-          fontFamily={config.textFontFamily}
-          width={config.pageWidth}
-          fontSize={config.infoFontSize}
-          transform={
-            "translate(" + config.pageMarginHorizontal + "," + y2 + ")"
-          }
-        >
-          {info.speed}
-        </text>
-        <text
-          fontFamily={config.textFontFamily}
-          width={config.pageWidth}
-          fontSize={config.infoFontSize}
-          transform={
-            "translate(" + config.pageMarginHorizontal + "," + y3 + ")"
-          }
-        >
-          {`1=${info.C} ${info.rhythmic}`}
-        </text>
-      </g>
-    </g>
-  ));
-};
-
 export interface MuseNotationProps {
   notation: Notation;
 }
@@ -245,8 +141,25 @@ const MuseNotation: FC<MuseNotationProps> = ({ notation }) => {
   let state = useAppState();
   return useObserver(() => (
     <div className={clazz}>
-      {notation.pages.map((it, idx) => (
-        <MusePage key={idx} page={it} c={[idx]} sl={state.sl} />
+      {notation.group.map((ar, idx) => (
+        <div
+          className="line"
+          key={idx}
+          style={{
+            width: notation.groupWidth,
+            height: notation.groupHeight,
+            display: "flex",
+          }}
+        >
+          {ar.map((it, idx) => (
+            <MusePage
+              key={it}
+              page={notation.pages[it]}
+              c={[it]}
+              sl={state.sl}
+            />
+          ))}
+        </div>
       ))}
     </div>
   ));

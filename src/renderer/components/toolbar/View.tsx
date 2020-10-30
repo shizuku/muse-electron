@@ -9,8 +9,8 @@ export const ViewTab: FC = () => {
   const { t } = useTranslation();
   return <span>{t("toolbar.view.view")}</span>;
 };
+
 //TODO: change icons
-//TODO:  two page
 export const View: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
@@ -21,7 +21,7 @@ export const View: FC = () => {
           icon={<LayoutVerticalOutlined />}
           size="m"
           onClick={() => state.onSetOnePage()}
-          active={state.config.vertical === true}
+          active={state.config.twopage === false}
         >
           {t("toolbar.view.one-page")}
         </MenuItem>
@@ -29,7 +29,7 @@ export const View: FC = () => {
           icon={<LayoutHorizontalOutlined />}
           size="m"
           onClick={() => state.onSetTwoPage()}
-          active={state.config.vertical === false}
+          active={state.config.twopage === true}
         >
           {t("toolbar.view.two-page")}
         </MenuItem>

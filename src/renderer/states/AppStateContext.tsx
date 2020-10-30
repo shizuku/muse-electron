@@ -5,13 +5,14 @@ import { useContext } from "react";
 import { getFileName } from "../../shared/utils";
 import { MuseConfig, Notation } from "../components/muse-notation";
 import Selector from "../components/muse-notation/Selector";
+import { saveConfig } from "../store";
+import i18n from "../../shared/locales";
 
-export interface FileInfo {
+export interface RecentFile {
   path: string;
   time: number;
   size: number;
-  line: number;
-  vertical: boolean;
+  twopage: boolean;
 }
 
 export interface Theme {
@@ -115,12 +116,12 @@ export class AppState {
   @observable fullScreenStatus: boolean = false;
   @observable maxStatus: boolean = false;
   //unopened
-  @observable recents: FileInfo[] = [];
+  @observable recents: RecentFile[] = [];
   @observable sortRectentBy: "time-etl" | "time-lte" = "time-lte";
-  @computed get sortedRecents(): FileInfo[] {
+  @computed get sortedRecents(): RecentFile[] {
     const cbs = {
-      "time-etl": (a: FileInfo, b: FileInfo) => a.time - b.time,
-      "time-lte": (a: FileInfo, b: FileInfo) => b.time - a.time,
+      "time-etl": (a: RecentFile, b: RecentFile) => a.time - b.time,
+      "time-lte": (a: RecentFile, b: RecentFile) => b.time - a.time,
     };
     return this.recents.sort(cbs[this.sortRectentBy]);
   }
@@ -138,7 +139,7 @@ export class AppState {
     else return getFileName(this.currentFile?.path || "");
   }
   @observable autoSave: boolean = false;
-  @observable currentFile?: FileInfo;
+  @observable currentFile?: RecentFile;
   @observable sl?: Selector = undefined;
   @observable notation?: Notation;
   @computed get data(): string {
@@ -160,17 +161,15 @@ export class AppState {
       {
         path,
         time: Date.now(),
-        line: 1,
         size: 1,
-        vertical: true,
+        twopage: true,
       },
       false
     );
     this.rs = [];
     this.undoStack = [];
     this.redoStack = [];
-    this.config.vertical = this.currentFile?.vertical || true;
-    this.config.pagePerLine = this.currentFile?.line || 1;
+    this.config.twopage = this.currentFile?.twopage || true;
     this.config.x = this.currentFile?.size || 1;
   }
   @action close() {
@@ -184,13 +183,13 @@ export class AppState {
     this.undoStack = [];
     this.redoStack = [];
   }
-  @action loadRecents(recents: FileInfo[]) {
+  @action loadRecents(recents: RecentFile[]) {
     this.recents = recents;
   }
   @action addRecentFile(
-    f: FileInfo,
+    f: RecentFile,
     updateTime: boolean
-  ): FileInfo | undefined {
+  ): RecentFile | undefined {
     if (f.path === "") return f;
     for (let i = 0; i < this.recents.length; ++i) {
       if (this.recents[i].path === f.path) {
@@ -204,17 +203,25 @@ export class AppState {
   @action removeFile(path: string) {
     this.recents.filter((it) => it.path !== path);
   }
-  @action changeTheme(t: string) {
-    if (t !== "auto") {
-      this.themeConf = t;
-      this.themeCode = t;
-      this.theme = this.themeCode === "light" ? lightTheme : darkTheme;
-    }
+  @action changeLang(conf: string, code: string) {
+    this.langConf = conf;
+    this.langCode = code;
+    i18n.changeLanguage(this.langCode);
+    saveConfig("language", conf);
   }
-
+  @action changeTheme(conf: string, code: string) {
+    this.themeConf = conf;
+    this.themeCode = code;
+    this.theme = this.themeCode === "light" ? lightTheme : darkTheme;
+    saveConfig("theme", conf);
+  }
+  @action saveFileConfig() {
+    if (this.currentFile) this.addRecentFile(this.currentFile, true);
+    saveConfig("recent-files", this.recents);
+  }
   @action onSetDisplay(s: DisplayStyle) {
     this.display = s;
-    //saveConfig("display", this.display);
+    saveConfig("display", this.display);
   }
   @action onNew() {
     if (!this.opened) {
@@ -259,16 +266,12 @@ export class AppState {
   }
   @action onAutoSave() {
     this.autoSave = !this.autoSave;
+    saveConfig("auto-save", this.autoSave);
   }
   @action onSetSizer(x: number) {
     this.config.x = x;
     if (this.currentFile) this.currentFile.size = x;
-    //saveFileConfig();
-  }
-  @action onSetLiner(x: number) {
-    this.config.pagePerLine = x;
-    if (this.currentFile) this.currentFile.line = x;
-    //saveFileConfig();
+    this.saveFileConfig();
   }
   @action onExport() {
     this.showExport = true;
@@ -312,14 +315,14 @@ export class AppState {
     this.showEditMetaModel = true;
   }
   @action onSetTwoPage() {
-    this.config.vertical = false;
-    if (this.currentFile) this.currentFile.vertical = false;
-    //saveFileConfig();
+    this.config.twopage = true;
+    if (this.currentFile) this.currentFile.twopage = true;
+    this.saveFileConfig();
   }
   @action onSetOnePage() {
-    this.config.vertical = true;
-    if (this.currentFile) this.currentFile.vertical = true;
-    // saveFileConfig();
+    this.config.twopage = false;
+    if (this.currentFile) this.currentFile.twopage = false;
+    this.saveFileConfig();
   }
   @action onExit() {
     if (this.modified) {
@@ -335,26 +338,20 @@ export class AppState {
   @action onSettings() {
     this.showSettings = true;
   }
-  @action onSetLanguage(code: string) {
-    if (code !== "auto") {
-      this.langConf = code;
-      this.langCode = code;
-      //i18n.changeLanguage(code);
+  @action onSetLanguage(conf: string) {
+    if (conf !== "auto") {
+      this.changeLang(conf, conf);
     } else {
-      this.langConf = code;
+      this.langConf = conf;
       ipcRenderer.send("get-locale");
     }
-    //saveConfig("language", code);
   }
-  @action onSetTheme(t: string) {
-    if (t !== "auto") {
-      this.themeConf = t;
-      this.themeCode = t;
+  @action onSetTheme(conf: string) {
+    if (conf !== "auto") {
+      this.changeTheme(conf, conf);
     } else {
-      this.themeConf = t;
       ipcRenderer.send("get-dark-light");
     }
-    //saveConfig("theme", t);
   }
   @action beforeModify() {
     console.log("before modify");
@@ -372,7 +369,7 @@ export class AppState {
   }
   @action onClearRecent() {
     this.recents = [];
-    //saveFileConfig();
+    this.saveFileConfig();
   }
 }
 

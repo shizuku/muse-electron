@@ -1,5 +1,5 @@
 import Store from "electron-store";
-import { DisplayStyle, FileInfo } from "../../states/AppStateContext";
+import { DisplayStyle, RecentFile } from "../states/AppStateContext";
 
 const store = new Store({
   name: "user",
@@ -13,7 +13,7 @@ const store = new Store({
 });
 
 export interface ConfigStore {
-  recents: FileInfo[];
+  recents: RecentFile[];
   autoSave: boolean;
   display: DisplayStyle;
   theme: string;

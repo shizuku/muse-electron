@@ -81,8 +81,8 @@ export const Footer: FC = () => {
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={state.onSetOnePage}
-                active={state.config.vertical === true}
+                onClick={() => state.onSetOnePage()}
+                active={state.config.twopage === false}
               >
                 <LayoutVerticalOutlined />
               </FuncButtom>
@@ -93,8 +93,8 @@ export const Footer: FC = () => {
               mouseEnterDelay={1}
             >
               <FuncButtom
-                onClick={state.onSetTwoPage}
-                active={state.config.vertical === false}
+                onClick={() => state.onSetTwoPage()}
+                active={state.config.twopage === true}
               >
                 <LayoutHorizontalOutlined />
               </FuncButtom>

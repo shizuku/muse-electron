@@ -7,8 +7,7 @@ export default class MuseConfig {
   @observable backgroundColor = "white";
   @observable textColor = "black";
   @observable showBorder = false;
-  @observable pagePerLine = 1;
-  @observable vertical = true;
+  @observable twopage = false;
 
   @computed get noteHeight() {
     return this.x * 22;
@@ -47,7 +46,7 @@ export default class MuseConfig {
     return this.x * 110;
   }
   @computed get pageGap() {
-    return this.x * 8;
+    return this.x * 4;
   }
   @computed get infoTitleFontSize() {
     return this.x * 34;

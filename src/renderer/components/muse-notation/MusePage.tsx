@@ -27,25 +27,11 @@ export class Page implements Codec, SelectionPage {
       this.config.pageHeight - this.config.pageMarginVertical - this.marginTop
     );
   }
-  @computed get xp() {
-    if (this.config.vertical) {
-      return this.index % this.config.pagePerLine;
-    } else {
-      return parseInt(`${this.index / this.config.pagePerLine}`, 10);
-    }
-  }
-  @computed get yp() {
-    if (this.config.vertical) {
-      return parseInt(`${this.index / this.config.pagePerLine}`, 10);
-    } else {
-      return this.index % this.config.pagePerLine;
-    }
-  }
   @computed get x() {
-    return this.marginLeft + this.xp * this.config.pageWidth;
+    return this.marginLeft;
   }
   @computed get y() {
-    return this.marginTop + this.yp * this.config.pageHeight;
+    return this.marginTop;
   }
   @computed get marginTop() {
     let mt = 0;
@@ -256,12 +242,13 @@ const MusePage: FC<{ page: Page; c: number[]; sl?: Selector }> = ({
   let clazz = "muse-page";
   let state = useAppState();
   return useObserver(() => (
-    <div
+    <span
       className={clazz}
       ref={(e) => {
         state.rs[page.index] = e as HTMLElement;
       }}
       style={{
+        display: "inline-block",
         width: page.width + page.marginLeft + page.marginRight,
         height: page.height + page.marginTop + page.marginBottom,
         margin: page.config.pageGap,
@@ -307,7 +294,7 @@ const MusePage: FC<{ page: Page; c: number[]; sl?: Selector }> = ({
           <></>
         )}
       </svg>
-    </div>
+    </span>
   ));
 };
 

@@ -22,6 +22,7 @@ export const EditMetaModal: FC = () => {
       state.notation.info.title = title;
       state.notation.info.subtitle = subTitle;
       state.notation.info.author = author.split("\n").filter((it) => it !== "");
+      state.notation.info.C = mark;
     }
     state.showEditMetaModel = false;
   };
@@ -43,10 +44,14 @@ export const EditMetaModal: FC = () => {
     >
       <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
         <Form.Item label={t("modal.meta.title")}>
-          <Input onChange={onTitleChange} value={title} />
+          <Input onChange={onTitleChange} value={title} defaultValue={title} />
         </Form.Item>
         <Form.Item label={t("modal.meta.subtitle")}>
-          <Input onChange={onSubTitleChange} value={subTitle} />
+          <Input
+            onChange={onSubTitleChange}
+            value={subTitle}
+            defaultValue={subTitle}
+          />
         </Form.Item>
         <Form.Item label={t("modal.meta.author")}>
           <Input.TextArea onChange={onAuthorChange} value={author} rows={4} />
@@ -56,7 +61,7 @@ export const EditMetaModal: FC = () => {
             onChange={(v: string) => {
               setMark(v);
             }}
-            defaultValue="C"
+            defaultValue={mark}
           >
             <Select.Option key="C" value="C">
               {"C"}
