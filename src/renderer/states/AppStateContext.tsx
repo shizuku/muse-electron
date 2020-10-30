@@ -239,7 +239,6 @@ export class AppState {
     }
   }
   @action onSave(cb?: (result: string) => void) {
-    //FIXME: late of save
     if (this.modified) {
       if (this.isNew) {
         this.onSaveAs(cb);
