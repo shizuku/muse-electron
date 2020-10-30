@@ -50,9 +50,9 @@ export class Notation implements Codec, SelectionNotation {
     return r;
   }
   @computed get groupWidth(): number {
-    if (this.config.twopage)
+    if (this.config.twopage && this.pages.length > 1) {
       return this.config.pageWidth * 2 + this.config.pageGap * 2;
-    else return this.config.pageWidth + this.config.pageGap * 2;
+    } else return this.config.pageWidth + this.config.pageGap * 2;
   }
   @computed get groupHeight(): number {
     return this.config.pageHeight + this.config.pageGap * 2;

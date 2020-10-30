@@ -53,6 +53,7 @@ export const PreferenceModal: FC = () => {
             defaultValue={scale}
             min={1.0}
             max={4.0}
+            step={0.1}
           ></InputNumber>
         </Form.Item>
       </Form>

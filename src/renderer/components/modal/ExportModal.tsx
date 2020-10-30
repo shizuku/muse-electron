@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { Form, Input, Modal, Select } from "antd";
+import { Form, Input, InputNumber, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { ipcRenderer } from "electron";
 import { useTranslation } from "react-i18next";
@@ -24,6 +24,7 @@ export const ExportModal: FC = () => {
     getFileNameWithoutExtension(getFileName(state.currentFile?.path || ""))
   );
   const [ext, setExt] = useState("png");
+  const [scale, setScale] = useState(state.exportScale);
   useEffect(() => {
     ipcRenderer.on("export-data-reply", (e, code) => {
       if (code === "success") {
@@ -56,7 +57,7 @@ export const ExportModal: FC = () => {
       let n = `${path}${name}-${idx + 1}.${ext}`;
       console.log("export:", n);
       setTimeout(() => {
-        generateScreenshot(el, state.exportScale).then((c) => {
+        generateScreenshot(el, scale).then((c) => {
           getImageArrayBuffer(c).then((s) => {
             ipcRenderer.send("export-data", n, s, idx);
           });
@@ -72,7 +73,7 @@ export const ExportModal: FC = () => {
       onOk={ok}
       confirmLoading={state.exportConfirm}
     >
-      <Form labelCol={{ span: 3 }} wrapperCol={{ span: 0 }}>
+      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 0 }}>
         <Form.Item label={t("modal.export.path")}>
           <Input onChange={(v) => setPath(v.target.value)} value={path} />
         </Form.Item>
@@ -91,10 +92,23 @@ export const ExportModal: FC = () => {
             </Select.Option>
           </Select>
         </Form.Item>
-        {range(state.rs.length).map((i) => (
-          <div key={i}>{`${path}${name}-${i + 1}.${ext}`}</div>
-        ))}
+        <Form.Item label={t("modal.preference.export-scale")}>
+          <InputNumber
+            onChange={(v) => {
+              if (typeof v === "number") setScale(v);
+              else if (typeof v === "string") setScale(parseFloat(v));
+            }}
+            value={scale}
+            defaultValue={scale}
+            min={1.0}
+            max={4.0}
+            step={0.1}
+          ></InputNumber>
+        </Form.Item>
       </Form>
+      {range(state.rs.length).map((i) => (
+        <p key={i}>{`${path}${name}-${i + 1}.${ext}`}</p>
+      ))}
     </Modal>
   ));
 };
