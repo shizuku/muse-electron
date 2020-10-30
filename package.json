@@ -18,7 +18,11 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "name": "Muse",
+        "executableName": "Muse",
+        "productName": "Muse"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-zip"
@@ -48,7 +52,16 @@
           "platforms": [
             "linux"
           ],
-          "config": {}
+          "config": {
+            "options": {
+              "name": "Muse",
+              "executableName": "Muse",
+              "productName": "Muse"
+            },
+            "name": "Muse",
+            "executableName": "Muse",
+            "productName": "Muse"
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
