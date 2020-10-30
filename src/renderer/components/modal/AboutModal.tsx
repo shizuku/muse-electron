@@ -4,7 +4,7 @@ import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
 import { ExternalLink } from "../../utils";
-import { version } from "../../../shared/const";
+import pack from "../../../../package.json";
 import "./about.css";
 
 export const AboutModal: FC = () => {
@@ -22,7 +22,9 @@ export const AboutModal: FC = () => {
     >
       <div className="about">
         <ExternalLink url="https://github.com/shizuku/muse-electron">
-          <div className="about__title">{t("app-name") + " v" + version}</div>
+          <div className="about__title">
+            {t("app-name") + " v" + pack.version}
+          </div>
         </ExternalLink>
         <div className="about__content">
           <p>{t("modal.about.content")}</p>

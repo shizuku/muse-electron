@@ -3,8 +3,8 @@ import { Form, Input, Modal, Select } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
+import { toneMarks } from "../../../shared/const";
 
-//TODO: will finish marks
 export const EditMetaModal: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
@@ -13,7 +13,7 @@ export const EditMetaModal: FC = () => {
   let [author, setAuthor] = useState(
     state.notation?.info.author.reduce((a, b) => a + b + "\n", "") || ""
   );
-  let [mark, setMark] = useState("C");
+  let [mark, setMark] = useState(state.notation?.info.mark || "C");
   const handleCancel = () => {
     state.showEditMetaModel = false;
   };
@@ -23,8 +23,9 @@ export const EditMetaModal: FC = () => {
       state.notation.info.title = title;
       state.notation.info.subtitle = subTitle;
       state.notation.info.author = author.split("\n").filter((it) => it !== "");
-      state.notation.info.C = mark;
+      state.notation.info.mark = mark;
     }
+    state.afterModify();
     state.showEditMetaModel = false;
   };
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,9 +65,11 @@ export const EditMetaModal: FC = () => {
             }}
             defaultValue={mark}
           >
-            <Select.Option key="C" value="C">
-              {"C"}
-            </Select.Option>
+            {toneMarks.map((it) => (
+              <Select.Option key={it} value={it}>
+                {it}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
       </Form>

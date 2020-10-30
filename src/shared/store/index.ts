@@ -1,5 +1,5 @@
 import Store from "electron-store";
-import { DisplayStyle, RecentFile } from "../states/AppStateContext";
+import { DisplayStyle, RecentFile } from "../../renderer/states/AppStateContext";
 
 const store = new Store({
   name: "user",

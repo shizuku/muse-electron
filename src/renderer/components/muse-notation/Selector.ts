@@ -60,7 +60,8 @@ export interface SelectionNotation {
 }
 
 class Selector {
-  modify: () => void;
+  beforeModify: () => void;
+  afterModify: () => void;
   subnote: SelectionSubNote | null = null;
   note: SelectionNote | null = null;
   bar: SelectionBar | null = null;
@@ -70,9 +71,14 @@ class Selector {
   notation: SelectionNotation | null = null;
   c: number[] = [];
   base: Notation;
-  constructor(base: Notation, md: () => void) {
+  constructor(
+    base: Notation,
+    beforeModify: () => void,
+    afterModify: () => void
+  ) {
     this.base = base;
-    this.modify = md;
+    this.beforeModify = beforeModify;
+    this.afterModify = afterModify;
     document.addEventListener("keydown", (ev) => {
       if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey) {
         if (!this.keySubNote(ev)) {
@@ -90,6 +96,11 @@ class Selector {
         } else ev.returnValue = false;
       }
     });
+  }
+  modify(cb: () => void) {
+    this.beforeModify();
+    cb();
+    this.afterModify();
   }
   select(c: number[]) {
     this.c = c;
@@ -173,7 +184,7 @@ class Selector {
           this.note?.setSelect(true);
           return true;
         case "Backspace":
-          this.modify();
+          this.beforeModify();
           if (this.note) {
             let idx = this.subnote.getThis().index;
             this.note.removeSubNote(this.subnote.getThis().index);
@@ -191,34 +202,38 @@ class Selector {
               }
             }
           }
+          this.afterModify();
           return true;
         case " ":
           return true;
         case "z":
-          this.modify();
+          this.beforeModify();
           if (this.note) {
             this.note?.addSubNote(0);
             this.selectSubNote(this.note?.getThis().subNotes[0]);
           }
+          this.afterModify();
           return true;
         case "x":
-          this.modify();
+          this.beforeModify();
           if (this.note) {
             let idx = this.subnote.getThis().index;
             this.note?.addSubNote(idx);
             this.selectSubNote(this.note?.getThis().subNotes[idx]);
           }
+          this.afterModify();
           return true;
         case "c":
-          this.modify();
+          this.beforeModify();
           if (this.note) {
             let idx = this.subnote.getThis().index;
             this.note?.addSubNote(idx + 1);
             this.selectSubNote(this.note?.getThis().subNotes[idx + 1]);
           }
+          this.afterModify();
           return true;
         case "v":
-          this.modify();
+          this.beforeModify();
           if (this.note) {
             this.note?.addSubNote(this.note.getThis().subNotes.length);
             this.selectSubNote(
@@ -227,9 +242,10 @@ class Selector {
               ]
             );
           }
+          this.afterModify();
           return true;
         case "ArrowUp":
-          this.modify();
+          this.beforeModify();
           if (this.note) {
             let l = this.note.getThis().subNotes.length;
             if (l > this.subnote.getThis().index + 1) {
@@ -267,32 +283,39 @@ class Selector {
         case "8":
         case "9":
         case "-":
-          this.modify();
+          this.beforeModify();
           this.subnote.setNum(ev.key);
+          this.afterModify();
           return true;
         case "r":
-          this.modify();
+          this.beforeModify();
           this.subnote.reducePoint(1);
+          this.afterModify();
           return true;
         case "f":
-          this.modify();
+          this.beforeModify();
           this.subnote.reducePoint(-1);
+          this.afterModify();
           return true;
         case "q":
-          this.modify();
+          this.beforeModify();
           this.subnote.reduceLine(-1);
+          this.afterModify();
           return true;
         case "a":
-          this.modify();
+          this.beforeModify();
           this.subnote.reduceLine(1);
+          this.afterModify();
           return true;
         case "s":
-          this.modify();
+          this.beforeModify();
           this.subnote.reduceTailPoint(-1);
+          this.afterModify();
           return true;
         case "d":
-          this.modify();
+          this.beforeModify();
           this.subnote.reduceTailPoint(1);
+          this.afterModify();
           return true;
         default:
           return false;
@@ -316,43 +339,48 @@ class Selector {
           this.bar?.setSelect(true);
           return true;
         case " ":
-          this.modify();
+          this.beforeModify();
           this.note.addSubNote(this.note.getThis().subNotes.length);
+          this.afterModify();
           return true;
         case "z":
-          this.modify();
+          this.beforeModify();
           if (this.bar) {
             this.bar?.addNote(0);
             this.selectNote(this.bar?.getThis().notes[0]);
           }
+          this.afterModify();
           return true;
         case "x":
-          this.modify();
+          this.beforeModify();
           if (this.bar) {
             let idx = this.note.getThis().index;
             this.bar?.addNote(idx);
             this.selectNote(this.bar?.getThis().notes[idx]);
           }
+          this.afterModify();
           return true;
         case "c":
-          this.modify();
+          this.beforeModify();
           if (this.bar) {
             let idx = this.note.getThis().index;
             this.bar?.addNote(idx + 1);
             this.selectNote(this.bar?.getThis().notes[idx + 1]);
           }
+          this.afterModify();
           return true;
         case "v":
-          this.modify();
+          this.beforeModify();
           if (this.bar) {
             this.bar?.addNote(this.bar.getThis().notes.length);
             this.selectNote(
               this.bar?.getThis().notes[this.bar.getThis().notes.length - 1]
             );
           }
+          this.afterModify();
           return true;
         case "Backspace":
-          this.modify();
+          this.beforeModify();
           if (this.bar) {
             let idx = this.note.getThis().index;
             this.bar.removeNote(idx);
@@ -370,6 +398,7 @@ class Selector {
               }
             }
           }
+          this.afterModify();
           return true;
         case "ArrowLeft":
           if (this.bar) {
@@ -426,20 +455,24 @@ class Selector {
         case "ArrowDown":
           return true;
         case "q":
-          this.modify();
+          this.beforeModify();
           this.note.reduceLine(-1);
+          this.afterModify();
           return true;
         case "a":
-          this.modify();
+          this.beforeModify();
           this.note.reduceLine(1);
+          this.afterModify();
           return true;
         case "s":
-          this.modify();
+          this.beforeModify();
           this.note.reduceTailPoint(-1);
+          this.afterModify();
           return true;
         case "d":
-          this.modify();
+          this.beforeModify();
           this.note.reduceTailPoint(1);
+          this.afterModify();
           return true;
         default:
           return false;
@@ -463,43 +496,48 @@ class Selector {
           this.track?.setSelect(true);
           return true;
         case " ":
-          this.modify();
+          this.beforeModify();
           this.bar.addNote(this.bar.getThis().notes.length);
+          this.afterModify();
           return true;
         case "z":
-          this.modify();
+          this.beforeModify();
           if (this.track) {
             this.track.addBar(0);
             this.selectBar(this.track.getThis().bars[0]);
           }
+          this.afterModify();
           return true;
         case "x":
-          this.modify();
+          this.beforeModify();
           if (this.track) {
             let idx = this.bar.getThis().index;
             this.track.addBar(idx);
             this.selectBar(this.track.getThis().bars[idx]);
           }
+          this.afterModify();
           return true;
         case "c":
-          this.modify();
+          this.beforeModify();
           if (this.track) {
             let idx = this.bar.getThis().index;
             this.track.addBar(idx + 1);
             this.selectBar(this.track.getThis().bars[idx + 1]);
           }
+          this.afterModify();
           return true;
         case "v":
-          this.modify();
+          this.beforeModify();
           if (this.track) {
             this.track.addBar(this.track.getThis().bars.length);
             this.selectBar(
               this.track.getThis().bars[this.track.getThis().bars.length - 1]
             );
           }
+          this.afterModify();
           return true;
         case "Backspace":
-          this.modify();
+          this.beforeModify();
           if (this.track) {
             let idx = this.bar.getThis().index;
             this.track.removeBar(idx);
@@ -517,6 +555,7 @@ class Selector {
               }
             }
           }
+          this.afterModify();
           return true;
         case "ArrowLeft":
           if (this.track) {
@@ -686,44 +725,49 @@ class Selector {
           this.line?.setSelect(true);
           return true;
         case " ":
-          this.modify();
+          this.beforeModify();
           this.track.addBar(this.track.getThis().bars.length);
           ev.returnValue = false;
+          this.afterModify();
           return true;
         case "z":
-          this.modify();
+          this.beforeModify();
           if (this.line) {
             this.line.addTrack(0);
             this.selectTrack(this.line.getThis().tracks[0]);
           }
+          this.afterModify();
           return true;
         case "x":
-          this.modify();
+          this.beforeModify();
           if (this.line) {
             let idx = this.track.getThis().index;
             this.line.addTrack(idx);
             this.selectTrack(this.line.getThis().tracks[idx]);
           }
+          this.afterModify();
           return true;
         case "c":
-          this.modify();
+          this.beforeModify();
           if (this.line) {
             let idx = this.track.getThis().index;
             this.line.addTrack(idx + 1);
             this.selectTrack(this.line.getThis().tracks[idx + 1]);
           }
+          this.afterModify();
           return true;
         case "v":
-          this.modify();
+          this.beforeModify();
           if (this.line) {
             this.line.addTrack(this.line.getThis().tracks.length);
             this.selectTrack(
               this.line.getThis().tracks[this.line.getThis().tracks.length - 1]
             );
           }
+          this.afterModify();
           return true;
         case "Backspace":
-          this.modify();
+          this.beforeModify();
           if (this.line) {
             let idx = this.track.getThis().index;
             this.line.removeTrack(this.track.getThis().index);
@@ -741,6 +785,7 @@ class Selector {
               }
             }
           }
+          this.afterModify();
           return true;
         case "ArrowUp":
           if (this.line) {
@@ -843,43 +888,48 @@ class Selector {
           this.page?.setSelect(true);
           return true;
         case " ":
-          this.modify();
+          this.beforeModify();
           this.line.addTrack(this.line.getThis().tracks.length);
+          this.afterModify();
           return true;
         case "z":
-          this.modify();
+          this.beforeModify();
           if (this.page) {
             this.page.addLine(0);
             this.selectLine(this.page.getThis().lines[0]);
           }
+          this.afterModify();
           return true;
         case "x":
-          this.modify();
+          this.beforeModify();
           if (this.page) {
             let idx = this.line.getThis().index;
             this.page.addLine(idx);
             this.selectLine(this.page.getThis().lines[idx]);
           }
+          this.afterModify();
           return true;
         case "c":
-          this.modify();
+          this.beforeModify();
           if (this.page) {
             let idx = this.line.getThis().index;
             this.page.addLine(idx + 1);
             this.selectLine(this.page.getThis().lines[idx + 1]);
           }
+          this.afterModify();
           return true;
         case "v":
-          this.modify();
+          this.beforeModify();
           if (this.page) {
             this.page.addLine(this.page.getThis().lines.length);
             this.selectLine(
               this.page.getThis().lines[this.page.getThis().lines.length - 1]
             );
           }
+          this.afterModify();
           return true;
         case "Backspace":
-          this.modify();
+          this.beforeModify();
           if (this.page) {
             let idx = this.line.getThis().index;
             this.page.removeLine(this.line.getThis().index);
@@ -897,6 +947,7 @@ class Selector {
               }
             }
           }
+          this.afterModify();
           return true;
         case "ArrowUp":
           if (this.page) {
@@ -968,34 +1019,38 @@ class Selector {
           this.notation?.setSelect(true);
           return true;
         case " ":
-          this.modify();
+          this.beforeModify();
           this.page.addLine(this.page.getThis().lines.length);
+          this.afterModify();
           return true;
         case "z":
-          this.modify();
+          this.beforeModify();
           if (this.notation) {
             this.notation.addPage(0);
             this.selectPage(this.notation.getThis().pages[0]);
           }
+          this.afterModify();
           return true;
         case "x":
-          this.modify();
+          this.beforeModify();
           if (this.notation) {
             let idx = this.page.getThis().index;
             this.notation.addPage(idx);
             this.selectPage(this.notation.getThis().pages[idx]);
           }
+          this.afterModify();
           return true;
         case "c":
-          this.modify();
+          this.beforeModify();
           if (this.notation) {
             let idx = this.page.getThis().index;
             this.notation.addPage(idx + 1);
             this.selectPage(this.notation.getThis().pages[idx + 1]);
           }
+          this.afterModify();
           return true;
         case "v":
-          this.modify();
+          this.beforeModify();
           if (this.notation) {
             this.notation.addPage(this.notation.getThis().pages.length);
             this.selectPage(
@@ -1004,9 +1059,10 @@ class Selector {
               ]
             );
           }
+          this.afterModify();
           return true;
         case "Backspace":
-          this.modify();
+          this.beforeModify();
           if (this.notation) {
             let idx = this.page.getThis().index;
             this.notation?.reomvePage(this.page.getThis().index);
@@ -1024,6 +1080,7 @@ class Selector {
               }
             }
           }
+          this.afterModify();
           return true;
         case "ArrowUp":
           if (this.notation) {
@@ -1067,9 +1124,10 @@ class Selector {
           this.notation.setSelect(false);
           return true;
         case " ":
-          this.modify();
+          this.beforeModify();
           this.notation.addPage(this.notation.getThis().pages.length);
           ev.returnValue = false;
+          this.afterModify();
           return true;
         default:
           return false;

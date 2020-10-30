@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { getFileName } from "../../shared/utils";
 import { MuseConfig, Notation } from "../components/muse-notation";
 import Selector from "../components/muse-notation/Selector";
-import { loadConfigs, saveConfig } from "../store";
+import { loadConfigs, saveConfig } from "../../shared/store";
 import i18n from "../../shared/locales";
 
 export interface RecentFile {
@@ -156,7 +156,11 @@ export class AppState {
     this.opened = true;
     this.modified = false;
     this.notation = new Notation(JSON.parse(data), this.config);
-    this.sl = new Selector(this.notation, () => this.beforeModify());
+    this.sl = new Selector(
+      this.notation,
+      () => this.beforeModify(),
+      () => this.afterModify()
+    );
     this.isNew = isNew;
     this.currentFile = this.addRecentFile(
       {
@@ -368,6 +372,8 @@ export class AppState {
       });
     this.redoStack.length = 0;
     this.modified = true;
+  }
+  @action afterModify() {
     if (this.autoSave && !this.isNew) {
       this.onSave();
     }

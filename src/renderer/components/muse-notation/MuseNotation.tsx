@@ -13,7 +13,7 @@ export class NotationInfo {
   @observable author: string[] = [];
   @observable speed: string = "";
   @observable rhythmic: string = "";
-  @observable C: string = "";
+  @observable mark: string = "";
 }
 
 export interface INotation {
@@ -107,7 +107,7 @@ export class Notation implements Codec, SelectionNotation {
       this.info.rhythmic = o.rhythmic;
     }
     if (o.C) {
-      this.info.C = o.C;
+      this.info.mark = o.C;
     }
   }
   code(): INotation {
@@ -126,7 +126,7 @@ export class Notation implements Codec, SelectionNotation {
       author: author,
       rhythmic: this.info.rhythmic,
       speed: this.info.speed,
-      C: this.info.C,
+      C: this.info.mark,
       pages,
     };
   }

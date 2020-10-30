@@ -227,7 +227,7 @@ const MuseNotationInfo: FC<MuseNotationInfoProps> = ({
             "translate(" + config.pageMarginHorizontal + "," + y3 + ")"
           }
         >
-          {`1=${info.C} ${info.rhythmic}`}
+          {`1=${info.mark} ${info.rhythmic}`}
         </text>
       </g>
     </g>
