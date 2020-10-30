@@ -1,10 +1,11 @@
 import html2canvas from "html2canvas";
 
 export function generateScreenshot(
-  element: HTMLElement
+  element: HTMLElement,
+  scale: number = 1.5
 ): Promise<HTMLCanvasElement> {
   return new Promise<HTMLCanvasElement>((resolve) => {
-    resolve(html2canvas(element, { scale: 1 }));
+    resolve(html2canvas(element, { scale }));
   });
 }
 

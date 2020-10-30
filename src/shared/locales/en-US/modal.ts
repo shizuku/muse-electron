@@ -25,6 +25,7 @@ export default {
     "theme-dark": "Dark",
     language: "Language",
     "language-auto": "Auto",
+    "export-scale": "Export Scale",
   },
   export: {
     export: "Export",

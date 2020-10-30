@@ -7,8 +7,6 @@ import { ExternalLink } from "../../utils";
 import { version } from "../../../shared/const";
 import "./about.css";
 
-//TODO: finish about
-
 export const AboutModal: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();

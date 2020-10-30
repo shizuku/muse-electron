@@ -1,5 +1,5 @@
 import React, { useState, FC } from "react";
-import { Form, Modal, Select } from "antd";
+import { Form, Modal, Select, InputNumber } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { getAvaliableLangauge } from "../../../shared/locales";
@@ -9,11 +9,13 @@ export const PreferenceModal: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
   let [lang, setLang] = useState("auto");
+  let [scale, setScale] = useState(state.exportScale);
   const onCancel = () => {
     state.showSettings = false;
   };
   const onOk = () => {
     state.onSetLanguage(lang);
+    state.onSetExportScale(scale);
     state.showSettings = false;
   };
   return useObserver(() => (
@@ -40,6 +42,18 @@ export const PreferenceModal: FC = () => {
               </Select.Option>
             ))}
           </Select>
+        </Form.Item>
+        <Form.Item label={t("modal.preference.export-scale")}>
+          <InputNumber
+            onChange={(v) => {
+              if (typeof v === "number") setScale(v);
+              else if (typeof v === "string") setScale(parseFloat(v));
+            }}
+            value={scale}
+            defaultValue={scale}
+            min={1.0}
+            max={4.0}
+          ></InputNumber>
         </Form.Item>
       </Form>
     </Modal>

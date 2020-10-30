@@ -56,7 +56,7 @@ export const ExportModal: FC = () => {
       let n = `${path}${name}-${idx + 1}.${ext}`;
       console.log("export:", n);
       setTimeout(() => {
-        generateScreenshot(el).then((c) => {
+        generateScreenshot(el, state.exportScale).then((c) => {
           getImageArrayBuffer(c).then((s) => {
             ipcRenderer.send("export-data", n, s, idx);
           });

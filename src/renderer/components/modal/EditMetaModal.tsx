@@ -4,6 +4,7 @@ import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { useAppState } from "../../states";
 
+//TODO: will finish marks
 export const EditMetaModal: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();

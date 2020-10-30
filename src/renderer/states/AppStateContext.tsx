@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { getFileName } from "../../shared/utils";
 import { MuseConfig, Notation } from "../components/muse-notation";
 import Selector from "../components/muse-notation/Selector";
-import { saveConfig } from "../store";
+import { loadConfigs, saveConfig } from "../store";
 import i18n from "../../shared/locales";
 
 export interface RecentFile {
@@ -139,6 +139,7 @@ export class AppState {
     else return getFileName(this.currentFile?.path || "");
   }
   @observable autoSave: boolean = false;
+  @observable exportScale: number = 1;
   @observable currentFile?: RecentFile;
   @observable sl?: Selector = undefined;
   @observable notation?: Notation;
@@ -353,6 +354,10 @@ export class AppState {
       ipcRenderer.send("get-dark-light");
     }
   }
+  @action onSetExportScale(s: number) {
+    this.exportScale = s;
+    saveConfig("export-scale", s);
+  }
   @action beforeModify() {
     console.log("before modify");
     if (this.currentFile) this.currentFile.time = Date.now();
@@ -370,6 +375,17 @@ export class AppState {
   @action onClearRecent() {
     this.recents = [];
     this.saveFileConfig();
+  }
+  @action readConfigs() {
+    let c = loadConfigs();
+    this.loadRecents(c.recents);
+    this.autoSave = c.autoSave;
+    this.display = c.display;
+    this.exportScale = c.exportScale;
+    this.langConf = c.language;
+    if (c.language !== "auto") this.langCode = c.language;
+    this.themeConf = c.theme;
+    if (c.theme !== "auto") this.themeCode = c.theme;
   }
 }
 

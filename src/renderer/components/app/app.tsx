@@ -13,7 +13,6 @@ import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
 import { AppState, useAppState } from "../../states";
-import { loadConfigs } from "../../store";
 import {
   AboutModal,
   EditMetaModal,
@@ -25,6 +24,7 @@ import "./app.css";
 
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
+  state.readConfigs();
   const { t, i18n } = useTranslation();
   useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
@@ -122,16 +122,6 @@ const App: FC = () => {
         state.footerHover = false;
       }
     });
-  });
-  useEffect(() => {
-    let c = loadConfigs();
-    state.loadRecents(c.recents);
-    state.autoSave = c.autoSave;
-    state.display = c.display;
-    state.langConf = c.language;
-    if (c.language !== "auto") state.langCode = c.language;
-    state.themeConf = c.theme;
-    if (c.theme !== "auto") state.themeCode = c.theme;
   });
   if (state) {
     return (

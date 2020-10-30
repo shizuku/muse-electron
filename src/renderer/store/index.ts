@@ -9,6 +9,7 @@ const store = new Store({
     display: "full",
     theme: "auto",
     language: "auto",
+    "export-scale": 1.5,
   },
 });
 
@@ -18,6 +19,7 @@ export interface ConfigStore {
   display: DisplayStyle;
   theme: string;
   language: string;
+  exportScale: number;
 }
 
 export function loadConfigs(): ConfigStore {
@@ -27,6 +29,7 @@ export function loadConfigs(): ConfigStore {
     display: store.get("display") as DisplayStyle,
     theme: store.get("theme"),
     language: store.get("language"),
+    exportScale: store.get("export-scale"),
   };
 }
 

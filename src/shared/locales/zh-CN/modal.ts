@@ -25,6 +25,7 @@ export default {
     "theme-dark": "深色",
     language: "语言",
     "language-auto": "自动",
+    "export-scale": "导出比例",
   },
   export: {
     export: "导出",
