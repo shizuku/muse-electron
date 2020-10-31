@@ -6,11 +6,11 @@ tagline: 一个显示编辑简谱的 react electron 项目。
 actionText: 快速上手 →
 actionLink: /zh-CN/guide/
 features:
-  - title: 简洁至上
-    details: 以 Markdown 为中心的项目结构，以最少的配置帮助你专注于写作。
-  - title: Vue驱动
-    details: 享受 Vue + webpack 的开发体验，在 Markdown 中使用 Vue 组件，同时可以使用 Vue 来开发自定义主题。
-  - title: 高性能
-    details: VuePress 为每个页面预渲染生成静态的 HTML，同时在页面被加载的时候，将作为 SPA 运行。
-footer: MIT Licensed | Copyright © 2020-present 零露瀼瀼
+  - title: 自由开源
+    details: 自由而开放。感谢以下开源项目：electron electron-forge react typescript mobx ant-design i18next html2canvas。
+  - title: 简洁优雅
+    details: 使用React、Electron、Ant Design，UI简洁而优雅。
+  - title: 方便快捷
+    details: 几乎全使用键盘输入，可以方便、高效、快速地生成乐谱并导出为图片。
+footer: MIT Licensed | Copyright © 2020 零露瀼瀼
 ---
