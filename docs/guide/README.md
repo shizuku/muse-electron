@@ -14,7 +14,7 @@ The next step is the File:
 
 There are some levels of items in notaion:
 
-![select](/select.png)
+<img :src="$withBase('/select.png')" alt="select">
 
 The subnote can be select by mouse press, press `Esc` to jump to upper level, press `Enter` to jump to lower level.
 

@@ -14,7 +14,7 @@
 
 谱面中的元素分为以下层级:
 
-![select](/select.png)
+<img :src="$withBase('/select.png')" alt="select">
 
 鼠标单击可以选择 subnote，按`ESC`可以进入当前元素的上一个层级，按`Enter`进入当前元素的第一个子元素。
 
