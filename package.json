@@ -3,12 +3,17 @@
   "productName": "Muse",
   "version": "0.1.0",
   "description": "My Electron application description",
+  "homepage": "https://shizuku.github.io/muse-electron/",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "publish": "electron-forge publish",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "predeploy": "yarn docs:build",
+    "deploy": "gh-pages -d docs/.vuepress/dist"
   },
   "keywords": [],
   "author": {
@@ -105,10 +110,12 @@
     "css-loader": "^4.2.1",
     "electron": "10.1.3",
     "fork-ts-checker-webpack-plugin": "^5.0.14",
+    "gh-pages": "^3.1.0",
     "node-loader": "^1.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.2",
+    "vuepress": "^1.7.1"
   },
   "dependencies": {
     "@types/classnames": "^2.2.10",
