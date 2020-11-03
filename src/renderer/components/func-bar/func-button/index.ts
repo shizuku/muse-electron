@@ -1,1 +1,1 @@
-export { FuncButtom } from "./FuncButton";
+export { FuncButton } from "./FuncButton";

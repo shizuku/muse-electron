@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { FuncBar } from "../func-bar";
 import { useAppState } from "../../states";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
-import { FuncButtom } from "../func-bar/func-button";
+import { FuncButton } from "../func-bar/func-button";
 import "./style.css";
 
 const DisplayPopup: FC = () => {
@@ -132,36 +132,36 @@ export const Header: FC = () => {
               title={t("toolbar.file.save")}
               mouseEnterDelay={1}
             >
-              <FuncButtom
+              <FuncButton
                 onClick={() => state.onSave()}
                 disable={!state.modified}
               >
                 <SaveOutlined />
-              </FuncButtom>
+              </FuncButton>
             </Tooltip>
             <Tooltip
               placement="topLeft"
               title={t("toolbar.start.undo")}
               mouseEnterDelay={1}
             >
-              <FuncButtom
+              <FuncButton
                 onClick={() => state.onUndo()}
                 disable={state.undoDisable}
               >
                 <UndoOutlined />
-              </FuncButtom>
+              </FuncButton>
             </Tooltip>
             <Tooltip
               placement="topLeft"
               title={t("toolbar.start.redo")}
               mouseEnterDelay={1}
             >
-              <FuncButtom
+              <FuncButton
                 onClick={() => state.onRedo()}
                 disable={state.redoDisable}
               >
                 <RedoOutlined />
-              </FuncButtom>
+              </FuncButton>
             </Tooltip>
           </FuncBar>
         ) : (

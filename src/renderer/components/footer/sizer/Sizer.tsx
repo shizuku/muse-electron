@@ -26,22 +26,16 @@ const PopContent: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
   let fw =
-    parseInt(
-      `${
-        (state.windowDim.contentW / state.windowDim.notationW) *
+    Math.round(
+      (state.windowDim.contentW / state.windowDim.notationW) *
         state.config.x *
         100
-      }`,
-      10
     ) / 100;
   let fh =
-    parseInt(
-      `${
-        (state.windowDim.contentH / state.windowDim.notationH) *
+    Math.round(
+      (state.windowDim.contentH / state.windowDim.notationH) *
         state.config.x *
         100
-      }`,
-      10
     ) / 100;
   console.log(fw, fh);
   return useObserver(() => (
@@ -68,7 +62,7 @@ export const Sizer: FC = () => {
     let x = 0;
     switch (typeof v) {
       case "number":
-        x = parseInt(`${v}`, 10);
+        x = Math.round(v);
         break;
       case "string":
         x = parseInt(v, 10);

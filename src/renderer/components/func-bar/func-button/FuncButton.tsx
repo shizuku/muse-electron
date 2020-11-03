@@ -12,7 +12,7 @@ export interface FuncButtonProps {
   children?: React.ReactNode;
 }
 
-export const FuncButtom: FC<FuncButtonProps> = ({
+export const FuncButton: FC<FuncButtonProps> = ({
   children,
   onClick,
   onMouseEnter,

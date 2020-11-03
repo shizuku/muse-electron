@@ -5,7 +5,7 @@ import { useAppState } from "../../states";
 import { Sizer } from "./sizer";
 import { FuncBar } from "../func-bar";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
-import { FuncButtom } from "../func-bar/func-button";
+import { FuncButton } from "../func-bar/func-button";
 import "./style.css";
 import { Tooltip } from "antd";
 
@@ -80,24 +80,24 @@ export const Footer: FC = () => {
               title={t("toolbar.view.one-page")}
               mouseEnterDelay={1}
             >
-              <FuncButtom
+              <FuncButton
                 onClick={() => state.onSetOnePage()}
                 active={state.config.twopage === false}
               >
                 <LayoutVerticalOutlined />
-              </FuncButtom>
+              </FuncButton>
             </Tooltip>
             <Tooltip
               placement="topLeft"
               title={t("toolbar.view.two-page")}
               mouseEnterDelay={1}
             >
-              <FuncButtom
+              <FuncButton
                 onClick={() => state.onSetTwoPage()}
                 active={state.config.twopage === true}
               >
                 <LayoutHorizontalOutlined />
-              </FuncButtom>
+              </FuncButton>
             </Tooltip>
           </FuncBar>
         </div>
