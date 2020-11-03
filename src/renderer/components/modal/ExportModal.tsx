@@ -9,22 +9,16 @@ import { useAppState } from "../../states";
 import { openNotificationWithIcon } from "../../utils";
 import {
   generateScreenshot,
-  getFileFolder,
-  getFileName,
-  getFileNameWithoutExtension,
   getImageArrayBuffer,
   range,
 } from "../../../shared/utils";
 
 export const ExportModal: FC = () => {
   let state = useAppState();
+  let p = parse(state.currentFile?.path || "");
   const { t } = useTranslation();
-  const [path, setPath] = useState(
-    getFileFolder(state.currentFile?.path || "")
-  );
-  const [name, setName] = useState(
-    getFileNameWithoutExtension(getFileName(state.currentFile?.path || ""))
-  );
+  const [path, setPath] = useState(p.dir);
+  const [name, setName] = useState(p.name);
   const [ext, setExt] = useState("png");
   const [scale, setScale] = useState(state.exportScale);
   useEffect(() => {

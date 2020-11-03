@@ -2,7 +2,7 @@ import { ipcRenderer } from "electron";
 import { action, computed, observable } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
-import { getFileName } from "../../shared/utils";
+import { parse } from "path";
 import { MuseConfig, Notation } from "../components/muse-notation";
 import Selector from "../components/muse-notation/Selector";
 import { loadConfigs, saveConfig } from "../../shared/store";
@@ -134,9 +134,9 @@ export class AppState {
   @computed get redoDisable(): boolean {
     return this.redoStack.length === 0;
   }
-  @computed get fileName() {
+  @computed get fileName(): string {
     if (this.isNew) return "No title";
-    else return getFileName(this.currentFile?.path || "");
+    else return parse(this.currentFile?.path || "").name;
   }
   @observable autoSave: boolean = false;
   @observable exportScale: number = 1;

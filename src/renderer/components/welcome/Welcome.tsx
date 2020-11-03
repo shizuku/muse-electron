@@ -10,7 +10,7 @@ import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
 import { useAppState } from "../../states";
-import { getFileFolder, getFileName } from "../../../shared/utils";
+import { basename, dirname } from "path";
 import "./style.css";
 import { Meta } from "./meta";
 
@@ -95,10 +95,10 @@ export const Welcome: FC = () => {
                         ipcRenderer.send("open-file", it.path);
                       }}
                     >
-                      {getFileName(it.path)}
+                      {basename(it.path)}
                     </a>
                   }
-                  description={`${getFileFolder(it.path)}`}
+                  description={`${dirname(it.path)}`}
                   time={`${new Date(it.time).toLocaleString(state.langCode)}`}
                 />
               </List.Item>
