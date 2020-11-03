@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { getAvaliableLangauge } from "../../../shared/locales";
 import { useAppState } from "../../states";
 
+//TODO: add theme
 export const PreferenceModal: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();

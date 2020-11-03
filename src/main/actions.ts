@@ -96,4 +96,13 @@ export function createActions(mw: BrowserWindow) {
   ipcMain.on("open-external", (ev, url) => {
     shell.openExternal(url);
   });
+  ipcMain.on("choose-folder", (ev) => {
+    dialog.showOpenDialog(mw, { properties: ["openDirectory"] }).then((v) => {
+      if (v.canceled) {
+        ev.reply("choose-folder-reply", "canceled");
+      } else {
+        ev.reply("choose-folder-reply", "success", v.filePaths[0]);
+      }
+    });
+  });
 }

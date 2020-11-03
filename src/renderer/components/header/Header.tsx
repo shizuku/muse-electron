@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import { Popover, Tooltip } from "antd";
 import { ipcRenderer } from "electron";
+import is from "electron-is";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { FuncBar } from "../func-bar";
@@ -124,7 +125,10 @@ export const Header: FC = () => {
       style={state.headerHover ? styleHover() : styleUnhover()}
     >
       <div className="header__drag-region"></div>
-      <div className="header__group-left">
+      <div
+        className="header__group-left"
+        style={is.macOS() ? { marginLeft: 65 } : {}}
+      >
         {state.opened ? (
           <FuncBar>
             <Tooltip
@@ -212,10 +216,7 @@ export const Header: FC = () => {
         >
           {state.maxStatus ? <MinimizeOutlined /> : <MaxmizeOutlined />}
         </div>
-        <div
-          className="window-icon hover-red"
-          onClick={() => state.onExit()}
-        >
+        <div className="window-icon hover-red" onClick={() => state.onExit()}>
           <CloseOutlined />
         </div>
       </div>

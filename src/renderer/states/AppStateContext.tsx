@@ -151,7 +151,7 @@ export class AppState {
     //this.notation = new Notation(JSON.parse(d), this.config);
   }
   @observable isNew: boolean = false;
-  @observable rs: HTMLElement[] = [];
+  @observable pages: HTMLElement[] = [];
   @action open(path: string, data: string, isNew: boolean) {
     this.opened = true;
     this.modified = false;
@@ -171,7 +171,7 @@ export class AppState {
       },
       false
     );
-    this.rs = [];
+    this.pages = [];
     this.undoStack = [];
     this.redoStack = [];
     this.config.twopage = this.currentFile?.twopage || true;
@@ -184,7 +184,7 @@ export class AppState {
     this.sl = undefined;
     this.isNew = false;
     this.currentFile = undefined;
-    this.rs = [];
+    this.pages = [];
     this.undoStack = [];
     this.redoStack = [];
   }

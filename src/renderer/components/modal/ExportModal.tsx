@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 import { Form, Input, InputNumber, Modal, Select } from "antd";
+import { FolderOpenOutlined } from "@ant-design/icons";
 import { useObserver } from "mobx-react";
 import { ipcRenderer } from "electron";
 import { useTranslation } from "react-i18next";
+import { parse, join } from "path";
 import { useAppState } from "../../states";
 import { openNotificationWithIcon } from "../../utils";
 import {
@@ -43,7 +45,7 @@ export const ExportModal: FC = () => {
         }
       }
     });
-    return function () {
+    return function() {
       ipcRenderer.removeAllListeners("export-data-reply");
     };
   });
@@ -52,9 +54,9 @@ export const ExportModal: FC = () => {
   };
   const ok = () => {
     state.exportConfirm = true;
-    state.exportNum = state.rs.length;
-    state.rs.forEach((el, idx) => {
-      let n = `${path}${name}-${idx + 1}.${ext}`;
+    state.exportNum = state.pages.length;
+    state.pages.forEach((el, idx) => {
+      let n = `${join(path, name)}-${idx + 1}.${ext}`;
       console.log("export:", n);
       setTimeout(() => {
         generateScreenshot(el, scale).then((c) => {
@@ -64,6 +66,14 @@ export const ExportModal: FC = () => {
         });
       }, 500);
     });
+  };
+  const onChooseFolder = () => {
+    ipcRenderer.once("choose-folder-reply", (ev, code: string, p: string) => {
+      if (code === "success") {
+        setPath(p);
+      }
+    });
+    ipcRenderer.send("choose-folder");
   };
   return useObserver(() => (
     <Modal
@@ -75,7 +85,12 @@ export const ExportModal: FC = () => {
     >
       <Form labelCol={{ span: 4 }} wrapperCol={{ span: 0 }}>
         <Form.Item label={t("modal.export.path")}>
-          <Input onChange={(v) => setPath(v.target.value)} value={path} />
+          <Input.Search
+            onChange={(v) => setPath(v.target.value)}
+            value={path}
+            enterButton={<FolderOpenOutlined />}
+            onSearch={onChooseFolder}
+          />
         </Form.Item>
         <Form.Item label={t("modal.export.name")}>
           <Input onChange={(v) => setName(v.target.value)} value={name} />
@@ -106,9 +121,11 @@ export const ExportModal: FC = () => {
           ></InputNumber>
         </Form.Item>
       </Form>
-      {range(state.rs.length).map((i) => (
-        <p key={i}>{`${path}${name}-${i + 1}.${ext}`}</p>
-      ))}
+      <div>
+        {range(state.pages.length).map((i) => {
+          return <p key={i}>{`${join(path, name)}-${i + 1}.${ext}`}</p>;
+        })}
+      </div>
     </Modal>
   ));
 };

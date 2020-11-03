@@ -245,7 +245,7 @@ const MusePage: FC<{ page: Page; c: number[]; sl?: Selector }> = ({
     <span
       className={clazz}
       ref={(e) => {
-        state.rs[page.index] = e as HTMLElement;
+        state.pages[page.index] = e as HTMLElement;
       }}
       style={{
         display: "inline-block",
