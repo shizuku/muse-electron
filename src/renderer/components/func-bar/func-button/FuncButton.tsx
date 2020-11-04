@@ -7,7 +7,7 @@ export interface FuncButtonProps {
   onMouseEnter?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onMouseLeave?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
-  active?: boolean;
+  active?: () => boolean | boolean;
   disable?: boolean;
   children?: React.ReactNode;
 }
@@ -55,7 +55,8 @@ export const FuncButton: FC<FuncButtonProps> = ({
           ? hover
             ? { color: "#FFFFFF44", background: "#00000022" }
             : { color: "#FFFFFF44" }
-          : active === true
+          : (typeof active === "boolean" && active === true) ||
+            (typeof active === "function" && active() === true)
           ? { background: "#00000055" }
           : hover
           ? press

@@ -1,7 +1,7 @@
 import { observable, computed } from "mobx";
 
 export default class MuseConfig {
-  @observable x = 1.0;
+  @observable x = 1.0; // 1.0 means 100%
   @observable noteFontFamily = "serif";
   @observable textFontFamily = "serif";
   @observable backgroundColor = "white";

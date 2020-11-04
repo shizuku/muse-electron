@@ -78,6 +78,18 @@ export class WindowDim {
   @observable notationW: number = 0;
 }
 
+export class ModalState {
+  @observable appLoading: boolean = false;
+  @observable showEditMetaModel: boolean = false;
+  @observable showAboutModel: boolean = false;
+  @observable showSettings: boolean = false;
+  @observable showExport: boolean = false;
+  @observable exportConfirm: boolean = false;
+  @observable exportNum: number = 0;
+  @observable showSureClose: boolean = false;
+  @observable toExit: boolean = false;
+}
+
 //full: show all element,
 //headfoot: only show header, footer and content
 //content: only show content
@@ -107,6 +119,27 @@ export class AppState {
   @observable themeConf: string = "auto"; //auto|light|dark
   @observable themeCode: string = "light"; //light|dark
   @observable windowDim: WindowDim = new WindowDim();
+  @computed get fitWidthSizer(): number {
+    // 100 means 100%
+    return Math.floor(
+      (this.windowDim.contentW /
+        (((this.config.pageWidth + 2 * this.config.pageGap) / this.config.x) *
+          (this.config.twopage
+            ? (this.notation?.pages.length || 0) > 1
+              ? 2
+              : 1
+            : 1))) *
+        100
+    );
+  }
+  @computed get fitHeightSizer(): number {
+    // 100 means 100%
+    return Math.floor(
+      (this.windowDim.contentH /
+        ((this.config.pageHeight + 2 * this.config.pageGap) / this.config.x)) *
+        100
+    );
+  }
   //state
   @observable opened: boolean = false;
   @observable modified: boolean = false;
@@ -136,7 +169,7 @@ export class AppState {
   }
   @computed get fileName(): string {
     if (this.isNew) return "No title";
-    else return parse(this.currentFile?.path || "").name;
+    else return parse(this.currentFile?.path || "").base;
   }
   @observable autoSave: boolean = false;
   @observable exportScale: number = 1;
@@ -273,8 +306,9 @@ export class AppState {
     saveConfig("auto-save", this.autoSave);
   }
   @action onSetSizer(x: number) {
-    this.config.x = x;
-    if (this.currentFile) this.currentFile.size = x;
+    // 100 means 100%
+    this.config.x = x / 100;
+    if (this.currentFile) this.currentFile.size = x / 100;
     this.saveFileConfig();
   }
   @action onExport() {

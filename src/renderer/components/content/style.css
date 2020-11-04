@@ -5,7 +5,7 @@
 .notaiton-container {
   display: block;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .notaion-outer {

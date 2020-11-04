@@ -1,6 +1,7 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
+import { ColumnHeightOutlined, ColumnWidthOutlined } from "@ant-design/icons";
 import { useAppState } from "../../states";
 import { Sizer } from "./sizer";
 import { FuncBar } from "../func-bar";
@@ -78,11 +79,11 @@ export const Footer: FC = () => {
             <Tooltip
               placement="topLeft"
               title={t("toolbar.view.one-page")}
-              mouseEnterDelay={1}
+              mouseEnterDelay={0.5}
             >
               <FuncButton
                 onClick={() => state.onSetOnePage()}
-                active={state.config.twopage === false}
+                active={() => state.config.twopage === false}
               >
                 <LayoutVerticalOutlined />
               </FuncButton>
@@ -90,13 +91,41 @@ export const Footer: FC = () => {
             <Tooltip
               placement="topLeft"
               title={t("toolbar.view.two-page")}
-              mouseEnterDelay={1}
+              mouseEnterDelay={0.5}
             >
               <FuncButton
                 onClick={() => state.onSetTwoPage()}
-                active={state.config.twopage === true}
+                active={() => state.config.twopage === true}
               >
                 <LayoutHorizontalOutlined />
+              </FuncButton>
+            </Tooltip>
+          </FuncBar>
+        </div>
+        <div className="footer__item">
+          <FuncBar>
+            <Tooltip
+              placement="topLeft"
+              title={t("footer.sizer.fit-height")}
+              mouseEnterDelay={0.5}
+            >
+              <FuncButton
+                active={() => state.config.x * 100 === state.fitHeightSizer}
+                onClick={() => state.onSetSizer(state.fitHeightSizer)}
+              >
+                <ColumnHeightOutlined />
+              </FuncButton>
+            </Tooltip>
+            <Tooltip
+              placement="topLeft"
+              title={t("footer.sizer.fit-width")}
+              mouseEnterDelay={0.5}
+            >
+              <FuncButton
+                active={() => state.config.x * 100 === state.fitWidthSizer}
+                onClick={() => state.onSetSizer(state.fitWidthSizer)}
+              >
+                <ColumnWidthOutlined />
               </FuncButton>
             </Tooltip>
           </FuncBar>

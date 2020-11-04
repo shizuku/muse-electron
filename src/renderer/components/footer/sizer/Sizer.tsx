@@ -11,7 +11,7 @@ const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
     <div
       className="pop-item"
       style={
-        state.config.x - x > -10e-20 && state.config.x - x < 10e-20
+        state.config.x * 100 === x
           ? { background: state.theme.colorPrimaryLight }
           : {}
       }
@@ -25,32 +25,18 @@ const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
 const PopContent: FC = () => {
   let state = useAppState();
   const { t } = useTranslation();
-  let fw =
-    Math.round(
-      (state.windowDim.contentW / state.windowDim.notationW) *
-        state.config.x *
-        100
-    ) / 100;
-  let fh =
-    Math.round(
-      (state.windowDim.contentH / state.windowDim.notationH) *
-        state.config.x *
-        100
-    ) / 100;
-  console.log(fw, fh);
+  console.log(state.fitWidthSizer, state.fitHeightSizer);
   return useObserver(() => (
     <div className="pop-content">
-      <PopItem x={fw} s={t("footer.sizer.fit-width")} />
-      <PopItem x={fh} s={t("footer.sizer.fit-height")} />
-      <PopItem x={Math.min(fw, fh)} s={t("footer.sizer.fit-screen")} />
-      <PopItem x={Math.max(fw, fh)} s={t("footer.sizer.fit-content")} />
-      <PopItem x={3} s="300%" />
-      <PopItem x={2.5} s="250%" />
-      <PopItem x={1.5} s="150%" />
-      <PopItem x={1} s="100%" />
-      <PopItem x={0.75} s="75%" />
-      <PopItem x={0.5} s="50%" />
-      <PopItem x={0.25} s="25%" />
+      <PopItem x={state.fitWidthSizer} s={t("footer.sizer.fit-width")} />
+      <PopItem x={state.fitHeightSizer} s={t("footer.sizer.fit-height")} />
+      <PopItem x={300} s="300%" />
+      <PopItem x={250} s="250%" />
+      <PopItem x={150} s="150%" />
+      <PopItem x={100} s="100%" />
+      <PopItem x={75} s="75%" />
+      <PopItem x={50} s="50%" />
+      <PopItem x={25} s="25%" />
     </div>
   ));
 };
@@ -62,7 +48,7 @@ export const Sizer: FC = () => {
     let x = 0;
     switch (typeof v) {
       case "number":
-        x = Math.round(v);
+        x = Math.floor(v);
         break;
       case "string":
         x = parseInt(v, 10);
@@ -70,7 +56,7 @@ export const Sizer: FC = () => {
       default:
         x = 100;
     }
-    state.config.x = x / 100;
+    state.onSetSizer(x);
   };
   return useObserver(() => (
     <div className="sizer">

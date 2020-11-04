@@ -37,7 +37,7 @@
         "icon": "public/code.ico",
         "name": "Muse",
         "executableName": "Muse",
-        "productName": "Muse"
+        "win32metadata": "muse/muse"
       },
       "makers": [
         {
@@ -50,6 +50,8 @@
           ],
           "config": {
             "name": "Muse",
+            "exe": "Muse",
+            "title": "Muse",
             "noMsi": false
           }
         },
@@ -60,7 +62,10 @@
           ],
           "config": {
             "options": {
-              "bin": "Muse"
+              "bin": "Muse",
+              "name": "Muse",
+              "productName": "Muse",
+              "genericName": "Muse"
             }
           }
         },
@@ -71,7 +76,10 @@
           ],
           "config": {
             "options": {
-              "bin": "Muse"
+              "bin": "Muse",
+              "name": "Muse",
+              "productName": "Muse",
+              "genericName": "Muse"
             }
           }
         },
