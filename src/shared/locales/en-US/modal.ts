@@ -11,6 +11,7 @@ export default {
     license: "License",
     issues: "Issues",
     releases: "Releases",
+    help: "Help",
     content:
       "This is a open source project and my first front-end project. If you have any issures or suggestions, please report to me.",
     thanks:

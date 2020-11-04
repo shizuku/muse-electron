@@ -28,7 +28,6 @@ export const AboutModal: FC = () => {
         </ExternalLink>
         <div className="about__content">
           <p>{t("modal.about.content")}</p>
-          <p>{t("modal.about.thanks")}</p>
           <p>{t("modal.about.special-thanks")}</p>
         </div>
         <div className="about__bottom">
@@ -38,6 +37,9 @@ export const AboutModal: FC = () => {
             </ExternalLink>
           </div>
           <div className="about__bottom__right">
+            <ExternalLink url="https://shizuku.github.io/muse-electron">
+              <div className="about__item">{t("modal.about.help")}</div>
+            </ExternalLink>
             <ExternalLink url="https://github.com/shizuku/muse-electron/blob/master/LICENSE">
               <div className="about__item">{t("modal.about.license")}</div>
             </ExternalLink>

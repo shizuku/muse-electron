@@ -11,10 +11,9 @@ export default {
     license: "开源许可",
     issues: "错误报告",
     releases: "更新日志",
+    help: "帮助支持",
     content:
       "这是一个开源项目，也是我的第一个完整的前端项目。遇到任何问题，或有任何意见建议，欢迎与我联系。",
-    thanks:
-      "感谢以下开源项目：electron electron-forge react typescript mobx ant-design i18next html2canvas",
     "special-thanks": "特别鸣谢：团团子",
   },
   preference: {
