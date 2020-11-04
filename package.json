@@ -2,7 +2,7 @@
   "name": "muse-electron",
   "productName": "Muse",
   "version": "0.1.0",
-  "description": "My Electron application description",
+  "description": "A react electron project to show and edit music score.",
   "homepage": "https://shizuku.github.io/muse-electron/",
   "main": ".webpack/main",
   "scripts": {
@@ -15,7 +15,17 @@
     "predeploy": "yarn docs:build",
     "deploy": "gh-pages -d docs/.vuepress/dist"
   },
-  "keywords": [],
+  "keywords": [
+    "electron",
+    "electron-forge",
+    "webpack",
+    "react",
+    "typescript",
+    "antd",
+    "mobx",
+    "music",
+    "muse"
+  ],
   "author": {
     "name": "shizuku",
     "email": "2112165916@qq.com"
@@ -50,13 +60,8 @@
           ],
           "config": {
             "options": {
-              "name": "Muse",
-              "executableName": "Muse",
-              "productName": "Muse"
-            },
-            "name": "Muse",
-            "executableName": "Muse",
-            "productName": "Muse"
+              "bin": "Muse"
+            }
           }
         },
         {
@@ -64,7 +69,11 @@
           "platforms": [
             "linux"
           ],
-          "config": {}
+          "config": {
+            "options": {
+              "bin": "Muse"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-dmg",
