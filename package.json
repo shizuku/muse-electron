@@ -36,8 +36,7 @@
       "packagerConfig": {
         "icon": "public/code.ico",
         "name": "Muse",
-        "executableName": "Muse",
-        "win32metadata": "muse/muse"
+        "executableName": "Muse"
       },
       "makers": [
         {
@@ -50,8 +49,6 @@
           ],
           "config": {
             "name": "Muse",
-            "exe": "Muse",
-            "title": "Muse",
             "noMsi": false
           }
         },
