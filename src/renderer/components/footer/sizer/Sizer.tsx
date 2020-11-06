@@ -48,10 +48,10 @@ export const Sizer: FC = () => {
     let x = 0;
     switch (typeof v) {
       case "number":
-        x = Math.floor(v);
+        x = Math.floor(v * 100) / 100;
         break;
       case "string":
-        x = parseInt(v, 10);
+        x = Math.floor(parseFloat(v) * 100) / 100;
         break;
       default:
         x = 100;

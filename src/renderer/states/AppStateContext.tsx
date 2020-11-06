@@ -61,6 +61,10 @@ export const darkTheme: Theme = {
 };
 
 export class WindowDim {
+  constructor(state: AppState) {
+    this.state = state;
+  }
+  readonly state: AppState;
   @observable wh: number = 0;
   @observable ww: number = 0;
   @observable x: number = 0;
@@ -70,7 +74,11 @@ export class WindowDim {
   @observable toolbar: number = 0;
   //target
   @computed get contentH(): number {
-    return this.wh - this.header - this.toolbar - this.footer;
+    if (this.state.display === "content") {
+      return this.wh;
+    } else {
+      return this.wh - this.header - this.toolbar - this.footer;
+    }
   }
   @observable contentW: number = 0;
   //current
@@ -118,7 +126,7 @@ export class AppState {
   @observable theme: Theme = lightTheme;
   @observable themeConf: string = "auto"; //auto|light|dark
   @observable themeCode: string = "light"; //light|dark
-  @observable windowDim: WindowDim = new WindowDim();
+  @observable windowDim: WindowDim = new WindowDim(this);
   @computed get fitWidthSizer(): number {
     // 100 means 100%
     return Math.floor(
@@ -129,16 +137,16 @@ export class AppState {
               ? 2
               : 1
             : 1))) *
-        100
-    );
+        10000
+    )/100;
   }
   @computed get fitHeightSizer(): number {
     // 100 means 100%
     return Math.floor(
       (this.windowDim.contentH /
         ((this.config.pageHeight + 2 * this.config.pageGap) / this.config.x)) *
-        100
-    );
+        10000
+    )/100;
   }
   //state
   @observable opened: boolean = false;
