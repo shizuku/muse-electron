@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import { action, computed, observable } from "mobx";
+import { action, autorun, computed, observable } from "mobx";
 import { MobXProviderContext } from "mobx-react";
 import { useContext } from "react";
 import { parse } from "path";
@@ -109,6 +109,15 @@ export interface Op {
 }
 
 export class AppState {
+  constructor() {
+    autorun(() => {
+      if (this.sizerMode === "fh") {
+        this.config.x = this.fitHeightSizer / 100;
+      } else if (this.sizerMode === "fw") {
+        this.config.x = this.fitWidthSizer / 100;
+      }
+    });
+  }
   //modals
   @observable appLoading: boolean = false;
   @observable showEditMetaModel: boolean = false;
@@ -129,24 +138,29 @@ export class AppState {
   @observable windowDim: WindowDim = new WindowDim(this);
   @computed get fitWidthSizer(): number {
     // 100 means 100%
-    return Math.floor(
-      (this.windowDim.contentW /
-        (((this.config.pageWidth + 2 * this.config.pageGap) / this.config.x) *
-          (this.config.twopage
-            ? (this.notation?.pages.length || 0) > 1
-              ? 2
-              : 1
-            : 1))) *
-        10000
-    )/100;
+    return (
+      Math.floor(
+        (this.windowDim.contentW /
+          (((this.config.pageWidth + 2 * this.config.pageGap) / this.config.x) *
+            (this.config.twopage
+              ? (this.notation?.pages.length || 0) > 1
+                ? 2
+                : 1
+              : 1))) *
+          10000
+      ) / 100
+    );
   }
   @computed get fitHeightSizer(): number {
     // 100 means 100%
-    return Math.floor(
-      (this.windowDim.contentH /
-        ((this.config.pageHeight + 2 * this.config.pageGap) / this.config.x)) *
-        10000
-    )/100;
+    return (
+      Math.floor(
+        (this.windowDim.contentH /
+          ((this.config.pageHeight + 2 * this.config.pageGap) /
+            this.config.x)) *
+          10000
+      ) / 100
+    );
   }
   //state
   @observable opened: boolean = false;
@@ -313,10 +327,24 @@ export class AppState {
     this.autoSave = !this.autoSave;
     saveConfig("auto-save", this.autoSave);
   }
+  @observable sizerMode: "fw" | "fh" | "flex" = "flex";
   @action onSetSizer(x: number) {
     // 100 means 100%
+    this.sizerMode = "flex";
     this.config.x = x / 100;
     if (this.currentFile) this.currentFile.size = x / 100;
+    this.saveFileConfig();
+  }
+  @action onSetFitWidth() {
+    this.sizerMode = "fw";
+    this.config.x = this.fitWidthSizer / 100;
+    if (this.currentFile) this.currentFile.size = this.fitWidthSizer / 100;
+    this.saveFileConfig();
+  }
+  @action onSetFitHeight() {
+    this.sizerMode = "fh";
+    this.config.x = this.fitHeightSizer / 100;
+    if (this.currentFile) this.currentFile.size = this.fitHeightSizer / 100;
     this.saveFileConfig();
   }
   @action onExport() {

@@ -111,7 +111,7 @@ export const Footer: FC = () => {
             >
               <FuncButton
                 active={() => state.config.x * 100 === state.fitHeightSizer}
-                onClick={() => state.onSetSizer(state.fitHeightSizer)}
+                onClick={() => state.onSetFitHeight()}
               >
                 <ColumnHeightOutlined />
               </FuncButton>
@@ -123,7 +123,7 @@ export const Footer: FC = () => {
             >
               <FuncButton
                 active={() => state.config.x * 100 === state.fitWidthSizer}
-                onClick={() => state.onSetSizer(state.fitWidthSizer)}
+                onClick={() => state.onSetFitWidth()}
               >
                 <ColumnWidthOutlined />
               </FuncButton>
@@ -137,4 +137,4 @@ export const Footer: FC = () => {
     </footer>
   ));
 };
-3
+3;
