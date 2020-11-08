@@ -6,7 +6,6 @@ import { Locale } from "antd/lib/locale-provider";
 import zhCN from "antd/es/locale/zh_CN";
 import enUS from "antd/es/locale/en_US";
 import { useObserver, Provider } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { Welcome } from "../welcome";
 import { Content } from "../content";
 import { Toolbar } from "../toolbar";
@@ -25,7 +24,6 @@ import "./app.css";
 const App: FC = () => {
   let [state, setState] = useState<AppState>(new AppState());
   state.readConfigs();
-  const { t, i18n } = useTranslation();
   useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
       if (data !== "") {
@@ -61,7 +59,7 @@ const App: FC = () => {
         state.changeTheme(state.themeCode, state.themeCode);
       }
     });
-    return function () {
+    return function() {
       ipcRenderer.removeAllListeners("open-file-reply");
       ipcRenderer.removeAllListeners("new-file-reply");
       ipcRenderer.removeAllListeners("save-reply");

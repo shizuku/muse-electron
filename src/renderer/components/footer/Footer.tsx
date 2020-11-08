@@ -110,7 +110,7 @@ export const Footer: FC = () => {
               mouseEnterDelay={0.5}
             >
               <FuncButton
-                active={() => state.config.x * 100 === state.fitHeightSizer}
+                active={() => state.currentFile?.sizerMode === "fh"}
                 onClick={() => state.onSetFitHeight()}
               >
                 <ColumnHeightOutlined />
@@ -122,7 +122,7 @@ export const Footer: FC = () => {
               mouseEnterDelay={0.5}
             >
               <FuncButton
-                active={() => state.config.x * 100 === state.fitWidthSizer}
+                active={() => state.currentFile?.sizerMode === "fw"}
                 onClick={() => state.onSetFitWidth()}
               >
                 <ColumnWidthOutlined />

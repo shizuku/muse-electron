@@ -11,6 +11,7 @@ import i18n from "../../shared/locales";
 export interface RecentFile {
   path: string;
   time: number;
+  sizerMode: "flex" | "fw" | "fh";
   size: number;
   twopage: boolean;
 }
@@ -111,10 +112,18 @@ export interface Op {
 export class AppState {
   constructor() {
     autorun(() => {
-      if (this.sizerMode === "fh") {
-        this.config.x = this.fitHeightSizer / 100;
-      } else if (this.sizerMode === "fw") {
-        this.config.x = this.fitWidthSizer / 100;
+      if (this.currentFile) {
+        if (this.currentFile.sizerMode === "fh") {
+          if (this.fitHeightSizer !== 0) {
+            this.config.x = this.fitHeightSizer / 100;
+          }
+        } else if (this.currentFile.sizerMode === "fw") {
+          if (this.fitWidthSizer !== 0) {
+            this.config.x = this.fitWidthSizer / 100;
+          }
+        } else {
+          this.config.x = this.currentFile.size;
+        }
       }
     });
   }
@@ -208,19 +217,11 @@ export class AppState {
   @observable isNew: boolean = false;
   @observable pages: HTMLElement[] = [];
   @action open(path: string, data: string, isNew: boolean) {
-    this.opened = true;
-    this.modified = false;
-    this.notation = new Notation(JSON.parse(data), this.config);
-    this.sl = new Selector(
-      this.notation,
-      () => this.beforeModify(),
-      () => this.afterModify()
-    );
-    this.isNew = isNew;
     this.currentFile = this.addRecentFile(
       {
         path,
         time: Date.now(),
+        sizerMode: "flex",
         size: 1,
         twopage: true,
       },
@@ -229,8 +230,22 @@ export class AppState {
     this.pages = [];
     this.undoStack = [];
     this.redoStack = [];
-    this.config.twopage = this.currentFile?.twopage || true;
-    this.config.x = this.currentFile?.size || 1;
+    if (this.currentFile) {
+      this.config.twopage = this.currentFile.twopage;
+      this.config.x = this.currentFile.size;
+      this.opened = true;
+      this.modified = false;
+      this.notation = new Notation(JSON.parse(data), this.config);
+      this.sl = new Selector(
+        this.notation,
+        () => this.beforeModify(),
+        () => this.afterModify()
+      );
+      this.isNew = isNew;
+    } else {
+      this.config.twopage = true;
+      this.config.x = 1;
+    }
   }
   @action close() {
     this.opened = false;
@@ -327,25 +342,30 @@ export class AppState {
     this.autoSave = !this.autoSave;
     saveConfig("auto-save", this.autoSave);
   }
-  @observable sizerMode: "fw" | "fh" | "flex" = "flex";
   @action onSetSizer(x: number) {
     // 100 means 100%
-    this.sizerMode = "flex";
-    this.config.x = x / 100;
-    if (this.currentFile) this.currentFile.size = x / 100;
-    this.saveFileConfig();
+    if (this.currentFile) {
+      this.currentFile.sizerMode = "flex";
+      this.config.x = x / 100;
+      if (this.currentFile) this.currentFile.size = x / 100;
+      this.saveFileConfig();
+    }
   }
   @action onSetFitWidth() {
-    this.sizerMode = "fw";
-    this.config.x = this.fitWidthSizer / 100;
-    if (this.currentFile) this.currentFile.size = this.fitWidthSizer / 100;
-    this.saveFileConfig();
+    if (this.currentFile) {
+      this.currentFile.sizerMode = "fw";
+      this.config.x = this.fitWidthSizer / 100;
+      if (this.currentFile) this.currentFile.size = this.fitWidthSizer / 100;
+      this.saveFileConfig();
+    }
   }
   @action onSetFitHeight() {
-    this.sizerMode = "fh";
-    this.config.x = this.fitHeightSizer / 100;
-    if (this.currentFile) this.currentFile.size = this.fitHeightSizer / 100;
-    this.saveFileConfig();
+    if (this.currentFile) {
+      this.currentFile.sizerMode = "fh";
+      this.config.x = this.fitHeightSizer / 100;
+      if (this.currentFile) this.currentFile.size = this.fitHeightSizer / 100;
+      this.saveFileConfig();
+    }
   }
   @action onExport() {
     this.showExport = true;
