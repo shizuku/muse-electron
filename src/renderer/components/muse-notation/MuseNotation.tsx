@@ -139,6 +139,7 @@ export interface MuseNotationProps {
 const MuseNotation: FC<MuseNotationProps> = ({ notation }) => {
   let clazz = "muse-notation";
   let state = useAppState();
+  console.log("render notation");
   return useObserver(() => (
     <div className={clazz}>
       {notation.group.map((ar, idx) => (

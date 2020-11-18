@@ -322,6 +322,7 @@ class Selector {
       }
     } else return false;
   }
+  //FIXME:  undefined
   keyNote(ev: KeyboardEvent): boolean {
     if (this.note) {
       switch (ev.key) {
@@ -383,7 +384,9 @@ class Selector {
           this.beforeModify();
           if (this.bar) {
             let idx = this.note.getThis().index;
+            console.log("xx")
             this.bar.removeNote(idx);
+            console.log("xxx")
             if (this.bar.getThis().notes.length === 0) {
               this.bar.setSelect(true);
               this.note.setSelect(false);

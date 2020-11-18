@@ -460,9 +460,10 @@ export class AppState {
         c: this.sl.c,
       });
     this.redoStack.length = 0;
-    this.modified = true;
   }
   @action afterModify() {
+    console.log("after modify");
+    this.modified = true;
     if (this.autoSave && !this.isNew) {
       this.onSave();
     }
