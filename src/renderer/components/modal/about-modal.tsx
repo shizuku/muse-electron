@@ -2,21 +2,24 @@ import React, { FC } from "react";
 import { Modal } from "antd";
 import { useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { useAppState } from "../../states";
 import { ExternalLink } from "../../utils";
 import pack from "../../../../package.json";
+import { AboutModalInstance } from "../../models/components/modal/about";
 import "./about.css";
 
-export const AboutModal: FC = () => {
-  let state = useAppState();
+export interface AboutModalProps {
+  model: AboutModalInstance;
+}
+
+export const AboutModal: FC<AboutModalProps> = ({ model }) => {
   const { t } = useTranslation();
   const cancel = () => {
-    state.showAboutModel = false;
+    model.hide();
   };
   return useObserver(() => (
     <Modal
       title={t("modal.about.about")}
-      visible={state.showAboutModel}
+      visible={model.ifShow}
       onCancel={cancel}
       footer={[]}
     >
