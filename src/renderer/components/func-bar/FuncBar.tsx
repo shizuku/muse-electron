@@ -1,12 +1,17 @@
+import { observer } from "mobx-react";
 import React, { FC } from "react";
-import { useAppState } from "../../states";
+import { ThemeItemInstance } from "../../models/config/theme";
 import "./style.css";
 
-export const FuncBar: FC = ({ children }) => {
-  let state = useAppState();
+export interface FuncBarProps {
+  theme: ThemeItemInstance;
+  children?: React.ReactNode;
+}
+
+export const FuncBar: FC<FuncBarProps> = observer(({ children, theme }) => {
   return (
-    <div className="func-bar" style={{ color: state.theme.colorBackground }}>
+    <div className="func-bar" style={{ color: theme.activeColor }}>
       {children}
     </div>
   );
-};
+});

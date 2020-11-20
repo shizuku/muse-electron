@@ -1,47 +1,47 @@
 import React, { FC } from "react";
-import { useObserver } from "mobx-react";
+import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { InputNumber, Popover } from "antd";
 import { useAppState } from "../../../states";
+import { useRootModel } from "../../../models";
 import "./style.css";
 
-const PopItem: FC<{ x: number; s: string }> = ({ x, s }) => {
-  let state = useAppState();
+const PopItem: FC<{ x: number; t: string }> = observer(({ x, t }) => {
+  let root = useRootModel();
+  let theme = root.config.theme.theme;
+  let fileConf = root.file.conf;
   return useObserver(() => (
     <div
       className="pop-item"
-      style={
-        state.config.x * 100 === x
-          ? { background: state.theme.colorPrimaryLight }
-          : {}
-      }
-      onClick={() => state.onSetSizer(x)}
+      style={fileConf.sizer === x ? { background: theme.activeColor } : {}}
+      onClick={() => fileConf.setSizer(x)}
     >
-      {s}
+      {t}
     </div>
   ));
-};
+});
 
-const PopContent: FC = () => {
-  let state = useAppState();
+const PopContent: FC = observer(() => {
+  let root = useRootModel();
+
   const { t } = useTranslation();
-  console.log(state.fitWidthSizer, state.fitHeightSizer);
+  console.log(root.fitWidthSizer, root.fitHeightSizer);
   return useObserver(() => (
     <div className="pop-content">
-      <PopItem x={state.fitWidthSizer} s={t("footer.sizer.fit-width")} />
-      <PopItem x={state.fitHeightSizer} s={t("footer.sizer.fit-height")} />
-      <PopItem x={300} s="300%" />
-      <PopItem x={250} s="250%" />
-      <PopItem x={150} s="150%" />
-      <PopItem x={100} s="100%" />
-      <PopItem x={75} s="75%" />
-      <PopItem x={50} s="50%" />
-      <PopItem x={25} s="25%" />
+      <PopItem x={root.fitWidthSizer} t={t("footer.sizer.fit-width")} />
+      <PopItem x={root.fitHeightSizer} t={t("footer.sizer.fit-height")} />
+      <PopItem x={300} t="300%" />
+      <PopItem x={250} t="250%" />
+      <PopItem x={150} t="150%" />
+      <PopItem x={100} t="100%" />
+      <PopItem x={75} t="75%" />
+      <PopItem x={50} t="50%" />
+      <PopItem x={25} t="25%" />
     </div>
   ));
-};
+});
 
-export const Sizer: FC = () => {
+export const Sizer: FC = observer(() => {
   let state = useAppState();
   const { t } = useTranslation();
   const onChange = (v: string | number | undefined) => {
@@ -74,4 +74,4 @@ export const Sizer: FC = () => {
       </Popover>
     </div>
   ));
-};
+});

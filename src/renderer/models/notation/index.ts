@@ -1,9 +1,10 @@
-import { types } from "mobx-state-tree";
-import { Instance, optional } from "mobx-state-tree/dist/internal";
+import { types, Instance } from "mobx-state-tree";
+import { NotationConfigModel } from "./config";
 import { NotationInfoModel } from "./info";
 
 export const NotationModel = types.model("Notation", {
-  info: optional(NotationInfoModel, {}),
+  info: types.optional(NotationInfoModel, {}),
+  config: types.optional(NotationConfigModel, {}),
 });
 
 export type NotationInstance = Instance<typeof NotationModel>;

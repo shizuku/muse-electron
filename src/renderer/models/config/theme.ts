@@ -2,6 +2,8 @@ import { Instance, types } from "mobx-state-tree";
 import { optional } from "mobx-state-tree/dist/internal";
 
 export interface ThemeItemLoader {
+  activeColor: string;
+
   titleBarText: string;
   titleBarBackground: string;
   welcomeSiderText: string;
@@ -22,6 +24,7 @@ export interface ThemeItemLoader {
 }
 
 export const ThemeItemModel = types.model("ThemeItem", {
+  activeColor: types.string,
   titleBarText: types.string,
   titleBarBackground: types.string,
   welcomeSiderText: types.string,
@@ -44,6 +47,8 @@ export const ThemeItemModel = types.model("ThemeItem", {
 export type ThemeItemInstance = Instance<typeof ThemeItemModel>;
 
 const defaultTheme = ThemeItemModel.create({
+  activeColor: "",
+  
   titleBarText: "",
   titleBarBackground: "",
   welcomeSiderText: "",

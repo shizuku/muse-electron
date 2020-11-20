@@ -28,5 +28,8 @@ export const FileConfigModel = types
       setSizerMode(s: "flex" | "fw" | "fh") {
         self.sizerMode = s;
       },
+      setSizer(n: number) {
+        self.sizer = n;
+      },
     };
   });
