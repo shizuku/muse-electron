@@ -54,10 +54,10 @@ export function createActions(mw: BrowserWindow) {
       event.reply("save-reply", "success");
     });
   });
-  ipcMain.on("save-as", (event, path, data) => {
+  ipcMain.on("save-as", (event, data) => {
     dialog.showSaveDialog({}).then((v) => {
       if (v.canceled) {
-        event.reply("save-as-reply", "canceled", path);
+        event.reply("save-as-reply", "canceled", "");
         return;
       }
       if (v.filePath) {

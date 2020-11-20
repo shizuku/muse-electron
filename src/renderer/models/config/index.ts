@@ -1,4 +1,5 @@
 import { Instance, types } from "mobx-state-tree";
+import { ThemeModel } from "./theme";
 
 export interface ConfigLoader {
   autoSave: boolean;
@@ -19,6 +20,7 @@ export const ConfigModel = types
       types.enumeration("", ["full", "headfoot", "content"]),
       "full"
     ),
+    theme: types.optional(ThemeModel, {}),
   })
   .views((self) => {
     return {

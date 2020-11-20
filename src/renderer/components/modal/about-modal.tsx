@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Modal } from "antd";
-import { useObserver } from "mobx-react";
+import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { ExternalLink } from "../../utils";
 import pack from "../../../../package.json";
@@ -11,7 +11,7 @@ export interface AboutModalProps {
   model: AboutModalInstance;
 }
 
-export const AboutModal: FC<AboutModalProps> = ({ model }) => {
+export const AboutModal: FC<AboutModalProps> = observer(({ model }) => {
   const { t } = useTranslation();
   const cancel = () => {
     model.hide();
@@ -57,4 +57,4 @@ export const AboutModal: FC<AboutModalProps> = ({ model }) => {
       </div>
     </Modal>
   ));
-};
+});

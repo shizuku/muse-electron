@@ -3,32 +3,32 @@ import { Button, Modal } from "antd";
 import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { SureCloseModalInstance } from "../../models/components/modal/sure-close";
+import { FileInstance } from "../../models/file";
 
 export interface SureCloseModalProps {
   model: SureCloseModalInstance;
-  onSave: (cb: (r: string) => void) => void;
-  onClose: () => void;
+  file: FileInstance;
 }
 
 export const SureCloseModal: FC<SureCloseModalProps> = observer(
-  ({ model, onSave, onClose }) => {
+  ({ model, file }) => {
     const { t } = useTranslation();
     const cancel = () => {
-      model.setShow(false);
+      model.hide();
     };
     const yes = () => {
       console.log("modal sure close yes");
-      onSave((r) => {
+      file.save((r) => {
         console.log("modal sure close cb", r);
         if (r === "success") {
-          model.setShow(false);
-          onClose();
+          model.hide();
+          file.close();
         }
       });
     };
     const no = () => {
-      model.setShow(false);
-      onClose();
+      model.hide();
+      file.close();
     };
     return useObserver(() => (
       <Modal

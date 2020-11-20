@@ -1,7 +1,88 @@
+import { ipcRenderer } from "electron";
 import { Instance, types } from "mobx-state-tree";
-import { ClosedFileModel } from "./closed";
-import { OpenedFileModel } from "./opened";
+import { parse } from "path";
+import { HtmlElementModel } from "./html-element";
 
-export const FileModel = types.union(OpenedFileModel, ClosedFileModel);
+export const FileModel = types
+  .model("File")
+  .props({
+    isOpen: types.optional(types.boolean, false),
+    isModified: types.optional(types.boolean, false),
+    isNew: types.optional(types.boolean, false),
+
+    path: types.optional(types.string, ""),
+
+    pages: types.optional(types.array(HtmlElementModel), []),
+  })
+  .views((self) => {
+    return {
+      get title(): string {
+        return parse(self.path).base;
+      },
+      get data(): string {
+        return "";
+      },
+    };
+  })
+  .actions((self) => {
+    return {
+      open() {
+        if (!self.isOpen) {
+          self.isOpen = true;
+        }
+      },
+      new() {},
+      clearRecent() {},
+    };
+  })
+  .actions((self) => {
+    const saveAsHandler = (cb?: (r: string) => void) => {
+      ipcRenderer.once("save-as-reply", (ev, r: string, newPath: string) => {
+        if (r === "success") {
+          console.log("File.saveAs: success");
+          self.isModified = false;
+          if (self.isNew) {
+            self.path = newPath;
+            self.isNew = false;
+          }
+        } else {
+          console.log("File.saveAs: canceled");
+        }
+        if (cb) cb(r);
+      });
+      ipcRenderer.send("save-as", "", self.data);
+    };
+    const saveHandler = (cb?: (r: string) => void) => {
+      ipcRenderer.once("save-reply", (ev, r: string) => {
+        if (r === "success") {
+          console.log("File.save: success");
+          self.isModified = false;
+        } else {
+          console.log("File.save: canceled");
+        }
+        if (cb) cb(r);
+      });
+      ipcRenderer.send("save", self.path, self.data);
+    };
+    return {
+      close() {
+        if (self.isOpen) {
+          self.isOpen = false;
+        }
+      },
+      saveAs(cb?: (r: string) => void) {
+        saveAsHandler(cb);
+      },
+      save(cb?: (r: string) => void) {
+        if (self.isOpen && self.isModified) {
+          if (self.isNew) {
+            saveAsHandler(cb);
+          } else {
+            saveHandler(cb);
+          }
+        }
+      },
+    };
+  });
 
 export type FileInstance = Instance<typeof FileModel>;

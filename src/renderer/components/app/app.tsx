@@ -12,11 +12,10 @@ import { Toolbar } from "../toolbar";
 import { Header } from "../header";
 import { Footer } from "../footer";
 import { Modals } from "../modal";
-import "./app.css";
-import { RootInstance } from "../../models";
 import { ModelInjector } from "../model-injector";
+import "./app.css";
 
-const App: FC = observer(() => {
+export const App: FC = observer(() => {
   // let [state, setState] = useState<AppState>(new AppState());
   // state.readConfigs();
   // useEffect(() => {
@@ -116,27 +115,27 @@ const App: FC = observer(() => {
   //     }
   //   });
   // });
-  return <ModelInjector>{(root) => <AppHolder model={root} />}</ModelInjector>;
-});
-
-interface AppHolderProps {
-  model: RootInstance;
-}
-
-const AppHolder: React.FC<AppHolderProps> = observer(({ model }) => {
   let locales: Record<string, Locale> = { "en-US": enUS, "zh-CN": zhCN };
   return (
     <div id="app">
-      <ConfigProvider locale={locales[model.config.lang]}>
-        <Header />
-        <Toolbar />
-        <Content />
-        <Footer />
-        <Welcome />
-        <Modals />
-      </ConfigProvider>
+      <ModelInjector>
+        {(root) => (
+          <ConfigProvider locale={locales[root.config.lang]}>
+            <Header />
+            <Toolbar />
+            <Content />
+            <Footer />
+            <Welcome
+              model={root.components.welcome}
+              modal={root.components.modal}
+              file={root.file}
+              config={root.config}
+              theme={root.config.theme.theme}
+            />
+            <Modals />
+          </ConfigProvider>
+        )}
+      </ModelInjector>
     </div>
   );
 });
-
-export default App;

@@ -9,8 +9,16 @@ export const RecentFileModel = types.model("RecentFile", {
   twopage: boolean,
 });
 
-export const WelcomeModel = types.model("Welcome", {
-  recents: types.optional(types.array(RecentFileModel), []),
-});
+export const WelcomeModel = types
+  .model("Welcome", {
+    recents: types.optional(types.array(RecentFileModel), []),
+  })
+  .views((self) => {
+    return {
+      get sortedRecents() {
+        return self.recents;
+      },
+    };
+  });
 
 export type WelcomeInstance = Instance<typeof WelcomeModel>;

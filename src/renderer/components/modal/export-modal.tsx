@@ -24,7 +24,7 @@ export interface ExportModalProps {
 
 export const ExportModal: FC<ExportModalProps> = observer(
   ({ model, file, config }) => {
-    if (file.status == "opened") {
+    if (file.isOpen) {
       let p = parse(file.path);
       const { t } = useTranslation();
       const [path, setPath] = useState(p.dir);
