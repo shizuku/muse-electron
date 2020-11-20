@@ -15,24 +15,43 @@ export const DimensModel = types
   })
   .views((self) => {
     return {
-      contentH() {
+      get contentH() {
         return self.windowH;
       },
     };
   })
   .actions((self) => {
     return {
-      setWindowH: (n: number) => (self.windowH = n),
-      setWindowW: (n: number) => (self.windowW = n),
-      setX: (n: number) => (self.x = n),
-      setY: (n: number) => (self.y = n),
-      setHeader: (n: number) => (self.header = n),
-      setFooter: (n: number) => (self.footer = n),
-      setToolbar: (n: number) => (self.toolbar = n),
-      setContentW: (n: number) => (self.contentW = n),
-      setNotationH: (n: number) => (self.notationH = n),
-      setNotationW: (n: number) => (self.notationW = n),
-      
+      setWindowH(n: number) {
+        self.windowH = n;
+      },
+      setWindowW(n: number) {
+        self.windowW = n;
+      },
+      setX(n: number) {
+        self.x = n;
+      },
+      setY(n: number) {
+        self.y = n;
+      },
+      setHeader(n: number) {
+        self.header = n;
+      },
+      setFooter(n: number) {
+        self.footer = n;
+      },
+      setToolbar(n: number) {
+        self.toolbar = n;
+      },
+      setContentW(n: number) {
+        self.contentW = n;
+      },
+      setNotationH(n: number) {
+        self.notationH = n;
+      },
+      setNotationW(n: number) {
+        self.notationW = n;
+      },
     };
   });
 

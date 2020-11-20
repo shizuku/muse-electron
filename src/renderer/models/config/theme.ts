@@ -12,9 +12,13 @@ export interface ThemeItemLoader {
   toolbarBackground: string;
 
   contentBackground: string;
+  contentText: string;
 
   notationText: string;
   notationBackground: string;
+
+  footerBackground: string;
+  footerText: string;
 }
 
 export const ThemeItemModel = types.model("ThemeItem", {
@@ -28,9 +32,13 @@ export const ThemeItemModel = types.model("ThemeItem", {
   toolbarBackground: types.string,
 
   contentBackground: types.string,
+  contentText: types.string,
 
   notationText: types.string,
   notationBackground: types.string,
+
+  footerBackground: types.string,
+  footerText: types.string,
 });
 
 export type ThemeItemInstance = Instance<typeof ThemeItemModel>;
@@ -46,9 +54,13 @@ const defaultTheme = ThemeItemModel.create({
   toolbarBackground: "",
 
   contentBackground: "",
+  contentText: "",
 
   notationText: "",
   notationBackground: "",
+
+  footerBackground: "",
+  footerText: "",
 });
 
 export const ThemeModel = types

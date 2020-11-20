@@ -123,7 +123,11 @@ export const App: FC = observer(() => {
           <ConfigProvider locale={locales[root.config.lang]}>
             <Header />
             <Toolbar />
-            <Content />
+            <Content
+              theme={root.config.theme.theme}
+              config={root.config}
+              dimens={root.ui.window.dimens}
+            />
             <Footer />
             <Welcome
               model={root.components.welcome}

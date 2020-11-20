@@ -1,23 +1,30 @@
 import React, { CSSProperties, FC } from "react";
 import { MuseNotation } from "../muse-notation";
-import { useObserver } from "mobx-react";
-import { useAppState } from "../../states";
+import { observer, useObserver } from "mobx-react";
 import "./style.css";
+import { ConfigInstance } from "../../models/config";
+import { DimensInstance } from "../../models/ui/window/dimens";
+import { ThemeItemInstance } from "../../models/config/theme";
 
-export const Content: FC = () => {
-  let state = useAppState();
+export interface ContentProps {
+  config: ConfigInstance;
+  dimens: DimensInstance;
+  theme: ThemeItemInstance;
+}
+
+export const Content: FC<ContentProps> = observer(({ config, dimens, theme }) => {
   let style = () => {
-    switch (state.display) {
+    switch (config.display) {
       case "full":
       case "headfoot":
         return {
-          height: state.windowDim.contentH,
-          background: state.theme.colorBackgroundDark,
+          height: dimens.contentH,
+          background: theme.contentBackground,
         } as CSSProperties;
       case "content":
         return {
-          height: state.windowDim.wh,
-          background: state.theme.colorBackgroundDark,
+          height: dimens.windowH,
+          background: theme.contentBackground,
         } as CSSProperties;
     }
   };
@@ -26,28 +33,30 @@ export const Content: FC = () => {
       <div
         className="notaiton-container"
         ref={(e) => {
-          state.windowDim.contentW = e?.clientWidth || 0;
+          dimens.setContentW(e?.clientWidth || 0);
         }}
       >
         <div className="notaion-outer">
           <div
             className="notation"
             ref={(e) => {
-              state.windowDim.notationH = e?.scrollHeight || 0;
-              state.windowDim.notationW = e?.scrollWidth || 0;
+              dimens.setNotationH(e?.scrollHeight || 0);
+              dimens.setNotationW(e?.scrollWidth || 0);
             }}
             style={{
-              color: state.theme.colorText,
+              color: theme.contentText,
             }}
           >
-            {state.notation ? (
-              <MuseNotation notation={state.notation} />
-            ) : (
-              <></>
-            )}
+
           </div>
         </div>
       </div>
     </div>
   ));
-};
+});
+
+// {state.notation ? (
+//   <MuseNotation notation={state.notation} />
+// ) : (
+//   <></>
+// )}

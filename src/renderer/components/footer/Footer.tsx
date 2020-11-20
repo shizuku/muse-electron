@@ -1,140 +1,150 @@
 import React, { CSSProperties, FC, useState } from "react";
-import { useObserver } from "mobx-react";
+import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { ColumnHeightOutlined, ColumnWidthOutlined } from "@ant-design/icons";
-import { useAppState } from "../../states";
 import { Sizer } from "./sizer";
 import { FuncBar } from "../func-bar";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { FuncButton } from "../func-bar/func-button";
 import "./style.css";
 import { Tooltip } from "antd";
+import { ConfigInstance } from "../../models/config";
+import { ThemeItemInstance } from "../../models/config/theme";
+import { DimensInstance } from "../../models/ui/window/dimens";
+import { WindowInstance } from "../../models/ui/window";
+import { FileInstance } from "../../models/file";
 
-export const Footer: FC = () => {
-  let state = useAppState();
-  const { t } = useTranslation();
-  let [maxHeight, setMaxHeight] = useState(0);
-  let styleHover = () => {
-    switch (state.display) {
-      case "full":
-      case "headfoot":
-        return {
-          display: "block",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
-        } as CSSProperties;
-      case "content":
-        return {
-          display: "block",
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: "100vw",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
-        } as CSSProperties;
-    }
-  };
-  let styleUnhover = () => {
-    switch (state.display) {
-      case "full":
-      case "headfoot":
-        return {
-          display: "block",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
-        } as CSSProperties;
-      case "content":
-        return {
-          display: "none",
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: "100vw",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorBackground,
-        } as CSSProperties;
-    }
-  };
-  return useObserver(() => (
-    <footer
-      className="footer"
-      ref={(e) => {
-        let h = e?.clientHeight || 0;
-        state.windowDim.footer = h;
-        setMaxHeight(maxHeight > h ? maxHeight : h);
-      }}
-      style={state.footerHover ? styleHover() : styleUnhover()}
-    >
-      <div className="footer__group-left">
-        <div className="time">
-          {new Date(state.currentFile?.time || 0).toLocaleString(
-            state.langCode
-          )}
+export interface FooterProps {
+  config: ConfigInstance;
+  dimens: DimensInstance;
+  file: FileInstance;
+  theme: ThemeItemInstance;
+  window: WindowInstance;
+}
+
+export const Footer: FC<FooterProps> = observer(
+  ({ config, dimens, file, theme, window }) => {
+    const { t } = useTranslation();
+    let [maxHeight, setMaxHeight] = useState(0);
+    let styleHover = () => {
+      switch (config.display) {
+        case "full":
+        case "headfoot":
+          return {
+            display: "block",
+            background: theme.footerBackground,
+            color: theme.footerText,
+          } as CSSProperties;
+        case "content":
+          return {
+            display: "block",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "100vw",
+            background: theme.footerBackground,
+            color: theme.footerText,
+          } as CSSProperties;
+      }
+    };
+    let styleUnhover = () => {
+      switch (config.display) {
+        case "full":
+        case "headfoot":
+          return {
+            display: "block",
+            background: theme.footerBackground,
+            color: theme.footerText,
+          } as CSSProperties;
+        case "content":
+          return {
+            display: "none",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "100vw",
+            background: theme.footerBackground,
+            color: theme.footerText,
+          } as CSSProperties;
+      }
+    };
+    return useObserver(() => (
+      <footer
+        className="footer"
+        ref={(e) => {
+          let h = e?.clientHeight || 0;
+          dimens.setFooter(h);
+          setMaxHeight(maxHeight > h ? maxHeight : h);
+        }}
+        style={window.footerHover ? styleHover() : styleUnhover()}
+      >
+        <div className="footer__group-left">
+          <div className="time">
+            {new Date(file.conf.time || 0).toLocaleString(config.lang)}
+          </div>
         </div>
-      </div>
-      <div className="footer__group-right">
-        <div className="footer__item">
-          <FuncBar>
-            <Tooltip
-              placement="topLeft"
-              title={t("toolbar.view.one-page")}
-              mouseEnterDelay={0.5}
-            >
-              <FuncButton
-                onClick={() => state.onSetOnePage()}
-                active={() => state.config.twopage === false}
+        <div className="footer__group-right">
+          <div className="footer__item">
+            <FuncBar>
+              <Tooltip
+                placement="topLeft"
+                title={t("toolbar.view.one-page")}
+                mouseEnterDelay={0.5}
               >
-                <LayoutVerticalOutlined />
-              </FuncButton>
-            </Tooltip>
-            <Tooltip
-              placement="topLeft"
-              title={t("toolbar.view.two-page")}
-              mouseEnterDelay={0.5}
-            >
-              <FuncButton
-                onClick={() => state.onSetTwoPage()}
-                active={() => state.config.twopage === true}
+                <FuncButton
+                  onClick={() => file.conf.setTwoPage(false)}
+                  active={() => file.conf.twopage === false}
+                >
+                  <LayoutVerticalOutlined />
+                </FuncButton>
+              </Tooltip>
+              <Tooltip
+                placement="topLeft"
+                title={t("toolbar.view.two-page")}
+                mouseEnterDelay={0.5}
               >
-                <LayoutHorizontalOutlined />
-              </FuncButton>
-            </Tooltip>
-          </FuncBar>
+                <FuncButton
+                  onClick={() => file.conf.setTwoPage(true)}
+                  active={() => file.conf.twopage === true}
+                >
+                  <LayoutHorizontalOutlined />
+                </FuncButton>
+              </Tooltip>
+            </FuncBar>
+          </div>
+          <div className="footer__item">
+            <FuncBar>
+              <Tooltip
+                placement="topLeft"
+                title={t("footer.sizer.fit-height")}
+                mouseEnterDelay={0.5}
+              >
+                <FuncButton
+                  active={() => file.conf.sizerMode === "fh"}
+                  onClick={() => file.conf.setSizerMode("fh")}
+                >
+                  <ColumnHeightOutlined />
+                </FuncButton>
+              </Tooltip>
+              <Tooltip
+                placement="topLeft"
+                title={t("footer.sizer.fit-width")}
+                mouseEnterDelay={0.5}
+              >
+                <FuncButton
+                  active={() => file.conf.sizerMode === "fw"}
+                  onClick={() => file.conf.setSizerMode("fw")}
+                >
+                  <ColumnWidthOutlined />
+                </FuncButton>
+              </Tooltip>
+            </FuncBar>
+          </div>
+          <div className="footer__item">
+            <Sizer />
+          </div>
         </div>
-        <div className="footer__item">
-          <FuncBar>
-            <Tooltip
-              placement="topLeft"
-              title={t("footer.sizer.fit-height")}
-              mouseEnterDelay={0.5}
-            >
-              <FuncButton
-                active={() => state.currentFile?.sizerMode === "fh"}
-                onClick={() => state.onSetFitHeight()}
-              >
-                <ColumnHeightOutlined />
-              </FuncButton>
-            </Tooltip>
-            <Tooltip
-              placement="topLeft"
-              title={t("footer.sizer.fit-width")}
-              mouseEnterDelay={0.5}
-            >
-              <FuncButton
-                active={() => state.currentFile?.sizerMode === "fw"}
-                onClick={() => state.onSetFitWidth()}
-              >
-                <ColumnWidthOutlined />
-              </FuncButton>
-            </Tooltip>
-          </FuncBar>
-        </div>
-        <div className="footer__item">
-          <Sizer />
-        </div>
-      </div>
-    </footer>
-  ));
-};
-3;
+      </footer>
+    ));
+  }
+);

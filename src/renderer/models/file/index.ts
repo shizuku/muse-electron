@@ -1,6 +1,7 @@
 import { ipcRenderer } from "electron";
 import { Instance, types } from "mobx-state-tree";
-import { parse } from "path";
+
+import { FileConfigModel } from "./file-config";
 import { HtmlElementModel } from "./html-element";
 
 export const FileModel = types
@@ -10,15 +11,12 @@ export const FileModel = types
     isModified: types.optional(types.boolean, false),
     isNew: types.optional(types.boolean, false),
 
-    path: types.optional(types.string, ""),
+    conf: types.optional(FileConfigModel, {}),
 
     pages: types.optional(types.array(HtmlElementModel), []),
   })
   .views((self) => {
     return {
-      get title(): string {
-        return parse(self.path).base;
-      },
       get data(): string {
         return "";
       },
@@ -42,7 +40,7 @@ export const FileModel = types
           console.log("File.saveAs: success");
           self.isModified = false;
           if (self.isNew) {
-            self.path = newPath;
+            self.conf.setPath(newPath);
             self.isNew = false;
           }
         } else {
@@ -62,7 +60,7 @@ export const FileModel = types
         }
         if (cb) cb(r);
       });
-      ipcRenderer.send("save", self.path, self.data);
+      ipcRenderer.send("save", self.conf.path, self.data);
     };
     return {
       close() {
