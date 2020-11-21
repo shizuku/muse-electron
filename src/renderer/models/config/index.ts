@@ -45,11 +45,14 @@ export const ConfigModel = types
       toggleAutoSave(): void {
         self.autoSave = !self.autoSave;
       },
-      setMachineLang(l: string): void {
-        self.machineLang = l;
-      },
       setConfLang(l: string): void {
         self.confLang = l;
+      },
+      setMachineLang(l: string) {
+        self.machineLang = l;
+      },
+      setMachineTheme(t: string) {
+        self.theme.name = t;
       },
       setExportScale(s: number): void {
         self.exportScale = s;

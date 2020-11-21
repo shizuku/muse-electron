@@ -19,11 +19,11 @@ export interface FooterProps {
   dimens: DimensInstance;
   file: FileInstance;
   theme: ThemeItemInstance;
-  window: WindowInstance;
+  win: WindowInstance;
 }
 
 export const Footer: FC<FooterProps> = observer(
-  ({ config, dimens, file, theme, window }) => {
+  ({ config, dimens, file, theme, win }) => {
     const { t } = useTranslation();
     let [maxHeight, setMaxHeight] = useState(0);
     let styleHover = () => {
@@ -76,7 +76,7 @@ export const Footer: FC<FooterProps> = observer(
           dimens.setFooter(h);
           setMaxHeight(maxHeight > h ? maxHeight : h);
         }}
-        style={window.footerHover ? styleHover() : styleUnhover()}
+        style={win.footerHover ? styleHover() : styleUnhover()}
       >
         <div className="footer__group-left">
           <div className="time">

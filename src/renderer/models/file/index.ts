@@ -20,13 +20,21 @@ export const FileModel = types
       get data(): string {
         return "";
       },
+      get undoDisable(): boolean {
+        return true;
+      },
+      get redoDisable(): boolean {
+        return true;
+      },
     };
   })
   .actions((self) => {
     return {
-      open() {
+      open(path: string, data: string, isNew: boolean) {
         if (!self.isOpen) {
           self.isOpen = true;
+          self.conf.path = path;
+          self.isNew = isNew;
         }
       },
       new() {},
@@ -78,6 +86,13 @@ export const FileModel = types
           } else {
             saveHandler(cb);
           }
+        }
+      },
+      finishSave(newPath: string) {
+        self.isModified = false;
+        if (self.isNew) {
+          self.conf.setPath(newPath);
+          self.isNew = false;
         }
       },
     };

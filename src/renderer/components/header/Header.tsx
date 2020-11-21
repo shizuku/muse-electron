@@ -14,13 +14,18 @@ import {
 import { Popover, Tooltip } from "antd";
 import { ipcRenderer } from "electron";
 import is from "electron-is";
-import { useObserver } from "mobx-react";
+import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { FuncBar } from "../func-bar";
 import { useAppState } from "../../states";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
 import { FuncButton } from "../func-bar/func-button";
 import "./style.css";
+import { ConfigInstance } from "../../models/config";
+import { ThemeItemInstance } from "../../models/config/theme";
+import { FileInstance } from "../../models/file";
+import { DimensInstance } from "../../models/ui/window/dimens";
+import { WindowInstance } from "../../models/ui/window";
 
 const DisplayPopup: FC = () => {
   let state = useAppState();
@@ -64,162 +69,172 @@ const DisplayPopup: FC = () => {
   ));
 };
 
-export const Header: FC = () => {
-  let state = useAppState();
-  const { t } = useTranslation();
-  let styleHover = () => {
-    switch (state.display) {
-      case "full":
-      case "headfoot":
-        return {
-          display: "block",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorTextLight,
-        } as CSSProperties;
-      case "content":
-        return {
-          display: "block",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorTextLight,
-        } as CSSProperties;
-    }
-  };
-  let styleUnhover = () => {
-    switch (state.display) {
-      case "full":
-      case "headfoot":
-        return {
-          display: "block",
-          background: state.theme.colorPrimary,
-          color: state.theme.colorTextLight,
-        } as CSSProperties;
-      case "content":
-        return (state.opened
-          ? {
-              display: "none",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              background: state.theme.colorPrimary,
-              color: state.theme.colorTextLight,
-            }
-          : {
-              display: "block",
-              background: state.theme.colorPrimary,
-              color: state.theme.colorTextLight,
-            }) as CSSProperties;
-    }
-  };
-  return useObserver(() => (
-    <div
-      className="header"
-      ref={(e) => {
-        let h = e?.clientHeight || 0;
-        state.windowDim.header = h;
-      }}
-      style={state.headerHover ? styleHover() : styleUnhover()}
-    >
-      <div className="header__drag-region"></div>
+export interface HeaderProps {
+  config: ConfigInstance;
+  theme: ThemeItemInstance;
+  file: FileInstance;
+  dimens: DimensInstance;
+  win: WindowInstance;
+  toggleFullScreen: () => void;
+  toggleMax: () => void;
+  onMin: () => void;
+  onExit: () => void;
+  onSave: (cb?: (r: string) => void) => void;
+  onUndo: () => void;
+  onRedo: () => void;
+}
+
+export const Header: FC<HeaderProps> = observer(
+  ({
+    config,
+    theme,
+    file,
+    dimens,
+    win,
+    toggleFullScreen,
+    toggleMax,
+    onMin,
+    onExit,
+    onSave,
+    onUndo,
+    onRedo,
+  }) => {
+    const { t } = useTranslation();
+    let styleHover = () => {
+      switch (config.display) {
+        case "full":
+        case "headfoot":
+          return {
+            display: "block",
+            background: theme.headerBackground,
+            color: theme.headerText,
+          } as CSSProperties;
+        case "content":
+          return {
+            display: "block",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            background: theme.headerBackground,
+            color: theme.headerText,
+          } as CSSProperties;
+      }
+    };
+    let styleUnhover = () => {
+      switch (config.display) {
+        case "full":
+        case "headfoot":
+          return {
+            display: "block",
+            background: theme.headerBackground,
+            color: theme.headerText,
+          } as CSSProperties;
+        case "content":
+          return (file.isOpen
+            ? {
+                display: "none",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                background: theme.headerBackground,
+                color: theme.headerText,
+              }
+            : {
+                display: "block",
+                background: theme.headerBackground,
+                color: theme.headerText,
+              }) as CSSProperties;
+      }
+    };
+    return useObserver(() => (
       <div
-        className="header__group-left"
-        style={is.macOS() ? { marginLeft: 65 } : {}}
+        className="header"
+        ref={(e) => {
+          let h = e?.clientHeight || 0;
+          dimens.setHeader(h);
+        }}
+        style={win.headerHover ? styleHover() : styleUnhover()}
       >
-        {state.opened ? (
-          <FuncBar>
-            <Tooltip
-              placement="topLeft"
-              title={t("toolbar.file.save")}
-              mouseEnterDelay={1}
-            >
-              <FuncButton
-                onClick={() => state.onSave()}
-                disable={!state.modified}
-              >
-                <SaveOutlined />
-              </FuncButton>
-            </Tooltip>
-            <Tooltip
-              placement="topLeft"
-              title={t("toolbar.start.undo")}
-              mouseEnterDelay={1}
-            >
-              <FuncButton
-                onClick={() => state.onUndo()}
-                disable={state.undoDisable}
-              >
-                <UndoOutlined />
-              </FuncButton>
-            </Tooltip>
-            <Tooltip
-              placement="topLeft"
-              title={t("toolbar.start.redo")}
-              mouseEnterDelay={1}
-            >
-              <FuncButton
-                onClick={() => state.onRedo()}
-                disable={state.redoDisable}
-              >
-                <RedoOutlined />
-              </FuncButton>
-            </Tooltip>
-          </FuncBar>
-        ) : (
-          <></>
-        )}
-      </div>
-      <div className="header__window-title">
-        {!state.opened
-          ? `Muse`
-          : `${state.fileName}${state.modified ? "*" : ""} - ${t("app-name")}`}
-      </div>
-      <div className="header__controls">
-        <Popover
-          placement="topLeft"
-          title={t("header.display.display")}
-          content={<DisplayPopup />}
-          trigger="click"
-        >
-          <div className="window-icon hover-gray" onClick={() => {}}>
-            <MenuFoldOutlined />
-          </div>
-        </Popover>
+        <div className="header__drag-region"></div>
         <div
-          className="window-icon hover-gray"
-          onClick={() => {
-            ipcRenderer.send("app-toggle-full-screen");
-          }}
+          className="header__group-left"
+          style={is.macOS() ? { marginLeft: 65 } : {}}
         >
-          {state.fullScreenStatus ? (
-            <FullscreenExitOutlined />
+          {file.isOpen ? (
+            <FuncBar>
+              <Tooltip
+                placement="topLeft"
+                title={t("toolbar.file.save")}
+                mouseEnterDelay={1}
+              >
+                <FuncButton onClick={() => onSave()} disable={!file.isModified}>
+                  <SaveOutlined />
+                </FuncButton>
+              </Tooltip>
+              <Tooltip
+                placement="topLeft"
+                title={t("toolbar.start.undo")}
+                mouseEnterDelay={1}
+              >
+                <FuncButton onClick={() => onUndo()} disable={file.undoDisable}>
+                  <UndoOutlined />
+                </FuncButton>
+              </Tooltip>
+              <Tooltip
+                placement="topLeft"
+                title={t("toolbar.start.redo")}
+                mouseEnterDelay={1}
+              >
+                <FuncButton onClick={() => onRedo()} disable={file.redoDisable}>
+                  <RedoOutlined />
+                </FuncButton>
+              </Tooltip>
+            </FuncBar>
           ) : (
-            <FullscreenOutlined />
+            <></>
           )}
         </div>
-        <div
-          className="window-icon hover-gray"
-          onClick={() => {
-            ipcRenderer.send("app-minimize");
-          }}
-        >
-          <MinusOutlined />
+        <div className="header__window-title">
+          {!file.isOpen
+            ? `Muse`
+            : `${file.conf.title}${file.isModified ? "*" : ""} - ${t(
+                "app-name"
+              )}`}
         </div>
-        <div
-          className="window-icon hover-gray"
-          onClick={() => {
-            ipcRenderer.send("app-toggle-max");
-          }}
-        >
-          {state.maxStatus ? <MinimizeOutlined /> : <MaxmizeOutlined />}
-        </div>
-        <div className="window-icon hover-red" onClick={() => state.onExit()}>
-          <CloseOutlined />
+        <div className="header__controls">
+          <Popover
+            placement="topLeft"
+            title={t("header.display.display")}
+            content={<DisplayPopup />}
+            trigger="click"
+          >
+            <div className="window-icon hover-gray">
+              <MenuFoldOutlined />
+            </div>
+          </Popover>
+          <div
+            className="window-icon hover-gray"
+            onClick={() => toggleFullScreen()}
+          >
+            {win.fullScreen ? (
+              <FullscreenExitOutlined />
+            ) : (
+              <FullscreenOutlined />
+            )}
+          </div>
+          <div className="window-icon hover-gray" onClick={() => onMin()}>
+            <MinusOutlined />
+          </div>
+          <div className="window-icon hover-gray" onClick={() => toggleMax()}>
+            {win.max ? <MinimizeOutlined /> : <MaxmizeOutlined />}
+          </div>
+          <div className="window-icon hover-red" onClick={() => onExit()}>
+            <CloseOutlined />
+          </div>
         </div>
       </div>
-    </div>
-  ));
-};
+    ));
+  }
+);
