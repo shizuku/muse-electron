@@ -1,7 +1,5 @@
 import { ipcRenderer } from "electron";
-import { MobXProviderContext } from "mobx-react";
 import { Instance, types } from "mobx-state-tree";
-import { useContext } from "react";
 import { ComponentsModel } from "./components";
 import { ConfigModel } from "./config";
 import { FileModel } from "./file";
@@ -13,7 +11,7 @@ export const RootModel = types
     components: types.optional(ComponentsModel, {}),
     config: types.optional(ConfigModel, {}),
     ui: types.optional(UiModel, {}),
-    file: types.optional(FileModel, FileModel.create()),
+    file: types.optional(FileModel, {}),
     notation: types.optional(NotationModel, {}),
   })
   .views((self) => {
@@ -40,8 +38,9 @@ export const RootModel = types
         return (
           Math.floor(
             (self.ui.window.dimens.contentH /
-              ((self.notation.config.pageHeight + 2 * self.notation.config.pageGap) /
-              self.file.conf.sizer)) *
+              ((self.notation.config.pageHeight +
+                2 * self.notation.config.pageGap) /
+                self.file.conf.sizer)) *
               10000
           ) / 100
         );
@@ -57,7 +56,3 @@ export const RootModel = types
   });
 
 export type RootInstance = Instance<typeof RootModel>;
-
-export function useRootModel(): RootInstance {
-  return useContext(MobXProviderContext).root;
-}

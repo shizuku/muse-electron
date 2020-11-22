@@ -1,11 +1,11 @@
 import React, { CSSProperties, FC, useState } from "react";
-import { observer, useObserver } from "mobx-react";
+import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { ColumnHeightOutlined, ColumnWidthOutlined } from "@ant-design/icons";
 import { Sizer } from "./sizer";
-import { FuncBar } from "../func-bar";
+import { FuncBar } from "./func-bar";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
-import { FuncButton } from "../func-bar/func-button";
+import { FuncButton } from "./func-bar/func-button";
 import "./style.css";
 import { Tooltip } from "antd";
 import { ConfigInstance } from "../../models/config";
@@ -68,7 +68,7 @@ export const Footer: FC<FooterProps> = observer(
           } as CSSProperties;
       }
     };
-    return useObserver(() => (
+    return (
       <footer
         className="footer"
         ref={(e) => {
@@ -76,7 +76,13 @@ export const Footer: FC<FooterProps> = observer(
           dimens.setFooter(h);
           setMaxHeight(maxHeight > h ? maxHeight : h);
         }}
-        style={win.footerHover ? styleHover() : styleUnhover()}
+        style={
+          file.isOpen
+            ? win.footerHover
+              ? styleHover()
+              : styleUnhover()
+            : { display: "none" }
+        }
       >
         <div className="footer__group-left">
           <div className="time">
@@ -141,10 +147,10 @@ export const Footer: FC<FooterProps> = observer(
             </FuncBar>
           </div>
           <div className="footer__item">
-            <Sizer />
+            <Sizer file={file} />
           </div>
         </div>
       </footer>
-    ));
+    );
   }
 );

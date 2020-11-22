@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import { ipcRenderer } from "electron";
 import hotkeys from "hotkeys-js";
 import { ConfigProvider } from "antd";
@@ -13,8 +13,8 @@ import { Header } from "../header";
 import { Footer } from "../footer";
 import { Modals } from "../modal";
 import { ModelInjector } from "../model-injector";
-import "./app.css";
 import { RootInstance } from "../../models";
+import "./app.css";
 
 export interface AppProps {
   root: RootInstance;
@@ -59,15 +59,20 @@ export const App: FC<AppProps> = observer(({ root }) => {
       ipcRenderer.send("save-as", "", root.file.data);
     }
   };
+  const onAutoSave = () => {};
   const onUndo = () => {};
   const onRedo = () => {};
 
   const onShowEditMetaDataModal = () => {};
   const onShowExportModal = () => {};
+  const onShowAboutModal = () => {};
+  const onShowPreferenceModal = () => {};
+
+  const onSetSizer = (n: number) => {};
   const onSetTwoPage = () => {};
   const onSetOnePage = () => {};
   const onExit = () => {};
-  const saveConfig = () => {};
+
   const toggleFullScreen = () => {
     ipcRenderer.send("app-toggle-full-screen");
   };
@@ -78,6 +83,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
     ipcRenderer.send("app-toggle-max");
   };
   const onClose = () => {};
+  const saveConfig = () => {};
   const saveFileConfig = () => {};
   useEffect(() => {
     ipcRenderer.on("open-file-reply", (event, path: string, data: string) => {
@@ -192,8 +198,27 @@ export const App: FC<AppProps> = observer(({ root }) => {
               toggleFullScreen={toggleFullScreen}
               toggleMax={toggleMax}
             />
-            <Toolbar />
+            <Toolbar
+              model={root.components.toolbar}
+              file={root.file}
+              config={root.config}
+              theme={root.config.theme.theme}
+              dimens={root.ui.window.dimens}
+              onSave={onSave}
+              onSaveAs={onSaveAs}
+              onAutoSave={onAutoSave}
+              onUndo={onUndo}
+              onRedo={onRedo}
+              onClose={onClose}
+              onSetOnePage={onSetOnePage}
+              onSetTwoPage={onSetTwoPage}
+              onShowEditMetaDataModal={onShowEditMetaDataModal}
+              onShowAboutModal={onShowAboutModal}
+              onShowExportModal={onShowExportModal}
+              onShowPreferenceModal={onShowPreferenceModal}
+            />
             <Content
+              file={root.file}
               theme={root.config.theme.theme}
               config={root.config}
               dimens={root.ui.window.dimens}
@@ -211,6 +236,10 @@ export const App: FC<AppProps> = observer(({ root }) => {
               file={root.file}
               config={root.config}
               theme={root.config.theme.theme}
+              onNew={onNew}
+              onOpen={onOpen}
+              onShowAboutModal={onShowAboutModal}
+              onShowPreferenceModal={onShowPreferenceModal}
             />
             <Modals />
           </ConfigProvider>

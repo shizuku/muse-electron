@@ -1,8 +1,6 @@
 import React, { CSSProperties, FC } from "react";
 import {
   CloseOutlined,
-  AppstoreOutlined,
-  BorderOutlined,
   MinusOutlined,
   FullscreenOutlined,
   FullscreenExitOutlined,
@@ -12,32 +10,34 @@ import {
   RedoOutlined,
 } from "@ant-design/icons";
 import { Popover, Tooltip } from "antd";
-import { ipcRenderer } from "electron";
 import is from "electron-is";
-import { observer, useObserver } from "mobx-react";
+import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
-import { FuncBar } from "../func-bar";
-import { useAppState } from "../../states";
+import { FuncBar } from "./func-bar";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
-import { FuncButton } from "../func-bar/func-button";
-import "./style.css";
+import { FuncButton } from "./func-bar/func-button";
 import { ConfigInstance } from "../../models/config";
 import { ThemeItemInstance } from "../../models/config/theme";
 import { FileInstance } from "../../models/file";
 import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";
+import "./style.css";
 
-const DisplayPopup: FC = () => {
-  let state = useAppState();
+export interface DisplayPopupProps {
+  config: ConfigInstance;
+  theme: ThemeItemInstance;
+}
+
+const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme }) => {
   const { t } = useTranslation();
-  return useObserver(() => (
+  return (
     <div className="display-popup">
       <div
         className="display-popup__item"
-        onClick={() => state.onSetDisplay("full")}
+        onClick={() => config.setDisplay("full")}
         style={
-          state.display === "full"
-            ? { background: state.theme.colorPrimaryLight }
+          config.display === "full"
+            ? { background: theme.headerPopupActiveBackground }
             : {}
         }
       >
@@ -45,10 +45,10 @@ const DisplayPopup: FC = () => {
       </div>
       <div
         className="display-popup__item"
-        onClick={() => state.onSetDisplay("headfoot")}
+        onClick={() => config.setDisplay("headfoot")}
         style={
-          state.display === "headfoot"
-            ? { background: state.theme.colorPrimaryLight }
+          config.display === "headfoot"
+            ? { background: theme.headerPopupActiveBackground }
             : {}
         }
       >
@@ -56,18 +56,18 @@ const DisplayPopup: FC = () => {
       </div>
       <div
         className="display-popup__item"
-        onClick={() => state.onSetDisplay("content")}
+        onClick={() => config.setDisplay("content")}
         style={
-          state.display === "content"
-            ? { background: state.theme.colorPrimaryLight }
+          config.display === "content"
+            ? { background: theme.headerPopupActiveBackground }
             : {}
         }
       >
         {t("header.display.content")}
       </div>
     </div>
-  ));
-};
+  );
+});
 
 export interface HeaderProps {
   config: ConfigInstance;
@@ -148,7 +148,7 @@ export const Header: FC<HeaderProps> = observer(
               }) as CSSProperties;
       }
     };
-    return useObserver(() => (
+    return (
       <div
         className="header"
         ref={(e) => {
@@ -207,7 +207,7 @@ export const Header: FC<HeaderProps> = observer(
           <Popover
             placement="topLeft"
             title={t("header.display.display")}
-            content={<DisplayPopup />}
+            content={<DisplayPopup theme={theme} config={config} />}
             trigger="click"
           >
             <div className="window-icon hover-gray">
@@ -235,6 +235,6 @@ export const Header: FC<HeaderProps> = observer(
           </div>
         </div>
       </div>
-    ));
+    );
   }
 );

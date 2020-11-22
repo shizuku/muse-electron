@@ -1,0 +1,1 @@
+export { FuncBar } from "./FuncBar";

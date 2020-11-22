@@ -1,4 +1,4 @@
-import { types } from "mobx-state-tree";
+import { Instance, types } from "mobx-state-tree";
 import { parse } from "path";
 
 export const FileConfigModel = types
@@ -33,3 +33,5 @@ export const FileConfigModel = types
       },
     };
   });
+
+export type FileConfigInstance = Instance<typeof FileConfigModel>;

@@ -12,6 +12,7 @@ app.on("ready", () => {
   let mw = createWindow();
   mw.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   createActions(mw);
+  mw.webContents.openDevTools();
   Menu.setApplicationMenu(null);
 });
 

@@ -5,7 +5,6 @@ import { observer, useObserver } from "mobx-react";
 import { ipcRenderer } from "electron";
 import { useTranslation } from "react-i18next";
 import { parse, join } from "path";
-import { useAppState } from "../../states";
 import { openNotificationWithIcon } from "../../utils";
 import {
   generateScreenshot,
@@ -25,7 +24,7 @@ export interface ExportModalProps {
 export const ExportModal: FC<ExportModalProps> = observer(
   ({ model, file, config }) => {
     if (file.isOpen) {
-      let p = parse(file.path);
+      let p = parse(file.conf.path);
       const { t } = useTranslation();
       const [path, setPath] = useState(p.dir);
       const [name, setName] = useState(p.name);

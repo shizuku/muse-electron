@@ -1,0 +1,1 @@
+export { FuncButton } from "./FuncButton";

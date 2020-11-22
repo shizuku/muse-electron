@@ -1,140 +1,212 @@
 import React, { CSSProperties, FC, useState } from "react";
 import classNames from "classnames";
-import { ActiveContext } from "./ActiveContext";
 import { File, FileTab } from "./File";
 import { View, ViewTab } from "./View";
 import { Start, StartTab } from "./Start";
 import { About, AboutTab } from "./About";
-import { useAppState } from "../../states";
-import { useObserver } from "mobx-react";
+import { observer } from "mobx-react";
+import { ToolbarInstance } from "../../models/components/toolbar";
+import { ConfigInstance } from "../../models/config";
+import { ThemeItemInstance } from "../../models/config/theme";
+import { DimensInstance } from "../../models/ui/window/dimens";
+import { ModelInjector } from "../model-injector";
 import "./style.css";
+import { FileInstance } from "../../models/file";
 
-export const Tab: FC<{ label: string }> = ({ label, children }) => {
-  let [hover, setHover] = useState(false);
-  let state = useAppState();
-  return useObserver(() => (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__tab", {
-            active: a.active === label,
-          })}
-          onClick={() => {
-            a.setActive(label);
-          }}
-          style={
-            hover
-              ? a.active !== label
-                ? {
-                    background: state.theme.colorPrimaryDark,
-                    color: state.theme.colorTextLight,
-                  }
-                : {
-                    background: state.theme.colorBackground,
-                    color: state.theme.colorPrimary,
-                  }
-              : a.active !== label
+export interface TabProps {
+  label: string;
+  model: ToolbarInstance;
+  theme: ThemeItemInstance;
+  children?: React.ReactNode;
+}
+
+export const Tab: FC<TabProps> = observer(
+  ({ label, model, theme, children }) => {
+    let [hover, setHover] = useState(false);
+    return (
+      <div
+        className={classNames("toolbar__tab", {
+          active: model.active === label,
+        })}
+        onClick={() => {
+          model.setActive(label);
+        }}
+        style={
+          hover
+            ? model.active !== label
               ? {
-                  background: state.theme.colorPrimary,
-                  color: state.theme.colorTextLight,
+                  background: theme.toolbarTabBackground,
+                  color: theme.toolbarTabText,
                 }
               : {
-                  background: state.theme.colorBackground,
-                  color: state.theme.colorPrimary,
+                  background: theme.toolbarTabActiveBackground,
+                  color: theme.toolbarTabActiveText,
                 }
-          }
-          onMouseEnter={() => {
-            setHover(true);
-          }}
-          onMouseLeave={() => {
-            setHover(false);
-          }}
-        >
-          <div className={"toolbar__tab-container"}>{children}</div>
-        </div>
-      )}
-    </ActiveContext.Consumer>
-  ));
-};
+            : model.active !== label
+            ? {
+                background: theme.toolbarTabBackground,
+                color: theme.toolbarTabText,
+              }
+            : {
+                background: theme.toolbarTabActiveBackground,
+                color: theme.toolbarTabActiveText,
+              }
+        }
+        onMouseEnter={() => {
+          setHover(true);
+        }}
+        onMouseLeave={() => {
+          setHover(false);
+        }}
+      >
+        <div className={"toolbar__tab-container"}>{children}</div>
+      </div>
+    );
+  }
+);
 
-export const Pane: FC<{ label: string }> = ({ label, children }) => {
-  let state = useAppState();
-  return useObserver(() => (
-    <ActiveContext.Consumer>
-      {(a) => (
-        <div
-          className={classNames("toolbar__pane", {
-            active: a.active === label,
-            inactive: a.active !== label,
-          })}
-          style={{ background: state.theme.colorBackground }}
-        >
-          {children}
-        </div>
-      )}
-    </ActiveContext.Consumer>
-  ));
-};
+export interface PaneProps {
+  label: string;
+  model: ToolbarInstance;
+  children?: React.ReactNode;
+}
 
-export const Toolbar: FC = () => {
-  let [active, setActive] = useState<string>("start");
-  let state = useAppState();
-  let toolbarStyle = () => {
-    switch (state.display) {
-      case "full":
-        return {
-          display: "block",
-          background: state.theme.colorBackground,
-        } as CSSProperties;
-      case "headfoot":
-      case "content":
-        return {
-          display: "none",
-          background: state.theme.colorBackground,
-        } as CSSProperties;
-    }
-  };
-  return useObserver(() => (
+export const Pane: FC<PaneProps> = observer(({ label, model, children }) => {
+  return (
     <div
-      className="toolbar"
-      ref={(e) => {
-        state.windowDim.toolbar = e?.clientHeight || 0;
-      }}
-      style={toolbarStyle()}
+      className={classNames("toolbar__pane", {
+        active: model.active === label,
+        inactive: model.active !== label,
+      })}
     >
-      <ActiveContext.Provider value={{ active, setActive }}>
-        <div
-          className="toolbar__tabs"
-          style={{ background: state.theme.colorPrimary }}
-        >
-          <Tab label="file">
-            <FileTab />
-          </Tab>
-          <Tab label="start">
-            <StartTab />
-          </Tab>
-          <Tab label="view">
-            <ViewTab />
-          </Tab>
-          <Tab label="about">
-            <AboutTab />
-          </Tab>
-        </div>
-        <div className="toolbar__panes">
-          <Pane label="file">
-            <File />
-          </Pane>
-          <Pane label="start">
-            <Start />
-          </Pane>
-          <Pane label="view">
-            <View />
-          </Pane>
-          <Pane label="about">
-            <About />
-          </Pane>
-        </div>
-      </ActiveContext.Provider>
+      {children}
     </div>
-  ));
-};
+  );
+});
+
+export interface ToolbarProps {
+  model: ToolbarInstance;
+  file: FileInstance;
+  config: ConfigInstance;
+  theme: ThemeItemInstance;
+  dimens: DimensInstance;
+  onSave: (cb?: (r: string) => void) => void;
+  onSaveAs: (cb?: (r: string) => void) => void;
+  onAutoSave: () => void;
+  onUndo: () => void;
+  onRedo: () => void;
+  onClose: () => void;
+  onSetTwoPage: () => void;
+  onSetOnePage: () => void;
+  onShowEditMetaDataModal: () => void;
+  onShowExportModal: () => void;
+  onShowAboutModal: () => void;
+  onShowPreferenceModal: () => void;
+}
+
+export const Toolbar: FC<ToolbarProps> = observer(
+  ({
+    model,
+    file,
+    config,
+    theme,
+    dimens,
+    onSave,
+    onSaveAs,
+    onAutoSave,
+    onUndo,
+    onRedo,
+    onClose,
+    onSetOnePage,
+    onSetTwoPage,
+    onShowEditMetaDataModal,
+    onShowExportModal,
+    onShowAboutModal,
+    onShowPreferenceModal,
+  }) => {
+    let toolbarStyle = () => {
+      switch (config.display) {
+        case "full":
+          return {
+            display: "block",
+            background: theme.toolbarBackground,
+          } as CSSProperties;
+        case "headfoot":
+        case "content":
+          return {
+            display: "none",
+            background: theme.toolbarBackground,
+          } as CSSProperties;
+      }
+    };
+    return (
+      <ModelInjector>
+        {(root) => (
+          <div
+            className="toolbar"
+            ref={(e) => {
+              dimens.setToolbar(e?.clientHeight || 0);
+            }}
+            style={file.isOpen ? toolbarStyle() : { display: "none" }}
+          >
+            <div
+              className="toolbar__tabs"
+              style={{ background: theme.activeColor }}
+            >
+              <Tab label="file" model={model} theme={theme}>
+                <FileTab />
+              </Tab>
+              <Tab label="start" model={model} theme={theme}>
+                <StartTab />
+              </Tab>
+              <Tab label="view" model={model} theme={theme}>
+                <ViewTab />
+              </Tab>
+              <Tab label="about" model={model} theme={theme}>
+                <AboutTab />
+              </Tab>
+            </div>
+            <div className="toolbar__panes">
+              <Pane label="file" model={model}>
+                <File
+                  theme={theme}
+                  file={root.file}
+                  config={config}
+                  onSave={onSave}
+                  onSaveAs={onSaveAs}
+                  onAutoSave={onAutoSave}
+                  onClose={onClose}
+                  onShowExportModal={onShowExportModal}
+                />
+              </Pane>
+              <Pane label="start" model={model}>
+                <Start
+                  theme={theme}
+                  file={root.file}
+                  onUndo={onUndo}
+                  onRedo={onRedo}
+                  onShowEditMetaDataModal={onShowEditMetaDataModal}
+                />
+              </Pane>
+              <Pane label="view" model={model}>
+                <View
+                  theme={theme}
+                  file={root.file}
+                  onSetOnePage={onSetOnePage}
+                  onSetTwoPage={onSetTwoPage}
+                />
+              </Pane>
+              <Pane label="about" model={model}>
+                <About
+                  theme={theme}
+                  onShowAboutModal={onShowAboutModal}
+                  onShowPreferenceModal={onShowPreferenceModal}
+                />
+              </Pane>
+            </div>
+          </div>
+        )}
+      </ModelInjector>
+    );
+  }
+);

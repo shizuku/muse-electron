@@ -24,10 +24,24 @@ export interface WelcomeProps {
   theme: ThemeItemInstance;
   modal: ModalInstance;
   config: ConfigInstance;
+  onOpen: () => void;
+  onNew: () => void;
+  onShowPreferenceModal: () => void;
+  onShowAboutModal: () => void;
 }
 
 export const Welcome: FC<WelcomeProps> = observer(
-  ({ file, theme, modal, model, config }) => {
+  ({
+    file,
+    theme,
+    modal,
+    model,
+    config,
+    onNew,
+    onOpen,
+    onShowAboutModal,
+    onShowPreferenceModal,
+  }) => {
     const { t } = useTranslation();
     return (
       <div
@@ -52,7 +66,7 @@ export const Welcome: FC<WelcomeProps> = observer(
                 key="0"
                 size="l"
                 icon={<FileAddOutlined />}
-                onClick={() => file.new()}
+                onClick={() => onNew()}
               >
                 {t("welcome.new-file")}
               </MenuItem>
@@ -60,7 +74,7 @@ export const Welcome: FC<WelcomeProps> = observer(
                 key="1"
                 size="l"
                 icon={<FolderOpenOutlined />}
-                onClick={() => file.open()}
+                onClick={() => onOpen()}
               >
                 {t("welcome.open")}
               </MenuItem>
@@ -76,11 +90,11 @@ export const Welcome: FC<WelcomeProps> = observer(
               <MenuItem
                 key="0"
                 size="l"
-                onClick={() => modal.preference.show()}
+                onClick={() => onShowPreferenceModal()}
               >
                 {t("toolbar.about.preference")}
               </MenuItem>
-              <MenuItem key="1" size="l" onClick={() => modal.about.show()}>
+              <MenuItem key="1" size="l" onClick={() => onShowAboutModal()}>
                 {t("toolbar.about.about")}
               </MenuItem>
             </Menu>

@@ -1,5 +1,4 @@
-import { Instance, types } from "mobx-state-tree";
-import { optional } from "mobx-state-tree/dist/internal";
+import { Instance, types, getSnapshot } from "mobx-state-tree";
 
 export interface ThemeItemLoader {
   activeColor: string;
@@ -10,9 +9,15 @@ export interface ThemeItemLoader {
 
   headerText: string;
   headerBackground: string;
+  headerPopupBackground: string;
+  headerPopupActiveBackground: string;
 
   toolbarText: string;
   toolbarBackground: string;
+  toolbarTabBackground: string;
+  toolbarTabText: string;
+  toolbarTabActiveBackground: string;
+  toolbarTabActiveText: string;
 
   contentBackground: string;
   contentText: string;
@@ -22,6 +27,8 @@ export interface ThemeItemLoader {
 
   footerBackground: string;
   footerText: string;
+  footerPopupBackground: string;
+  footerPopupActiveBackground: string;
 }
 
 export const ThemeItemModel = types.model("ThemeItem", {
@@ -33,9 +40,15 @@ export const ThemeItemModel = types.model("ThemeItem", {
 
   headerText: types.string,
   headerBackground: types.string,
+  headerPopupBackground: types.string,
+  headerPopupActiveBackground: types.string,
 
   toolbarText: types.string,
   toolbarBackground: types.string,
+  toolbarTabBackground: types.string,
+  toolbarTabText: types.string,
+  toolbarTabActiveBackground: types.string,
+  toolbarTabActiveText: types.string,
 
   contentBackground: types.string,
   contentText: types.string,
@@ -45,6 +58,8 @@ export const ThemeItemModel = types.model("ThemeItem", {
 
   footerBackground: types.string,
   footerText: types.string,
+  footerPopupBackground: types.string,
+  footerPopupActiveBackground: types.string,
 });
 
 export type ThemeItemInstance = Instance<typeof ThemeItemModel>;
@@ -52,33 +67,41 @@ export type ThemeItemInstance = Instance<typeof ThemeItemModel>;
 const defaultTheme = ThemeItemModel.create({
   activeColor: "",
 
-  welcomeSiderText: "",
-  welcomeSiderBackground: "",
-  welcomeContentBackground: "",
+  welcomeSiderText: "#FFFFFF",
+  welcomeSiderBackground: "#20A0FF",
+  welcomeContentBackground: "#F7F7F7",
 
-  headerText: "",
-  headerBackground: "",
+  headerText: "#FFFFFF",
+  headerBackground: "#20A0FF",
+  headerPopupBackground: "#FFFFFF",
+  headerPopupActiveBackground: "#58B7FF",
 
-  toolbarText: "",
-  toolbarBackground: "",
+  toolbarText: "#111111",
+  toolbarBackground: "#F7F7F7",
+  toolbarTabBackground: "#20A0FF",
+  toolbarTabText: "#FFFFFF",
+  toolbarTabActiveBackground: "#FFFFFF",
+  toolbarTabActiveText: "#20A0FF",
 
-  contentBackground: "",
-  contentText: "",
+  contentBackground: "#EEEEEE",
+  contentText: "#000000",
 
-  notationText: "",
-  notationBackground: "",
+  notationText: "#000000",
+  notationBackground: "#FFFFFF",
 
-  footerBackground: "",
-  footerText: "",
+  footerBackground: "#20A0FF",
+  footerText: "#FFFFFF",
+  footerPopupBackground: "#FFFFFF",
+  footerPopupActiveBackground: "#58B7FF",
 });
 
 export const ThemeModel = types
   .model("Theme")
   .props({
     themes: types.optional(types.map(ThemeItemModel), {
-      default: defaultTheme,
+      default: getSnapshot(defaultTheme),
     }),
-    name: optional(types.string, "default"),
+    name: types.optional(types.string, "default"),
   })
   .views((self) => {
     return {

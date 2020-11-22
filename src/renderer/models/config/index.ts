@@ -57,6 +57,9 @@ export const ConfigModel = types
       setExportScale(s: number): void {
         self.exportScale = s;
       },
+      setDisplay(s: "full" | "headfoot" | "content") {
+        self.display = s;
+      },
     };
   });
 

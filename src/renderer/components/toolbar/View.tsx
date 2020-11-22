@@ -1,39 +1,48 @@
 import React, { FC } from "react";
-import { useObserver } from "mobx-react";
+import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { Menu, MenuItem } from "./menu";
-import { useAppState } from "../../states";
+import { ThemeItemInstance } from "../../models/config/theme";
+import { FileInstance } from "../../models/file";
 
-export const ViewTab: FC = () => {
+export const ViewTab: FC = observer(() => {
   const { t } = useTranslation();
   return <span>{t("toolbar.view.view")}</span>;
-};
+});
+
+export interface ViewPaneProps {
+  theme: ThemeItemInstance;
+  file: FileInstance;
+  onSetTwoPage: () => void;
+  onSetOnePage: () => void;
+}
 
 //TODO: change icons
-export const View: FC = () => {
-  let state = useAppState();
-  const { t } = useTranslation();
-  return useObserver(() => (
-    <div className="pane-container">
-      <Menu mode="horizontal" style={{ color: state.theme.colorText }}>
-        <MenuItem
-          icon={<LayoutVerticalOutlined />}
-          size="m"
-          onClick={() => state.onSetOnePage()}
-          active={state.config.twopage === false}
-        >
-          {t("toolbar.view.one-page")}
-        </MenuItem>
-        <MenuItem
-          icon={<LayoutHorizontalOutlined />}
-          size="m"
-          onClick={() => state.onSetTwoPage()}
-          active={state.config.twopage === true}
-        >
-          {t("toolbar.view.two-page")}
-        </MenuItem>
-      </Menu>
-    </div>
-  ));
-};
+export const View: FC<ViewPaneProps> = observer(
+  ({ theme, file, onSetTwoPage, onSetOnePage }) => {
+    const { t } = useTranslation();
+    return useObserver(() => (
+      <div className="pane-container">
+        <Menu mode="horizontal" style={{ color: theme.toolbarText }}>
+          <MenuItem
+            icon={<LayoutVerticalOutlined />}
+            size="m"
+            onClick={() => onSetOnePage()}
+            active={file.conf.twopage === false}
+          >
+            {t("toolbar.view.one-page")}
+          </MenuItem>
+          <MenuItem
+            icon={<LayoutHorizontalOutlined />}
+            size="m"
+            onClick={() => onSetTwoPage()}
+            active={file.conf.twopage === true}
+          >
+            {t("toolbar.view.two-page")}
+          </MenuItem>
+        </Menu>
+      </div>
+    ));
+  }
+);
