@@ -9,7 +9,7 @@ import { FuncButton } from "./func-bar/func-button";
 import "./style.css";
 import { Tooltip } from "antd";
 import { ConfigInstance } from "../../models/config";
-import { ThemeItemInstance } from "../../models/config/theme";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";
 import { FileInstance } from "../../models/file";

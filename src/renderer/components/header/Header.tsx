@@ -17,7 +17,7 @@ import { FuncBar } from "./func-bar";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
 import { FuncButton } from "./func-bar/func-button";
 import { ConfigInstance } from "../../models/config";
-import { ThemeItemInstance } from "../../models/config/theme";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { FileInstance } from "../../models/file";
 import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";

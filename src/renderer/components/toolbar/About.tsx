@@ -3,7 +3,7 @@ import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { SettingOutlined, InfoOutlined } from "@ant-design/icons";
 import { Menu, MenuItem } from "./menu";
-import { ThemeItemInstance } from "../../models/config/theme";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 
 export const AboutTab: FC = observer(() => {
   const { t } = useTranslation();

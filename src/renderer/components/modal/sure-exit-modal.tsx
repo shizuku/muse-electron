@@ -3,32 +3,30 @@ import { Button, Modal } from "antd";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { SureExitModalInstance } from "../../models/components/modal/sure-exit";
-import { FileInstance } from "../../models/file";
-import { RootInstance } from "../../models";
 
 export interface SureExitModalProps {
   model: SureExitModalInstance;
-  file: FileInstance;
-  root: RootInstance;
+  onSave: (cb?: (r: string) => void) => void;
+  onExit: () => void;
 }
 
 export const SureExitModal: FC<SureExitModalProps> = observer(
-  ({ model, file, root }) => {
+  ({ model, onSave, onExit }) => {
     const { t } = useTranslation();
     const cancel = () => {
       model.hide();
     };
     const yes = () => {
-      file.save((r) => {
+      onSave((r) => {
         if (r === "success") {
           model.hide();
-          root.exit();
+          onExit();
         }
       });
     };
     const no = () => {
       model.hide();
-      root.exit();
+      onExit();
     };
     return (
       <Modal

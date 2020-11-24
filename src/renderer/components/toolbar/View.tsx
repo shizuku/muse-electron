@@ -3,8 +3,8 @@ import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { Menu, MenuItem } from "./menu";
-import { ThemeItemInstance } from "../../models/config/theme";
 import { FileInstance } from "../../models/file";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 
 export const ViewTab: FC = observer(() => {
   const { t } = useTranslation();

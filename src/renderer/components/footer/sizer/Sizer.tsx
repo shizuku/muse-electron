@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { InputNumber, Popover } from "antd";
 import { FileInstance } from "../../../models/file";
-import { ThemeItemInstance } from "../../../models/config/theme";
+import { ThemeItemInstance } from "../../../models/values/themes/theme-item";
 import { RootInstance } from "../../../models";
 import { ModelInjector } from "../../model-injector";
 import "./style.css";
@@ -46,55 +46,55 @@ const PopContent: FC<PopupProps> = observer(({ root }) => {
             x={root.fitWidthSizer}
             t={t("footer.sizer.fit-width")}
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={root.fitHeightSizer}
             t={t("footer.sizer.fit-height")}
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={300}
             t="300%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={250}
             t="250%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={150}
             t="150%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={100}
             t="100%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={75}
             t="75%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={50}
             t="50%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
           <PopItem
             x={25}
             t="25%"
             file={root.file}
-            theme={root.config.theme.theme}
+            theme={root.values.themes.t}
           />
         </div>
       )}

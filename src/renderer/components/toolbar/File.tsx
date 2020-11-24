@@ -7,9 +7,9 @@ import {
 import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
-import { ThemeItemInstance } from "../../models/config/theme";
 import { FileInstance } from "../../models/file";
 import { ConfigInstance } from "../../models/config";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 
 export const FileTab: FC = observer(() => {
   const { t } = useTranslation();

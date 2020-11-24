@@ -1,10 +1,10 @@
-import { ipcRenderer } from "electron";
 import { Instance, types } from "mobx-state-tree";
 import { ComponentsModel } from "./components";
 import { ConfigModel } from "./config";
 import { FileModel } from "./file";
 import { NotationModel } from "./notation";
 import { UiModel } from "./ui";
+import { ValuesModel } from "./values";
 
 export const RootModel = types
   .model("RootModel", {
@@ -13,6 +13,7 @@ export const RootModel = types
     ui: types.optional(UiModel, {}),
     file: types.optional(FileModel, {}),
     notation: types.optional(NotationModel, {}),
+    values: types.optional(ValuesModel, {}),
   })
   .views((self) => {
     return {
@@ -21,8 +22,8 @@ export const RootModel = types
         return (
           Math.floor(
             (self.ui.window.dimens.contentW /
-              (((self.notation.config.pageWidth +
-                2 * self.notation.config.pageGap) /
+              (((self.values.dimens.pageWidth +
+                2 * self.values.dimens.pageGap) /
                 self.file.conf.sizer) *
                 (self.file.conf.twopage
                   ? (self.file.pages.length || 0) > 1
@@ -38,8 +39,8 @@ export const RootModel = types
         return (
           Math.floor(
             (self.ui.window.dimens.contentH /
-              ((self.notation.config.pageHeight +
-                2 * self.notation.config.pageGap) /
+              ((self.values.dimens.pageHeight +
+                2 * self.values.dimens.pageGap) /
                 self.file.conf.sizer)) *
               10000
           ) / 100
@@ -49,9 +50,7 @@ export const RootModel = types
   })
   .actions(() => {
     return {
-      exit() {
-        ipcRenderer.send("app-quit");
-      },
+      
     };
   });
 

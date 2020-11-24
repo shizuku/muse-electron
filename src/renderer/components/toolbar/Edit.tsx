@@ -3,7 +3,7 @@ import { RedoOutlined, UndoOutlined, ProfileOutlined } from "@ant-design/icons";
 import { observer, useObserver } from "mobx-react";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
-import { ThemeItemInstance } from "../../models/config/theme";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 
 export const EditTab: FC = observer(() => {
   const { t } = useTranslation();

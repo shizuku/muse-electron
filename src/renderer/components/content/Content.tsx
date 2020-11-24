@@ -1,11 +1,11 @@
 import React, { CSSProperties, FC } from "react";
 import { MuseNotation } from "../muse-notation";
 import { observer } from "mobx-react";
-import "./style.css";
 import { ConfigInstance } from "../../models/config";
 import { DimensInstance } from "../../models/ui/window/dimens";
-import { ThemeItemInstance } from "../../models/config/theme";
 import { FileInstance } from "../../models/file";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
+import "./style.css";
 
 export interface ContentProps {
   file: FileInstance;

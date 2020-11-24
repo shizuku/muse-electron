@@ -11,8 +11,8 @@ import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
 import { basename, dirname } from "path";
 import { Meta } from "./meta";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { FileInstance } from "../../models/file";
-import { ThemeItemInstance } from "../../models/config/theme";
 import { ModalInstance } from "../../models/components/modal";
 import { WelcomeInstance } from "../../models/components/welcome";
 import { ConfigInstance } from "../../models/config";
@@ -26,6 +26,7 @@ export interface WelcomeProps {
   config: ConfigInstance;
   onOpen: () => void;
   onNew: () => void;
+  onClearRecent: () => void;
   onShowPreferenceModal: () => void;
   onShowAboutModal: () => void;
 }
@@ -39,6 +40,7 @@ export const Welcome: FC<WelcomeProps> = observer(
     config,
     onNew,
     onOpen,
+    onClearRecent,
     onShowAboutModal,
     onShowPreferenceModal,
   }) => {
@@ -46,7 +48,11 @@ export const Welcome: FC<WelcomeProps> = observer(
     return (
       <div
         className="welcome"
-        style={{ background: theme.welcomeContentBackground }}
+        style={
+          file.isOpen
+            ? { display: "none" }
+            : { background: theme.welcomeContentBackground }
+        }
       >
         <div
           className="welcome__sider"
@@ -106,9 +112,7 @@ export const Welcome: FC<WelcomeProps> = observer(
         >
           <h2>{t("welcome.recent")}</h2>
           <div className="welcom__clear">
-            <a onClick={() => file.clearRecent()}>
-              {t("welcome.recent-clear")}
-            </a>
+            <a onClick={() => onClearRecent()}>{t("welcome.recent-clear")}</a>
           </div>
           <div className="welcome__recent-files">
             <List

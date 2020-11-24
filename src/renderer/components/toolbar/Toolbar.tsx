@@ -7,11 +7,11 @@ import { About, AboutTab } from "./About";
 import { observer } from "mobx-react";
 import { ToolbarInstance } from "../../models/components/toolbar";
 import { ConfigInstance } from "../../models/config";
-import { ThemeItemInstance } from "../../models/config/theme";
 import { DimensInstance } from "../../models/ui/window/dimens";
 import { ModelInjector } from "../model-injector";
 import "./style.css";
 import { FileInstance } from "../../models/file";
+import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 
 export interface TabProps {
   label: string;
@@ -151,7 +151,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
           >
             <div
               className="toolbar__tabs"
-              style={{ background: theme.activeColor }}
+              style={{ background: theme.toolbarBackground }}
             >
               <Tab label="file" model={model} theme={theme}>
                 <FileTab />

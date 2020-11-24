@@ -35,7 +35,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
         ipcRenderer.once("save-as-reply", (ev, r: string, newPath: string) => {
           if (r === "success") {
             console.log("File.saveAs: success");
-            root.file.finishSave(newPath);
+            root.file.setPath(newPath);
           } else {
             console.log("File.saveAs: canceled");
           }
@@ -50,28 +50,58 @@ export const App: FC<AppProps> = observer(({ root }) => {
       ipcRenderer.once("save-as-reply", (ev, r: string, newPath: string) => {
         if (r === "success") {
           console.log("File.saveAs: success");
-          root.file.finishSave(newPath);
+          root.file.setPath(newPath);
         } else {
-          console.log("File.saveAs: canceled");
+          console.log("file saveAs: canceled");
         }
         if (cb) cb(r);
       });
       ipcRenderer.send("save-as", "", root.file.data);
     }
   };
-  const onAutoSave = () => {};
+  const onAutoSave = () => {
+    root.config.autoSave = !root.config.autoSave;
+  };
   const onUndo = () => {};
   const onRedo = () => {};
+  const onClearRecents = () => {};
 
-  const onShowEditMetaDataModal = () => {};
-  const onShowExportModal = () => {};
-  const onShowAboutModal = () => {};
-  const onShowPreferenceModal = () => {};
+  const onShowEditMetaDataModal = () => {
+    root.components.modal.editMeta.show();
+  };
+  const onShowExportModal = () => {
+    root.components.modal.export.show();
+  };
+  const onShowAboutModal = () => {
+    root.components.modal.about.show();
+  };
+  const onShowPreferenceModal = () => {
+    root.components.modal.preference.show();
+  };
 
-  const onSetSizer = (n: number) => {};
-  const onSetTwoPage = () => {};
-  const onSetOnePage = () => {};
-  const onExit = () => {};
+  const onSetSizerMode = (s: "flex" | "fw" | "fh") => {
+    root.file.conf.setSizerMode(s);
+  };
+  const onSetSizer = (n: number) => {
+    root.file.conf.setSizer(n);
+  };
+  const onSetTwoPage = () => {
+    root.file.conf.setTwoPage(true);
+  };
+  const onSetOnePage = () => {
+    root.file.conf.setTwoPage(false);
+  };
+  const onExit = () => {
+    if (root.file.isModified) {
+      onSave((r) => {
+        if (r === "success") {
+          ipcRenderer.send("app-quit");
+        }
+      });
+    } else {
+      ipcRenderer.send("app-quit");
+    }
+  };
 
   const toggleFullScreen = () => {
     ipcRenderer.send("app-toggle-full-screen");
@@ -82,7 +112,17 @@ export const App: FC<AppProps> = observer(({ root }) => {
   const toggleMax = () => {
     ipcRenderer.send("app-toggle-max");
   };
-  const onClose = () => {};
+  const onClose = () => {
+    if (root.file.isModified) {
+      onSave((r) => {
+        if (r === "success") {
+          root.file.close();
+        }
+      });
+    } else {
+      root.file.close();
+    }
+  };
   const saveConfig = () => {};
   const saveFileConfig = () => {};
   useEffect(() => {
@@ -111,9 +151,9 @@ export const App: FC<AppProps> = observer(({ root }) => {
       }
     });
     ipcRenderer.on("get-dark-light-reply", (e, code: string) => {
-      if (root.config.confTheme === "auto") {
+      if (root.values.themes.conf === "auto") {
         console.log("auto theme to: ", code);
-        root.config.setMachineTheme(code);
+        root.values.themes.setMachineConf(code);
       }
     });
     return function() {
@@ -188,7 +228,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
               dimens={root.ui.window.dimens}
               file={root.file}
               config={root.config}
-              theme={root.config.theme.theme}
+              theme={root.values.themes.t}
               win={root.ui.window}
               onExit={onExit}
               onMin={onMin}
@@ -202,7 +242,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
               model={root.components.toolbar}
               file={root.file}
               config={root.config}
-              theme={root.config.theme.theme}
+              theme={root.values.themes.t}
               dimens={root.ui.window.dimens}
               onSave={onSave}
               onSaveAs={onSaveAs}
@@ -219,7 +259,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
             />
             <Content
               file={root.file}
-              theme={root.config.theme.theme}
+              theme={root.values.themes.t}
               config={root.config}
               dimens={root.ui.window.dimens}
             />
@@ -227,7 +267,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
               dimens={root.ui.window.dimens}
               file={root.file}
               config={root.config}
-              theme={root.config.theme.theme}
+              theme={root.values.themes.t}
               win={root.ui.window}
             />
             <Welcome
@@ -235,13 +275,14 @@ export const App: FC<AppProps> = observer(({ root }) => {
               modal={root.components.modal}
               file={root.file}
               config={root.config}
-              theme={root.config.theme.theme}
+              theme={root.values.themes.t}
               onNew={onNew}
               onOpen={onOpen}
+              onClearRecent={onClearRecents}
               onShowAboutModal={onShowAboutModal}
               onShowPreferenceModal={onShowPreferenceModal}
             />
-            <Modals />
+            <Modals onSave={onSave} onClose={onClose} onExit={onExit} />
           </ConfigProvider>
         )}
       </ModelInjector>
