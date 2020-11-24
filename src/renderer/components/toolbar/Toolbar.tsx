@@ -7,12 +7,12 @@ import { About, AboutTab } from "./About";
 import { observer } from "mobx-react";
 import { ToolbarInstance } from "../../models/components/toolbar";
 import { ConfigInstance } from "../../models/config";
-import { DimensInstance } from "../../models/ui/window/dimens";
 import { ModelInjector } from "../model-injector";
 import "./style.css";
 import { FileInstance } from "../../models/file";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
+import { WindowInstance } from "../../models/ui/window";
 
 export interface TabProps {
   label: string;
@@ -90,7 +90,7 @@ export interface ToolbarProps {
   file: FileInstance;
   config: ConfigInstance;
   theme: ThemeItemInstance;
-  dimens: DimensInstance;
+  win: WindowInstance;
   t: LocaleStringsInstance;
   onSave: (cb?: (r: string) => void) => void;
   onSaveAs: (cb?: (r: string) => void) => void;
@@ -112,7 +112,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
     file,
     config,
     theme,
-    dimens,
+    win,
     t,
     onSave,
     onSaveAs,
@@ -128,7 +128,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
     onShowPreferenceModal,
   }) => {
     let toolbarStyle = () => {
-      switch (config.display) {
+      switch (win.display) {
         case "full":
           return {
             display: "block",
@@ -148,13 +148,13 @@ export const Toolbar: FC<ToolbarProps> = observer(
           <div
             className="toolbar"
             ref={(e) => {
-              dimens.setToolbar(e?.clientHeight || 0);
+              win.setToolbar(e?.clientHeight || 0);
             }}
             style={file.isOpen ? toolbarStyle() : { display: "none" }}
           >
             <div
               className="toolbar__tabs"
-              style={{ background: theme.toolbarBackground }}
+              style={{ background: theme.toolbarTabBackground }}
             >
               <Tab label="file" model={model} theme={theme}>
                 <FileTab t={t} />

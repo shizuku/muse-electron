@@ -13,10 +13,6 @@ export const ConfigModel = types
     confLang: types.optional(types.string, "auto"),
     machineLang: types.optional(types.string, "en-US"),
     exportScale: types.optional(types.number, 1),
-    display: types.optional(
-      types.enumeration("", ["full", "headfoot", "content"]),
-      "full"
-    ),
   })
   .views((self) => {
     return {
@@ -34,7 +30,6 @@ export const ConfigModel = types
       loadConf(c: ConfigLoader) {
         self.autoSave = c.autoSave;
         self.confLang = c.lang;
-        self.display = c.display;
         self.exportScale = c.exportScale;
       },
       toggleAutoSave(): void {
@@ -48,9 +43,6 @@ export const ConfigModel = types
       },
       setExportScale(s: number): void {
         self.exportScale = s;
-      },
-      setDisplay(s: "full" | "headfoot" | "content") {
-        self.display = s;
       },
     };
   });

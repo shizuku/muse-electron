@@ -9,14 +9,12 @@ import "./style.css";
 import { Tooltip } from "antd";
 import { ConfigInstance } from "../../models/config";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
-import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";
 import { FileInstance } from "../../models/file";
 import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface FooterProps {
   config: ConfigInstance;
-  dimens: DimensInstance;
   file: FileInstance;
   theme: ThemeItemInstance;
   t: LocaleStringsInstance;
@@ -24,10 +22,10 @@ export interface FooterProps {
 }
 
 export const Footer: FC<FooterProps> = observer(
-  ({ config, dimens, file, theme, t, win }) => {
+  ({ config, file, theme, t, win }) => {
     let [maxHeight, setMaxHeight] = useState(0);
     let styleHover = () => {
-      switch (config.display) {
+      switch (win.display) {
         case "full":
         case "headfoot":
           return {
@@ -48,7 +46,7 @@ export const Footer: FC<FooterProps> = observer(
       }
     };
     let styleUnhover = () => {
-      switch (config.display) {
+      switch (win.display) {
         case "full":
         case "headfoot":
           return {
@@ -73,7 +71,7 @@ export const Footer: FC<FooterProps> = observer(
         className="footer"
         ref={(e) => {
           let h = e?.clientHeight || 0;
-          dimens.setFooter(h);
+          win.setFooter(h);
           setMaxHeight(maxHeight > h ? maxHeight : h);
         }}
         style={

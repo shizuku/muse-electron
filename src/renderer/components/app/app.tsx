@@ -60,7 +60,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
     }
   };
   const onAutoSave = () => {
-    root.config.autoSave = !root.config.autoSave;
+    root.config.toggleAutoSave();
   };
   const onUndo = () => {};
   const onRedo = () => {};
@@ -197,19 +197,19 @@ export const App: FC<AppProps> = observer(({ root }) => {
     );
   });
   useEffect(() => {
-    root.ui.window.dimens.setWindowH(document.body.clientHeight);
-    root.ui.window.dimens.setWindowW(document.body.clientWidth);
+    root.ui.window.setWindowH(document.body.clientHeight);
+    root.ui.window.setWindowW(document.body.clientWidth);
     window.onresize = () => {
-      root.ui.window.dimens.setWindowH(document.body.clientHeight);
-      root.ui.window.dimens.setWindowW(document.body.clientWidth);
+      root.ui.window.setWindowH(document.body.clientHeight);
+      root.ui.window.setWindowW(document.body.clientWidth);
     };
     window.addEventListener("mousemove", (e) => {
       if (e.clientY < 30 && e.clientY > 0) {
         root.ui.window.setHeaderHover(true);
         root.ui.window.setFooterHover(false);
       } else if (
-        e.clientY < root.ui.window.dimens.windowH &&
-        e.clientY > root.ui.window.dimens.windowH - 30
+        e.clientY < root.ui.window.windowH &&
+        e.clientY > root.ui.window.windowH - 30
       ) {
         root.ui.window.setHeaderHover(false);
         root.ui.window.setFooterHover(true);
@@ -226,7 +226,6 @@ export const App: FC<AppProps> = observer(({ root }) => {
         {(root) => (
           <ConfigProvider locale={locales[root.config.lang]}>
             <Header
-              dimens={root.ui.window.dimens}
               file={root.file}
               config={root.config}
               theme={root.values.themes.t}
@@ -245,8 +244,8 @@ export const App: FC<AppProps> = observer(({ root }) => {
               file={root.file}
               config={root.config}
               theme={root.values.themes.t}
-              dimens={root.ui.window.dimens}
               t={root.values.strings.t}
+              win={root.ui.window}
               onSave={onSave}
               onSaveAs={onSaveAs}
               onAutoSave={onAutoSave}
@@ -264,10 +263,9 @@ export const App: FC<AppProps> = observer(({ root }) => {
               file={root.file}
               theme={root.values.themes.t}
               config={root.config}
-              dimens={root.ui.window.dimens}
+              win={root.ui.window}
             />
             <Footer
-              dimens={root.ui.window.dimens}
               file={root.file}
               config={root.config}
               theme={root.values.themes.t}

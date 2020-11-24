@@ -22,7 +22,7 @@ export const RootModel = types
         // 100 means 100%
         return (
           Math.floor(
-            (self.ui.window.dimens.contentW /
+            (self.ui.window.contentW /
               (((self.values.dimens.pageWidth +
                 2 * self.values.dimens.pageGap) /
                 self.file.conf.sizer) *
@@ -39,7 +39,7 @@ export const RootModel = types
         // 100 means 100%
         return (
           Math.floor(
-            (self.ui.window.dimens.contentH /
+            (self.ui.window.contentH /
               ((self.values.dimens.pageHeight +
                 2 * self.values.dimens.pageGap) /
                 self.file.conf.sizer)) *

@@ -18,7 +18,6 @@ import { FuncButton } from "./func-bar/func-button";
 import { ConfigInstance } from "../../models/config";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { FileInstance } from "../../models/file";
-import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";
 import "./style.css";
 import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
@@ -26,54 +25,56 @@ import { LocaleStringsInstance } from "../../models/values/strings/locale-string
 export interface DisplayPopupProps {
   config: ConfigInstance;
   theme: ThemeItemInstance;
+  win: WindowInstance;
   t: LocaleStringsInstance;
 }
 
-const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme, t }) => {
-  return (
-    <div className="display-popup">
-      <div
-        className="display-popup__item"
-        onClick={() => config.setDisplay("full")}
-        style={
-          config.display === "full"
-            ? { background: theme.headerPopupActiveBackground }
-            : {}
-        }
-      >
-        {t["header_display_show-all"]}
+const DisplayPopup: FC<DisplayPopupProps> = observer(
+  ({ config, theme, win, t }) => {
+    return (
+      <div className="display-popup">
+        <div
+          className="display-popup__item"
+          onClick={() => win.setDisplay("full")}
+          style={
+            win.display === "full"
+              ? { background: theme.headerPopupActiveBackground }
+              : {}
+          }
+        >
+          {t["header_display_show-all"]}
+        </div>
+        <div
+          className="display-popup__item"
+          onClick={() => win.setDisplay("headfoot")}
+          style={
+            win.display === "headfoot"
+              ? { background: theme.headerPopupActiveBackground }
+              : {}
+          }
+        >
+          {t["header_display_headfoot"]}
+        </div>
+        <div
+          className="display-popup__item"
+          onClick={() => win.setDisplay("content")}
+          style={
+            win.display === "content"
+              ? { background: theme.headerPopupActiveBackground }
+              : {}
+          }
+        >
+          {t["header_display_content"]}
+        </div>
       </div>
-      <div
-        className="display-popup__item"
-        onClick={() => config.setDisplay("headfoot")}
-        style={
-          config.display === "headfoot"
-            ? { background: theme.headerPopupActiveBackground }
-            : {}
-        }
-      >
-        {t["header_display_headfoot"]}
-      </div>
-      <div
-        className="display-popup__item"
-        onClick={() => config.setDisplay("content")}
-        style={
-          config.display === "content"
-            ? { background: theme.headerPopupActiveBackground }
-            : {}
-        }
-      >
-        {t["header_display_content"]}
-      </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export interface HeaderProps {
   config: ConfigInstance;
   theme: ThemeItemInstance;
   file: FileInstance;
-  dimens: DimensInstance;
   t: LocaleStringsInstance;
   win: WindowInstance;
   toggleFullScreen: () => void;
@@ -90,7 +91,6 @@ export const Header: FC<HeaderProps> = observer(
     config,
     theme,
     file,
-    dimens,
     t,
     win,
     toggleFullScreen,
@@ -102,7 +102,7 @@ export const Header: FC<HeaderProps> = observer(
     onRedo,
   }) => {
     let styleHover = () => {
-      switch (config.display) {
+      switch (win.display) {
         case "full":
         case "headfoot":
           return {
@@ -123,7 +123,7 @@ export const Header: FC<HeaderProps> = observer(
       }
     };
     let styleUnhover = () => {
-      switch (config.display) {
+      switch (win.display) {
         case "full":
         case "headfoot":
           return {
@@ -154,7 +154,7 @@ export const Header: FC<HeaderProps> = observer(
         className="header"
         ref={(e) => {
           let h = e?.clientHeight || 0;
-          dimens.setHeader(h);
+          win.setHeader(h);
         }}
         style={win.headerHover ? styleHover() : styleUnhover()}
       >
@@ -208,7 +208,9 @@ export const Header: FC<HeaderProps> = observer(
           <Popover
             placement="topLeft"
             title={t["header_display"]}
-            content={<DisplayPopup theme={theme} config={config} t={t} />}
+            content={
+              <DisplayPopup theme={theme} config={config} t={t} win={win} />
+            }
             trigger="click"
           >
             <div className="window-icon hover-gray">

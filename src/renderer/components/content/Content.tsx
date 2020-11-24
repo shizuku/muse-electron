@@ -2,31 +2,31 @@ import React, { CSSProperties, FC } from "react";
 import { MuseNotation } from "../muse-notation";
 import { observer } from "mobx-react";
 import { ConfigInstance } from "../../models/config";
-import { DimensInstance } from "../../models/ui/window/dimens";
 import { FileInstance } from "../../models/file";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import "./style.css";
+import { WindowInstance } from "../../models/ui/window";
 
 export interface ContentProps {
   file: FileInstance;
   config: ConfigInstance;
-  dimens: DimensInstance;
+  win: WindowInstance;
   theme: ThemeItemInstance;
 }
 
 export const Content: FC<ContentProps> = observer(
-  ({ file, config, dimens, theme }) => {
+  ({ file, config, win, theme }) => {
     let style = () => {
-      switch (config.display) {
+      switch (win.display) {
         case "full":
         case "headfoot":
           return {
-            height: dimens.contentH,
+            height: win.contentH,
             background: theme.contentBackground,
           } as CSSProperties;
         case "content":
           return {
-            height: dimens.windowH,
+            height: win.windowH,
             background: theme.contentBackground,
           } as CSSProperties;
       }
@@ -39,15 +39,15 @@ export const Content: FC<ContentProps> = observer(
         <div
           className="notaiton-container"
           ref={(e) => {
-            dimens.setContentW(e?.clientWidth || 0);
+            win.setContentW(e?.clientWidth || 0);
           }}
         >
           <div className="notaion-outer">
             <div
               className="notation"
               ref={(e) => {
-                dimens.setNotationH(e?.scrollHeight || 0);
-                dimens.setNotationW(e?.scrollWidth || 0);
+                win.setNotationH(e?.scrollHeight || 0);
+                win.setNotationW(e?.scrollWidth || 0);
               }}
               style={{
                 color: theme.contentText,

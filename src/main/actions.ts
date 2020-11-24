@@ -71,7 +71,7 @@ export function createActions(mw: BrowserWindow) {
   ipcMain.on("toggle-dev-tools", () => {
     mw.webContents.toggleDevTools();
   });
-  ipcMain.on("app-close", () => {
+  ipcMain.on("app-quit", () => {
     mw.close();
   });
   ipcMain.on("app-minimize", () => {

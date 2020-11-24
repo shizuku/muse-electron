@@ -13,9 +13,9 @@ import { Meta } from "./meta";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { FileInstance } from "../../models/file";
 import { WelcomeInstance } from "../../models/components/welcome";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 import { ConfigInstance } from "../../models/config";
 import "./style.css";
-import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface WelcomeProps {
   model: WelcomeInstance;
