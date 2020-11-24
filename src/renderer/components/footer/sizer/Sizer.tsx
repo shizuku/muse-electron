@@ -1,12 +1,13 @@
 import React, { FC } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { InputNumber, Popover } from "antd";
 import { FileInstance } from "../../../models/file";
 import { ThemeItemInstance } from "../../../models/values/themes/theme-item";
 import { RootInstance } from "../../../models";
 import { ModelInjector } from "../../model-injector";
 import "./style.css";
+import { LocaleStringsInstance } from "../../../models/values/strings/locale-strings";
+import { StringsInstance } from "../../../models/values/strings";
 
 export interface PopupItemProps {
   x: number;
@@ -36,7 +37,7 @@ export interface PopupProps {
 }
 
 const PopContent: FC<PopupProps> = observer(({ root }) => {
-  const { t } = useTranslation();
+  let t = root.values.strings.t;
   console.log(root.fitWidthSizer, root.fitHeightSizer);
   return (
     <ModelInjector>
@@ -44,13 +45,13 @@ const PopContent: FC<PopupProps> = observer(({ root }) => {
         <div className="pop-content">
           <PopItem
             x={root.fitWidthSizer}
-            t={t("footer.sizer.fit-width")}
+            t={t["footer_sizer_fit-width"]}
             file={root.file}
             theme={root.values.themes.t}
           />
           <PopItem
             x={root.fitHeightSizer}
-            t={t("footer.sizer.fit-height")}
+            t={t["footer_sizer_fit-height"]}
             file={root.file}
             theme={root.values.themes.t}
           />
@@ -104,10 +105,10 @@ const PopContent: FC<PopupProps> = observer(({ root }) => {
 
 export interface SizerProps {
   file: FileInstance;
+  t: LocaleStringsInstance;
 }
 
-export const Sizer: FC<SizerProps> = observer(({ file }) => {
-  const { t } = useTranslation();
+export const Sizer: FC<SizerProps> = observer(({ file, t }) => {
   const onChange = (v: string | number | undefined) => {
     let x = 0;
     switch (typeof v) {
@@ -129,7 +130,7 @@ export const Sizer: FC<SizerProps> = observer(({ file }) => {
         content={
           <ModelInjector>{(root) => <PopContent root={root} />}</ModelInjector>
         }
-        title={t("footer.sizer.sizer")}
+        title={t["footer_sizer"]}
       >
         <InputNumber
           size="small"

@@ -148,6 +148,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
       if (root.config.confLang === "auto") {
         console.log("auto locale to:", code);
         root.config.setMachineLang(code);
+        root.values.strings.setMachineConf(code);
       }
     });
     ipcRenderer.on("get-dark-light-reply", (e, code: string) => {
@@ -230,6 +231,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
               config={root.config}
               theme={root.values.themes.t}
               win={root.ui.window}
+              t={root.values.strings.t}
               onExit={onExit}
               onMin={onMin}
               onRedo={onRedo}
@@ -244,6 +246,7 @@ export const App: FC<AppProps> = observer(({ root }) => {
               config={root.config}
               theme={root.values.themes.t}
               dimens={root.ui.window.dimens}
+              t={root.values.strings.t}
               onSave={onSave}
               onSaveAs={onSaveAs}
               onAutoSave={onAutoSave}
@@ -269,10 +272,11 @@ export const App: FC<AppProps> = observer(({ root }) => {
               config={root.config}
               theme={root.values.themes.t}
               win={root.ui.window}
+              t={root.values.strings.t}
             />
             <Welcome
               model={root.components.welcome}
-              modal={root.components.modal}
+              t={root.values.strings.t}
               file={root.file}
               config={root.config}
               theme={root.values.themes.t}
@@ -282,7 +286,12 @@ export const App: FC<AppProps> = observer(({ root }) => {
               onShowAboutModal={onShowAboutModal}
               onShowPreferenceModal={onShowPreferenceModal}
             />
-            <Modals onSave={onSave} onClose={onClose} onExit={onExit} />
+            <Modals
+              onSave={onSave}
+              onClose={onClose}
+              onExit={onExit}
+              t={root.values.strings.t}
+            />
           </ConfigProvider>
         )}
       </ModelInjector>

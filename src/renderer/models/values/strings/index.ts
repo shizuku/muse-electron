@@ -10,21 +10,29 @@ export const StringsModel = types
       "en-US": enUS,
       "zh-CN": zhCN,
     }),
-    locale: types.optional(types.string, "en-US"),
+    conf: types.optional(types.string, "auto"),
+    machineConf: types.optional(types.string, "undefined"),
   })
   .views((self) => {
     return {
       get t(): LocaleStringsInstance {
-        let l = self.localeMap.get(self.locale);
-        if (l) return l;
-        else throw "no strings abvalibale.";
+        console.log("strings conf:", self.conf, self.machineConf);
+        let def = enUS;
+        if (self.conf === "auto") {
+          return self.localeMap.get(self.machineConf) || def;
+        } else {
+          return self.localeMap.get(self.conf) || def;
+        }
       },
     };
   })
   .actions((self) => {
     return {
-      setLocale(l: string) {
-        self.locale = l;
+      setConf(l: string) {
+        self.conf = l;
+      },
+      setMachineConf(c: string) {
+        self.machineConf = c;
       },
     };
   });

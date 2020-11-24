@@ -1,27 +1,28 @@
 import React, { FC } from "react";
 import { observer, useObserver } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { LayoutHorizontalOutlined, LayoutVerticalOutlined } from "../icons";
 import { Menu, MenuItem } from "./menu";
 import { FileInstance } from "../../models/file";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
+import { useStrings } from "../../models";
 
 export const ViewTab: FC = observer(() => {
-  const { t } = useTranslation();
-  return <span>{t("toolbar.view.view")}</span>;
+  let s = useStrings();
+  return <span>{s.t["toolbar_view"]}</span>;
 });
 
 export interface ViewPaneProps {
   theme: ThemeItemInstance;
   file: FileInstance;
+  t: LocaleStringsInstance;
   onSetTwoPage: () => void;
   onSetOnePage: () => void;
 }
 
 //TODO: change icons
 export const View: FC<ViewPaneProps> = observer(
-  ({ theme, file, onSetTwoPage, onSetOnePage }) => {
-    const { t } = useTranslation();
+  ({ theme, file, t, onSetTwoPage, onSetOnePage }) => {
     return useObserver(() => (
       <div className="pane-container">
         <Menu mode="horizontal" style={{ color: theme.toolbarText }}>
@@ -31,7 +32,7 @@ export const View: FC<ViewPaneProps> = observer(
             onClick={() => onSetOnePage()}
             active={file.conf.twopage === false}
           >
-            {t("toolbar.view.one-page")}
+            {t["toolbar_view_one-page"]}
           </MenuItem>
           <MenuItem
             icon={<LayoutHorizontalOutlined />}
@@ -39,7 +40,7 @@ export const View: FC<ViewPaneProps> = observer(
             onClick={() => onSetTwoPage()}
             active={file.conf.twopage === true}
           >
-            {t("toolbar.view.two-page")}
+            {t["toolbar_view_two-page"]}
           </MenuItem>
         </Menu>
       </div>

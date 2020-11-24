@@ -1,6 +1,5 @@
 import React, { CSSProperties, FC, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { ColumnHeightOutlined, ColumnWidthOutlined } from "@ant-design/icons";
 import { Sizer } from "./sizer";
 import { FuncBar } from "./func-bar";
@@ -13,18 +12,19 @@ import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";
 import { FileInstance } from "../../models/file";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface FooterProps {
   config: ConfigInstance;
   dimens: DimensInstance;
   file: FileInstance;
   theme: ThemeItemInstance;
+  t: LocaleStringsInstance;
   win: WindowInstance;
 }
 
 export const Footer: FC<FooterProps> = observer(
-  ({ config, dimens, file, theme, win }) => {
-    const { t } = useTranslation();
+  ({ config, dimens, file, theme, t, win }) => {
     let [maxHeight, setMaxHeight] = useState(0);
     let styleHover = () => {
       switch (config.display) {
@@ -94,7 +94,7 @@ export const Footer: FC<FooterProps> = observer(
             <FuncBar>
               <Tooltip
                 placement="topLeft"
-                title={t("toolbar.view.one-page")}
+                title={t["toolbar_view_one-page"]}
                 mouseEnterDelay={0.5}
               >
                 <FuncButton
@@ -106,7 +106,7 @@ export const Footer: FC<FooterProps> = observer(
               </Tooltip>
               <Tooltip
                 placement="topLeft"
-                title={t("toolbar.view.two-page")}
+                title={t["toolbar_view_two-page"]}
                 mouseEnterDelay={0.5}
               >
                 <FuncButton
@@ -122,7 +122,7 @@ export const Footer: FC<FooterProps> = observer(
             <FuncBar>
               <Tooltip
                 placement="topLeft"
-                title={t("footer.sizer.fit-height")}
+                title={t["footer_sizer_fit-height"]}
                 mouseEnterDelay={0.5}
               >
                 <FuncButton
@@ -134,7 +134,7 @@ export const Footer: FC<FooterProps> = observer(
               </Tooltip>
               <Tooltip
                 placement="topLeft"
-                title={t("footer.sizer.fit-width")}
+                title={t["footer_sizer_fit-width"]}
                 mouseEnterDelay={0.5}
               >
                 <FuncButton
@@ -147,7 +147,7 @@ export const Footer: FC<FooterProps> = observer(
             </FuncBar>
           </div>
           <div className="footer__item">
-            <Sizer file={file} />
+            <Sizer file={file} t={t} />
           </div>
         </div>
       </footer>

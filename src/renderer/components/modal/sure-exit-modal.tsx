@@ -1,18 +1,18 @@
 import React, { FC } from "react";
 import { Button, Modal } from "antd";
 import { observer } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { SureExitModalInstance } from "../../models/components/modal/sure-exit";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface SureExitModalProps {
   model: SureExitModalInstance;
+  t: LocaleStringsInstance;
   onSave: (cb?: (r: string) => void) => void;
   onExit: () => void;
 }
 
 export const SureExitModal: FC<SureExitModalProps> = observer(
-  ({ model, onSave, onExit }) => {
-    const { t } = useTranslation();
+  ({ model, t, onSave, onExit }) => {
     const cancel = () => {
       model.hide();
     };
@@ -30,22 +30,22 @@ export const SureExitModal: FC<SureExitModalProps> = observer(
     };
     return (
       <Modal
-        title={t("modal.save-close.save-close")}
+        title={t["modal_sure"]}
         visible={model.ifShow}
         onCancel={cancel}
         footer={[
           <Button onClick={cancel} key="cancel">
-            {t("common.button-cancel")}
+            {t["common_button_cancel"]}
           </Button>,
           <Button onClick={no} key="no">
-            {t("common.button-no")}
+            {t["common_button_no"]}
           </Button>,
           <Button type="primary" onClick={yes} key="yes">
-            {t("common.button-yes")}
+            {t["common_button_yes"]}
           </Button>,
         ]}
       >
-        <p>{t("modal.save-close.message")}</p>
+        <p>{t["modal_sure_message"]}</p>
       </Modal>
     );
   }

@@ -5,21 +5,21 @@ import {
   ExportOutlined,
 } from "@ant-design/icons";
 import { observer, useObserver } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
 import { FileInstance } from "../../models/file";
 import { ConfigInstance } from "../../models/config";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
-export const FileTab: FC = observer(() => {
-  const { t } = useTranslation();
-  return <span>{t("toolbar.file.file")}</span>;
+export const FileTab: FC<{ t: LocaleStringsInstance }> = observer(({ t }) => {
+  return <span>{t["toolbar_file"]}</span>;
 });
 
 export interface FilePanrProps {
   theme: ThemeItemInstance;
   file: FileInstance;
   config: ConfigInstance;
+  t: LocaleStringsInstance;
   onSave: () => void;
   onSaveAs: () => void;
   onAutoSave: () => void;
@@ -32,13 +32,13 @@ export const File: FC<FilePanrProps> = observer(
     theme,
     file,
     config,
+    t,
     onSave,
     onSaveAs,
     onAutoSave,
     onShowExportModal: onExport,
     onClose,
   }) => {
-    const { t } = useTranslation();
     return useObserver(() => (
       <div className="pane-container">
         <Menu mode="horizontal" style={{ color: theme.toolbarText }}>
@@ -48,10 +48,10 @@ export const File: FC<FilePanrProps> = observer(
             onClick={() => onSave()}
             disable={!file.isModified}
           >
-            {t("toolbar.file.save")}
+            {t["toolbar_file_save"]}
           </MenuItem>
           <MenuItem icon={<SaveOutlined />} size="m" onClick={() => onSaveAs()}>
-            {t("toolbar.file.save-as")}
+            {t["toolbar_file_save-as"]}
           </MenuItem>
           <MenuItem
             icon={<SaveOutlined />}
@@ -59,21 +59,21 @@ export const File: FC<FilePanrProps> = observer(
             onClick={() => onAutoSave()}
             active={config.autoSave}
           >
-            {t("toolbar.file.auto-save")}
+            {t["toolbar_file_auto-save"]}
           </MenuItem>
           <MenuItem
             icon={<ExportOutlined />}
             size="m"
             onClick={() => onExport()}
           >
-            {t("toolbar.file.export")}
+            {t["toolbar_file_export"]}
           </MenuItem>
           <MenuItem
             icon={<CloseCircleOutlined />}
             size="m"
             onClick={() => onClose()}
           >
-            {t("toolbar.file.close")}
+            {t["toolbar_file_close"]}
           </MenuItem>
         </Menu>
       </div>

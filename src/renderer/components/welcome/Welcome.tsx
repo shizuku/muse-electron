@@ -7,23 +7,22 @@ import {
 } from "@ant-design/icons";
 import { ipcRenderer } from "electron";
 import { observer } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "./menu";
 import { basename, dirname } from "path";
 import { Meta } from "./meta";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
 import { FileInstance } from "../../models/file";
-import { ModalInstance } from "../../models/components/modal";
 import { WelcomeInstance } from "../../models/components/welcome";
 import { ConfigInstance } from "../../models/config";
 import "./style.css";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface WelcomeProps {
   model: WelcomeInstance;
   file: FileInstance;
   theme: ThemeItemInstance;
-  modal: ModalInstance;
   config: ConfigInstance;
+  t: LocaleStringsInstance;
   onOpen: () => void;
   onNew: () => void;
   onClearRecent: () => void;
@@ -35,16 +34,15 @@ export const Welcome: FC<WelcomeProps> = observer(
   ({
     file,
     theme,
-    modal,
     model,
     config,
+    t,
     onNew,
     onOpen,
     onClearRecent,
     onShowAboutModal,
     onShowPreferenceModal,
   }) => {
-    const { t } = useTranslation();
     return (
       <div
         className="welcome"
@@ -74,7 +72,7 @@ export const Welcome: FC<WelcomeProps> = observer(
                 icon={<FileAddOutlined />}
                 onClick={() => onNew()}
               >
-                {t("welcome.new-file")}
+                {t["welcome_new-file"]}
               </MenuItem>
               <MenuItem
                 key="1"
@@ -82,7 +80,7 @@ export const Welcome: FC<WelcomeProps> = observer(
                 icon={<FolderOpenOutlined />}
                 onClick={() => onOpen()}
               >
-                {t("welcome.open")}
+                {t["welcome_open"]}
               </MenuItem>
             </Menu>
           </div>
@@ -98,10 +96,10 @@ export const Welcome: FC<WelcomeProps> = observer(
                 size="l"
                 onClick={() => onShowPreferenceModal()}
               >
-                {t("toolbar.about.preference")}
+                {t["toolbar_about_preference"]}
               </MenuItem>
               <MenuItem key="1" size="l" onClick={() => onShowAboutModal()}>
-                {t("toolbar.about.about")}
+                {t["toolbar_about"]}
               </MenuItem>
             </Menu>
           </div>
@@ -110,9 +108,9 @@ export const Welcome: FC<WelcomeProps> = observer(
           className="welcome__content"
           style={{ background: theme.welcomeContentBackground }}
         >
-          <h2>{t("welcome.recent")}</h2>
+          <h2>{t["welcome_recents"]}</h2>
           <div className="welcom__clear">
-            <a onClick={() => onClearRecent()}>{t("welcome.recent-clear")}</a>
+            <a onClick={() => onClearRecent()}>{t["welcome_recents-clear"]}</a>
           </div>
           <div className="welcome__recent-files">
             <List

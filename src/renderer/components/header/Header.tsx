@@ -12,7 +12,6 @@ import {
 import { Popover, Tooltip } from "antd";
 import is from "electron-is";
 import { observer } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { FuncBar } from "./func-bar";
 import { MaxmizeOutlined, MinimizeOutlined } from "../icons";
 import { FuncButton } from "./func-bar/func-button";
@@ -22,14 +21,15 @@ import { FileInstance } from "../../models/file";
 import { DimensInstance } from "../../models/ui/window/dimens";
 import { WindowInstance } from "../../models/ui/window";
 import "./style.css";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface DisplayPopupProps {
   config: ConfigInstance;
   theme: ThemeItemInstance;
+  t: LocaleStringsInstance;
 }
 
-const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme }) => {
-  const { t } = useTranslation();
+const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme, t }) => {
   return (
     <div className="display-popup">
       <div
@@ -41,7 +41,7 @@ const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme }) => {
             : {}
         }
       >
-        {t("header.display.show-all")}
+        {t["header_display_show-all"]}
       </div>
       <div
         className="display-popup__item"
@@ -52,7 +52,7 @@ const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme }) => {
             : {}
         }
       >
-        {t("header.display.headfoot")}
+        {t["header_display_headfoot"]}
       </div>
       <div
         className="display-popup__item"
@@ -63,7 +63,7 @@ const DisplayPopup: FC<DisplayPopupProps> = observer(({ config, theme }) => {
             : {}
         }
       >
-        {t("header.display.content")}
+        {t["header_display_content"]}
       </div>
     </div>
   );
@@ -74,6 +74,7 @@ export interface HeaderProps {
   theme: ThemeItemInstance;
   file: FileInstance;
   dimens: DimensInstance;
+  t: LocaleStringsInstance;
   win: WindowInstance;
   toggleFullScreen: () => void;
   toggleMax: () => void;
@@ -90,6 +91,7 @@ export const Header: FC<HeaderProps> = observer(
     theme,
     file,
     dimens,
+    t,
     win,
     toggleFullScreen,
     toggleMax,
@@ -99,7 +101,6 @@ export const Header: FC<HeaderProps> = observer(
     onUndo,
     onRedo,
   }) => {
-    const { t } = useTranslation();
     let styleHover = () => {
       switch (config.display) {
         case "full":
@@ -166,7 +167,7 @@ export const Header: FC<HeaderProps> = observer(
             <FuncBar>
               <Tooltip
                 placement="topLeft"
-                title={t("toolbar.file.save")}
+                title={t["toolbar_file_save"]}
                 mouseEnterDelay={1}
               >
                 <FuncButton onClick={() => onSave()} disable={!file.isModified}>
@@ -175,7 +176,7 @@ export const Header: FC<HeaderProps> = observer(
               </Tooltip>
               <Tooltip
                 placement="topLeft"
-                title={t("toolbar.start.undo")}
+                title={t["toolbar_start_undo"]}
                 mouseEnterDelay={1}
               >
                 <FuncButton onClick={() => onUndo()} disable={file.undoDisable}>
@@ -184,7 +185,7 @@ export const Header: FC<HeaderProps> = observer(
               </Tooltip>
               <Tooltip
                 placement="topLeft"
-                title={t("toolbar.start.redo")}
+                title={t["toolbar_start_redo"]}
                 mouseEnterDelay={1}
               >
                 <FuncButton onClick={() => onRedo()} disable={file.redoDisable}>
@@ -199,15 +200,15 @@ export const Header: FC<HeaderProps> = observer(
         <div className="header__window-title">
           {!file.isOpen
             ? `Muse`
-            : `${file.conf.title}${file.isModified ? "*" : ""} - ${t(
-                "app-name"
-              )}`}
+            : `${file.conf.title}${file.isModified ? "*" : ""} - ${
+                t["app-name"]
+              }`}
         </div>
         <div className="header__controls">
           <Popover
             placement="topLeft"
-            title={t("header.display.display")}
-            content={<DisplayPopup theme={theme} config={config} />}
+            title={t["header_display"]}
+            content={<DisplayPopup theme={theme} config={config} t={t} />}
             trigger="click"
           >
             <div className="window-icon hover-gray">

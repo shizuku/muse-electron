@@ -1,20 +1,20 @@
 import React, { useState, FC } from "react";
 import { Form, Modal, Select, InputNumber } from "antd";
 import { observer, useObserver } from "mobx-react";
-import { useTranslation } from "react-i18next";
 import { getAvaliableLangauge } from "../../../shared/locales";
 import { PreferenceModalInstance } from "../../models/components/modal/preference";
 import { ConfigInstance } from "../../models/config";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface PreferenceModalProps {
   model: PreferenceModalInstance;
   config: ConfigInstance;
+  t: LocaleStringsInstance;
 }
 
 //TODO: add theme
 export const PreferenceModal: FC<PreferenceModalProps> = observer(
-  ({ model, config }) => {
-    const { t } = useTranslation();
+  ({ model, config, t }) => {
     let [lang, setLang] = useState(config.confLang);
     let [scale, setScale] = useState(config.exportScale);
     const onCancel = () => {
@@ -27,13 +27,13 @@ export const PreferenceModal: FC<PreferenceModalProps> = observer(
     };
     return useObserver(() => (
       <Modal
-        title={t("modal.preference.preference")}
+        title={t["modal_preference"]}
         visible={model.ifShow}
         onOk={onOk}
         onCancel={onCancel}
       >
         <Form labelCol={{ span: 4 }} wrapperCol={{ span: 0 }}>
-          <Form.Item label={t("modal.preference.language")}>
+          <Form.Item label={t["modal_preference_language"]}>
             <Select
               onChange={(v: string) => {
                 setLang(v);
@@ -41,7 +41,7 @@ export const PreferenceModal: FC<PreferenceModalProps> = observer(
               defaultValue={config.confLang}
             >
               <Select.Option value={"auto"} key={"auto"}>
-                {t("modal.preference.language-auto")}
+                {t["modal_preference_auto"]}
               </Select.Option>
               {getAvaliableLangauge().map((it) => (
                 <Select.Option value={it.value} key={it.value}>
@@ -50,7 +50,7 @@ export const PreferenceModal: FC<PreferenceModalProps> = observer(
               ))}
             </Select>
           </Form.Item>
-          <Form.Item label={t("modal.preference.export-scale")}>
+          <Form.Item label={t["modal_preference_export-scale"]}>
             <InputNumber
               onChange={(v) => {
                 if (typeof v === "number") setScale(v);

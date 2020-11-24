@@ -1,4 +1,5 @@
 import { Instance, types } from "mobx-state-tree";
+import { createContext, useContext } from "react";
 import { ComponentsModel } from "./components";
 import { ConfigModel } from "./config";
 import { FileModel } from "./file";
@@ -7,7 +8,7 @@ import { UiModel } from "./ui";
 import { ValuesModel } from "./values";
 
 export const RootModel = types
-  .model("RootModel", {
+  .model("Root", {
     components: types.optional(ComponentsModel, {}),
     config: types.optional(ConfigModel, {}),
     ui: types.optional(UiModel, {}),
@@ -49,9 +50,21 @@ export const RootModel = types
     };
   })
   .actions(() => {
-    return {
-      
-    };
+    return {};
   });
 
 export type RootInstance = Instance<typeof RootModel>;
+
+export const root = RootModel.create();
+
+const RootStoreContext = createContext<RootInstance>(root);
+
+export const Provider = RootStoreContext.Provider;
+
+export function useMst() {
+  return useContext(RootStoreContext);
+}
+
+export function useStrings() {
+  return useMst().values.strings;
+}

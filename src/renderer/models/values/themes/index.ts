@@ -9,15 +9,17 @@ export const ThemesModel = types
       light: light,
     }),
     conf: types.optional(types.string, "auto"),
-    machineConf: types.optional(types.string, "auto"),
+    machineConf: types.optional(types.string, "undefined"),
   })
   .views((self) => {
     return {
       get t(): ThemeItemInstance {
+        console.log("themes conf:", self.conf, self.machineConf);
+        let def = light;
         if (self.conf === "auto") {
-          return self.themes.get(self.machineConf) || light;
+          return self.themes.get(self.machineConf) || def;
         } else {
-          return self.themes.get(self.conf) || light;
+          return self.themes.get(self.conf) || def;
         }
       },
     };

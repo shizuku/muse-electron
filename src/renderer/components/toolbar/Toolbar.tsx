@@ -12,6 +12,7 @@ import { ModelInjector } from "../model-injector";
 import "./style.css";
 import { FileInstance } from "../../models/file";
 import { ThemeItemInstance } from "../../models/values/themes/theme-item";
+import { LocaleStringsInstance } from "../../models/values/strings/locale-strings";
 
 export interface TabProps {
   label: string;
@@ -90,6 +91,7 @@ export interface ToolbarProps {
   config: ConfigInstance;
   theme: ThemeItemInstance;
   dimens: DimensInstance;
+  t: LocaleStringsInstance;
   onSave: (cb?: (r: string) => void) => void;
   onSaveAs: (cb?: (r: string) => void) => void;
   onAutoSave: () => void;
@@ -111,6 +113,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
     config,
     theme,
     dimens,
+    t,
     onSave,
     onSaveAs,
     onAutoSave,
@@ -154,7 +157,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
               style={{ background: theme.toolbarBackground }}
             >
               <Tab label="file" model={model} theme={theme}>
-                <FileTab />
+                <FileTab t={t} />
               </Tab>
               <Tab label="start" model={model} theme={theme}>
                 <StartTab />
@@ -163,7 +166,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
                 <ViewTab />
               </Tab>
               <Tab label="about" model={model} theme={theme}>
-                <AboutTab />
+                <AboutTab t={t} />
               </Tab>
             </div>
             <div className="toolbar__panes">
@@ -172,6 +175,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
                   theme={theme}
                   file={root.file}
                   config={config}
+                  t={t}
                   onSave={onSave}
                   onSaveAs={onSaveAs}
                   onAutoSave={onAutoSave}
@@ -183,6 +187,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
                 <Start
                   theme={theme}
                   file={root.file}
+                  t={t}
                   onUndo={onUndo}
                   onRedo={onRedo}
                   onShowEditMetaDataModal={onShowEditMetaDataModal}
@@ -192,6 +197,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
                 <View
                   theme={theme}
                   file={root.file}
+                  t={t}
                   onSetOnePage={onSetOnePage}
                   onSetTwoPage={onSetTwoPage}
                 />
@@ -199,6 +205,7 @@ export const Toolbar: FC<ToolbarProps> = observer(
               <Pane label="about" model={model}>
                 <About
                   theme={theme}
+                  t={t}
                   onShowAboutModal={onShowAboutModal}
                   onShowPreferenceModal={onShowPreferenceModal}
                 />
